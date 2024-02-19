@@ -1,7 +1,0 @@
-F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\DungeonCrawler.exe
-F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\DungeonCrawler.pdb
-F:\Tiltan\DungeonCrawler\DungeonCrawler\obj\Debug\DungeonCrawler.csproj.AssemblyReference.cache
-F:\Tiltan\DungeonCrawler\DungeonCrawler\obj\Debug\DungeonCrawler.csproj.SuggestedBindingRedirects.cache
-F:\Tiltan\DungeonCrawler\DungeonCrawler\obj\Debug\DungeonCrawler.csproj.CoreCompileInputs.cache
-F:\Tiltan\DungeonCrawler\DungeonCrawler\obj\Debug\DungeonCrawler.exe
-F:\Tiltan\DungeonCrawler\DungeonCrawler\obj\Debug\DungeonCrawler.pdb
