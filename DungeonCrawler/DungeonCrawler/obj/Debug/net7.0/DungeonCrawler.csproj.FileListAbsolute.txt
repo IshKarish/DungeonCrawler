@@ -1,0 +1,15 @@
+F:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\DungeonCrawler.exe
+F:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\DungeonCrawler.deps.json
+F:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\DungeonCrawler.runtimeconfig.json
+F:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\DungeonCrawler.dll
+F:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\DungeonCrawler.pdb
+F:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.csproj.AssemblyReference.cache
+F:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.GeneratedMSBuildEditorConfig.editorconfig
+F:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.AssemblyInfoInputs.cache
+F:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.AssemblyInfo.cs
+F:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.csproj.CoreCompileInputs.cache
+F:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.dll
+F:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\refint\DungeonCrawler.dll
+F:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.pdb
+F:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.genruntimeconfig.cache
+F:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\ref\DungeonCrawler.dll
