@@ -6,7 +6,7 @@ class Program
     {
         int mapSize = 20;
         
-        Character player = new Character(mapSize, mapSize);
+        Character player = new Character();
         Map map = new Map(mapSize, mapSize, player);
         
         while (true)

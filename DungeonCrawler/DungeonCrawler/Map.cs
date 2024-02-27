@@ -3,9 +3,9 @@
 public class Map
 {
     // Vars
-    public Object obj = new Object(4, 2, 6, 4);
-    
     public Character Player { get; set; }
+    public Object obj = new Object(3, 5, 4, 4);
+    
     public int[,] Grid { get; private set; }
     
     private const char _horizontalBorder = '-';
@@ -48,11 +48,11 @@ public class Map
             
             for (int j = 0; j < cols; j++) // Print actual map
             {
-                if (i == Player.Y && j == Player.X) Console.Write("*");
+                if (i == Player.Transform.Position.Y && j == Player.Transform.Position.X) Console.Write("*");
                 else
                 {
-                    if ((i >= obj.LocationY && i <= obj.LocationY + (obj.SizeY - 1)) &&
-                        (j >= obj.LocationX && j <= obj.LocationX + (obj.SizeX - 1)))
+                    if ((i >= obj.Transform.Position.Y && i <= obj.Transform.Position.Y + (obj.Transform.Position.Y - 1)) &&
+                        (j >= obj.Transform.Position.X && j <= obj.Transform.Position.X + (obj.Transform.Position.X - 1)))
                     {
                         Console.BackgroundColor = ConsoleColor.Red;
                         Console.Write("&");
@@ -76,16 +76,5 @@ public class Map
         }
 
         Console.WriteLine();
-    }
-
-    void PrintObject()
-    {
-        int sizeX = obj.SizeX;
-        int sizeY = obj.SizeY;
-
-        for (int j = 0; j < sizeX; j++)
-        {
-            Console.Write("&");
-        }
     }
 }

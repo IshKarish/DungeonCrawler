@@ -11,6 +11,12 @@ public class Transform
         Scale = new Vector2();
     }
 
+    public Transform(Vector2 position, Vector2 scale)
+    {
+        Position = position;
+        Scale = scale;
+    }
+
     public void SetPosition(int x, int y)
     {
         Position = new Vector2(x, y);

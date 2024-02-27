@@ -2,42 +2,26 @@
 
 public class Character
 {
-    public int X { get; set; }
-    public int Y { get; set; }
-    
-    public int LastX { get; set; }
-    public int LastY { get; set; }
-    
-    public Character() {}
-    
-    public Character(int lastX, int lastY)
-    {
-        LastX = lastX;
-        LastY = lastY;
-    }
+    public Transform Transform { get; private set; }
 
-    public Character(int x, int y, int lastX, int lastY)
+    public Character()
     {
-        X = x;
-        Y = y;
-        
-        LastX = lastX;
-        LastY = lastY;
+        Transform = new Transform();
     }
 
     public void MoveUp(int axis)
     {
-        bool isGoingOutsideOfMap = (Y == 0 && axis < 0) || (Y == LastY - 1 && axis > 0);
+        int xPos = Transform.Position.X;
+        int yPos = Transform.Position.Y;
         
-        if (isGoingOutsideOfMap) return;
-        Y += axis;
+        Transform.SetPosition(xPos, yPos + axis);
     }
 
     public void MoveRight(int axis)
     {
-        bool isGoingOutsideOfMap = (X == 0 && axis < 0) || (X == LastX - 1 && axis > 0);
+        int xPos = Transform.Position.X;
+        int yPos = Transform.Position.Y;
         
-        if (isGoingOutsideOfMap) return;
-        X += axis;
+        Transform.SetPosition(xPos + axis, yPos);
     }
 }
