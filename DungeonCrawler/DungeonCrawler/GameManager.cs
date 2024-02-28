@@ -22,29 +22,29 @@ public class GameManager
             Renderer.PrintMap(map, player);
             Console.WriteLine(game.IsPlayerStandingOnDoor());
 
-            bool isCollidingFromRight = Physics.IsNextXColliding(player, navMesh, 1);
-            bool isCollidingFromLeft = Physics.IsNextXColliding(player, navMesh, -1);
-            bool isCollidingFromTop = Physics.IsNextYColliding(player, navMesh, -1);
-            bool isCollidingFromBottom = Physics.IsNextYColliding(player, navMesh, 1);
+            bool isCollidingFromRight = player.IsCollidingFromRight(navMesh);
+            bool isCollidingFromLeft = player.isCollidingFromLeft(navMesh);
+            bool isCollidingFromTop = player.isCollidingFromTop(navMesh);
+            bool isCollidingFromBottom = player.isCollidingFromBottom(navMesh);
             
             ConsoleKeyInfo cki = Console.ReadKey();
             switch (cki.Key)
             {
                 case ConsoleKey.UpArrow:
                 case ConsoleKey.W:
-                    if (!isCollidingFromTop) player.MoveUp(-1);
+                    if (!isCollidingFromTop) player.MoveUp(-1, map);
                     break;
                 case ConsoleKey.DownArrow:
                 case ConsoleKey.S:
-                    if (!isCollidingFromBottom) player.MoveUp(1);
+                    if (!isCollidingFromBottom) player.MoveUp(1, map);
                     break;
                 case ConsoleKey.RightArrow:
                 case ConsoleKey.D:
-                    if (!isCollidingFromRight) player.MoveRight(1);
+                    if (!isCollidingFromRight) player.MoveRight(1, map);
                     break;
                 case ConsoleKey.LeftArrow:
                 case ConsoleKey.A:
-                    if (!isCollidingFromLeft) player.MoveRight(-1);
+                    if (!isCollidingFromLeft) player.MoveRight(-1, map);
                     break;
             }
             Console.Clear();
