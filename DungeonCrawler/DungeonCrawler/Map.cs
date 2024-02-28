@@ -62,7 +62,15 @@ public class Map
                 Vector2 currentPosition = new Vector2(i, j);
                 bool isObjectInCurrentPosition = IsObjectInCurrentPosition(currentPosition, currentObject);
 
-                if (isObjectInCurrentPosition) MapArr[j, i] = '&';
+                if (isObjectInCurrentPosition)
+                {
+                    MapArr[j, i] = currentObject.Graphics;
+                    bool isDoor = currentObject is Door;
+                    if (isDoor)
+                    {
+                        if (i == currentObject.Transform.Position.X + 1 && j > currentObject.Transform.Position.Y) MapArr[j, i] = ' ';
+                    }
+                }
             }
         }
     }
