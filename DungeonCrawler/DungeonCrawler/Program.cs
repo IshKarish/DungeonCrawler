@@ -11,7 +11,8 @@ class Program
         Object obj = new Object(3, 4, 2, 6);
         Object obj2 = new Object(6, 2, 7, 14);
         Object obj3 = new Object(4, 4, 18, 18);
-        Object[] objects = { obj, obj2, obj3 };
+        Object obj4 = new Object(3, 5, 5, 3);
+        Object[] objects = { obj, obj2, obj3, obj4 };
 
         Game game = gameManager.CreateGame(20, player, objects);
         gameManager.StartGame(game);
