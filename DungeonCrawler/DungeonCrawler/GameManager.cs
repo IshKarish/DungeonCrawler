@@ -4,7 +4,7 @@ public class GameManager
 {
     public Game CreateGame(int mapSize, Character player, Object[] objects)
     {
-        Map map = new Map(mapSize, 100, objects);
+        Map map = new Map(mapSize, mapSize * 2, objects);
         NavMesh navMesh = new NavMesh(map);
         Game game = new Game(map, navMesh, player);
 
