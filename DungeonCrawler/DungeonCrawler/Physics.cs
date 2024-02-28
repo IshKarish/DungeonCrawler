@@ -9,7 +9,7 @@ public static class Physics
 
         int[] yPositions = CorrespondingYPositions(navMesh, player.Transform.Position.X, direction);
 
-        foreach (Vector2 w in navMesh.Walkable)
+        foreach (Vector2 w in navMesh.Blocked)
         {
             bool isNextXColliding = player.Transform.Position.X + direction == w.X;
             if (isNextXColliding)
@@ -31,7 +31,7 @@ public static class Physics
 
         int[] xPositions = CorrespondingXPositions(navMesh, player.Transform.Position.Y, direction);
 
-        foreach (Vector2 w in navMesh.Walkable)
+        foreach (Vector2 w in navMesh.Blocked)
         {
             bool isNextXColliding = player.Transform.Position.Y + direction == w.Y;
             if (isNextXColliding)
@@ -53,7 +53,7 @@ public static class Physics
         
         List<int> x = new List<int>();
         
-        foreach (Vector2 v in navMesh.Walkable)
+        foreach (Vector2 v in navMesh.Blocked)
         {
             if (v.Y == yPosition + direction) x.Add(v.X);
         }
@@ -68,7 +68,7 @@ public static class Physics
         
         List<int> y = new List<int>();
         
-        foreach (Vector2 v in navMesh.Walkable)
+        foreach (Vector2 v in navMesh.Blocked)
         {
             if (v.X == xPosition + direction) y.Add(v.Y);
         }

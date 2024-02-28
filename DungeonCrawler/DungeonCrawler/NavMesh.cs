@@ -2,16 +2,16 @@
 
 public class NavMesh
 {
-    public Vector2[] Walkable { get; private set; }
+    public Vector2[] Blocked { get; private set; }
 
     public NavMesh(Map map)
     {
-        Walkable = CreateNavMesh(map);
+        Blocked = CreateNavMesh(map);
     }
 
     Vector2[] CreateNavMesh(Map map)
     {
-        List<Vector2> walkable = new List<Vector2>();
+        List<Vector2> blocked = new List<Vector2>();
 
         char[,] mapArr = map.MapArr;
         int rows = mapArr.GetLength(0);
@@ -24,11 +24,11 @@ public class NavMesh
                 if (mapArr[j, i] != ' ' && mapArr[j, i] != '*' && mapArr[j, i] != '.')
                 {
                     Vector2 position = new Vector2(i, j);
-                    walkable.Add(position);
+                    blocked.Add(position);
                 }
             }
         }
 
-        return walkable.ToArray();
+        return blocked.ToArray();
     }
 }

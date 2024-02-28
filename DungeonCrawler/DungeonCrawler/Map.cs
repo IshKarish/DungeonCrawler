@@ -4,13 +4,8 @@ public class Map
 {
     public char[,] MapArr { get; private set; }
     public Object[] Objects { get; private set; }
-    
-    private const char _horizontalBorder = '-';
-    private const char _verticalBorder = '|';
-
     private static int _rows;
     private static int _cols;
-    
     
     public Map(int size, Object[] objects)
     {
@@ -102,48 +97,5 @@ public class Map
         bool inXPosition = (position.X >= objectPosition.X) && (position.X <= objectPosition.X + obj.Transform.Scale.X);
         bool inYPosition = (position.Y >= objectPosition.Y) && (position.Y <= objectPosition.Y + obj.Transform.Scale.Y);
         return inXPosition && inYPosition;
-    }
-
-    public void PrintMap()
-    {
-        for (int i = 0; i < _rows; i++)
-        {
-            // States
-            bool drawHasStarted = i == 0;
-            bool drawHasEnded = i == _rows - 1;
-            
-            if (drawHasStarted) PrintHorizontalBorder();
-            
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.Write(_verticalBorder);
-            for (int j = 0; j < _cols; j++)
-            {
-                Console.BackgroundColor = ConsoleColor.Black;
-                for (int k = 0; k < Objects.Length; k++)
-                {
-                    if (MapArr[i, j] == Objects[k].Graphics.Symbol) Console.BackgroundColor = Objects[k].Graphics.Color;
-                    //else Console.BackgroundColor = ConsoleColor.Black;
-                }
-                
-                Console.Write(MapArr[i, j]);
-            }
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.WriteLine(_verticalBorder);
-            
-            if (drawHasEnded) PrintHorizontalBorder();
-        }
-
-        Console.WriteLine();
-    }
-
-    void PrintHorizontalBorder()
-    {
-        Console.BackgroundColor = ConsoleColor.Black;
-        
-        for (int i = 0; i < _cols + 2; i++)
-        {
-            Console.Write(_horizontalBorder);
-        }
-        Console.WriteLine();
     }
 }

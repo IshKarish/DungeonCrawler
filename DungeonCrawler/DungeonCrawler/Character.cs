@@ -8,12 +8,7 @@ public class Character
     {
         Transform = new Transform();
     }
-
-    public int Raycast()
-    {
-        return Transform.Position.X + 1;
-    }
-
+    
     public void MoveUp(int axis)
     {
         if (!inMapBounds()) return;

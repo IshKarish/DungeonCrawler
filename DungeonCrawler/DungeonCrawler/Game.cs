@@ -17,25 +17,14 @@ public class Game
         Player = player;
         NavMesh = navMesh;
     }
-    
-    public void UpdatePlayerLocation()
-    {
-        RemovePlayerFromMap();
-        
-        int playerX = Player.Transform.Position.X;
-        int playerY = Player.Transform.Position.Y;
 
-        Map.MapArr[playerY, playerX] = '*';
+    public bool IsPlayerStandingOnDoor()
+    {
+        return StandingChar() == '.';
     }
     
-    void RemovePlayerFromMap()
+    char StandingChar()
     {
-        for (int i = 0; i < Map.MapArr.GetLength(0); i++)
-        {
-            for (int j = 0; j < Map.MapArr.GetLength(1); j++)
-            {
-                if (Map.MapArr[j, i] == '*') Map.MapArr[j, i] = ' ';
-            }
-        }
+        return Map.MapArr[Player.Transform.Position.Y, Player.Transform.Position.X];
     }
 }

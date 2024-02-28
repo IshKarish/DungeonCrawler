@@ -19,8 +19,10 @@ public class GameManager
         
         while (true)
         {
-            game.UpdatePlayerLocation();
-            map.PrintMap();
+            //game.UpdatePlayerLocation();
+            Renderer.PrintMap(map, player);
+            Console.WriteLine(game.IsPlayerStandingOnDoor());
+            //map.PrintMap();
 
             bool isCollidingFromRight = Physics.IsNextXColliding(player, navMesh, 1);
             bool isCollidingFromLeft = Physics.IsNextXColliding(player, navMesh, -1);
