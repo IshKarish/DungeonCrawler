@@ -2,79 +2,116 @@
 
 public class Map
 {
-    // Vars
-    public Character Player { get; set; }
-    public Object obj = new Object(3, 5, 4, 4);
-    
-    public int[,] Grid { get; private set; }
+    public char[,] MapArr { get; private set; }
+    public Object[] Objects { get; private set; }
     
     private const char _horizontalBorder = '-';
     private const char _verticalBorder = '|';
+
+    private static int _rows;
+    private static int _cols;
     
-    // Constructors
-    public Map(Character player)
+    
+    public Map(int size, Object[] objects)
     {
-        Player = player;
-        Grid = new int[10, 10];
+        MapArr = new char[size, size];
+        Objects = objects;
+        
+        CreateMap();
     }
     
-    public Map(int sizeX, int sizeY, Character player)
+    public Map(int sizeX, int sizeY, Object[] objects)
     {
-        Grid = new int[sizeX, sizeY];
-        Player = player;
+        MapArr = new char[sizeX, sizeY];
+        Objects = objects;
+        
+        CreateMap();
     }
 
     // Functions
-    public void PrintMap()
+    void CreateMap()
     {
-        int rows = Grid.GetLength(0);
-        int cols = Grid.GetLength(1);
-        
-        for (int i = 0; i < rows; i++)
+        _rows = MapArr.GetLength(0);
+        _cols = MapArr.GetLength(1);
+
+        for (int i = 0; i < _rows; i++)
         {
-            // States
-            bool drawHasStarted = i == 0;
-            bool drawHasEnded = i == rows - 1;
-            
-            if (drawHasStarted) // Print horizontal border
+            for (int j = 0; j < _cols; j++)
             {
-                for (int j = 0; j < cols + 2; j++) 
-                {
-                    Console.Write(_horizontalBorder);
-                }
-                Console.WriteLine();
-            }
-            Console.Write(_verticalBorder); // Print vertical border
-            
-            for (int j = 0; j < cols; j++) // Print actual map
-            {
-                if (i == Player.Transform.Position.Y && j == Player.Transform.Position.X) Console.Write("*");
-                else
-                {
-                    if ((i >= obj.Transform.Position.Y && i <= obj.Transform.Position.Y + (obj.Transform.Position.Y - 1)) &&
-                        (j >= obj.Transform.Position.X && j <= obj.Transform.Position.X + (obj.Transform.Position.X - 1)))
-                    {
-                        Console.BackgroundColor = ConsoleColor.Red;
-                        Console.Write("&");
-                    }
-                    else
-                    {
-                        Console.BackgroundColor = ConsoleColor.Black;
-                        Console.Write(" ");
-                    }
-                }
-            }
-            
-            Console.WriteLine(_verticalBorder); // Print vertical border
-            if (drawHasEnded) // Print horizontal border
-            {
-                for (int j = 0; j < cols + 2; j++) 
-                {
-                    Console.Write(_horizontalBorder);
-                }
+                MapArr[j, i] = ' ';
             }
         }
 
+        if (Objects.Length > 0)
+        {
+            for (int i = 0; i < Objects.Length; i++)
+            {
+                AddObjects(i);
+            }
+        }
+    }
+
+    void AddObjects(int currentObjectIndex)
+    {
+        Object currentObject = Objects[currentObjectIndex];
+        
+        for (int i = 0; i < _rows; i++)
+        {
+            for (int j = 0; j < _cols; j++)
+            {
+                Vector2 currentPosition = new Vector2(i, j);
+                bool isObjectInCurrentPosition = IsObjectInCurrentPosition(currentPosition, currentObject);
+
+                if (isObjectInCurrentPosition) MapArr[j, i] = '&';
+            }
+        }
+    }
+
+    bool IsObjectInCurrentPosition(Vector2 position, Object obj)
+    {
+        Vector2 objectPosition = obj.Transform.Position;
+        
+        bool inXPosition = (position.X >= objectPosition.X) && (position.X <= objectPosition.X + obj.Transform.Scale.X);
+        bool inYPosition = (position.Y >= objectPosition.Y) && (position.Y <= objectPosition.Y + obj.Transform.Scale.Y);
+        return inXPosition && inYPosition;
+    }
+
+    public void PrintMap()
+    {
+        for (int i = 0; i < _rows; i++)
+        {
+            // States
+            bool drawHasStarted = i == 0;
+            bool drawHasEnded = i == _rows - 1;
+            
+            if (drawHasStarted) PrintHorizontalBorder();
+            
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.Write(_verticalBorder);
+            for (int j = 0; j < _cols; j++)
+            {
+                if (MapArr[i, j] == '&') Console.BackgroundColor = ConsoleColor.Red;
+                else Console.BackgroundColor = ConsoleColor.Black;
+                
+                Console.Write(MapArr[i, j]);
+            }
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.WriteLine(_verticalBorder);
+            
+            if (drawHasEnded) PrintHorizontalBorder();
+        }
+
+        Console.WriteLine();
+    }
+
+    void PrintHorizontalBorder()
+    {
+        Console.BackgroundColor = ConsoleColor.Black;
+        
+        for (int i = 0; i < _cols + 2; i++)
+        {
+            Console.Write(_horizontalBorder);
+        }
         Console.WriteLine();
     }
 }
