@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "Fr2WXyYu3YiM+I1LszKHQjjq8iS38ItqcZV/9k20XGIYa3C7rWxx03JgRb6vaBl5sxuBdlZREZZtVBiz+J3l2g==",
+  "dgSpecHash": "1/iGAHnAUNVZyMGM5804hj57tRC53lNxz6KM+c5yQrizUBwi/rwl5UP/pr+SR5IFag1SLrAXwNkHC9jQH9U3FQ==",
   "success": true,
-  "projectFilePath": "F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\DungeonCrawler\\DungeonCrawler.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\DungeonCrawler\\DungeonCrawler.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\danie\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.16\\microsoft.netcore.app.ref.7.0.16.nupkg.sha512",
+    "C:\\Users\\danie\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.16\\microsoft.windowsdesktop.app.ref.7.0.16.nupkg.sha512",
+    "C:\\Users\\danie\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.16\\microsoft.aspnetcore.app.ref.7.0.16.nupkg.sha512",
+    "C:\\Users\\danie\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\7.0.16\\microsoft.netcore.app.host.win-x64.7.0.16.nupkg.sha512"
+  ],
   "logs": []
 }

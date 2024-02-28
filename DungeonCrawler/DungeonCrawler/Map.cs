@@ -54,6 +54,11 @@ public class Map
     void AddObjects(int currentObjectIndex)
     {
         Object currentObject = Objects[currentObjectIndex];
+
+        bool isDoor = currentObject is Door;
+        int doorDirection = 1;
+        if (isDoor) doorDirection = ((Door)currentObject).Direction;
+        
         
         for (int i = 0; i < _rows; i++)
         {
@@ -64,12 +69,27 @@ public class Map
 
                 if (isObjectInCurrentPosition)
                 {
-                    MapArr[j, i] = currentObject.Graphics;
-                    bool isDoor = currentObject is Door;
                     if (isDoor)
                     {
-                        if (i == currentObject.Transform.Position.X + 1 && j > currentObject.Transform.Position.Y) MapArr[j, i] = ' ';
+                        int firstX = currentObject.Transform.Position.X + 1;
+                        int firstY = currentObject.Transform.Position.Y + 1;
+
+                        if (((Door)currentObject).DoorOrientation == DoorOrientation.Vertical)
+                        {
+                            if (doorDirection > 0) firstX = currentObject.Transform.Position.X + 1;
+                            else firstX = currentObject.Transform.Position.X;
+                        }
+
+                        if (((Door)currentObject).DoorOrientation == DoorOrientation.Horizontal)
+                        {
+                            if (doorDirection < 0) firstY = currentObject.Transform.Position.Y + 1;
+                            else firstY = currentObject.Transform.Position.Y;
+                        }
+                        
+                        if (i == firstX && j == firstY) MapArr[j, i] = ' ';
+                        else MapArr[j, i] = '&';
                     }
+                    else MapArr[j, i] = currentObject.Graphics;
                 }
             }
         }

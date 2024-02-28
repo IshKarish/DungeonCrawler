@@ -2,6 +2,8 @@
 
 public class Door : Object
 {
+    public DoorOrientation DoorOrientation { get; private set; }
+    public int Direction { get; private set; }
     public Door(int x, int y)
     {
         Transform.SetScale(2, 1);
@@ -9,9 +11,11 @@ public class Door : Object
         //Graphics = '!';
     }
 
-    public Door(int x, int y, DoorOrientation doorOrientation)
+    public Door(int x, int y, DoorOrientation doorOrientation, int direction)
     {
-        switch (doorOrientation)
+        DoorOrientation = doorOrientation;
+        Direction = direction;
+        switch (DoorOrientation)
         {
             case DoorOrientation.Horizontal:
                 Transform.SetScale(2, 1);
