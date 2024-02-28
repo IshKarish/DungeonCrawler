@@ -21,7 +21,7 @@ public class NavMesh
         {
             for (int j = 0; j < cols; j++)
             {
-                if (mapArr[j, i] == '&')
+                if (mapArr[j, i] != ' ' && mapArr[j, i] != '*' && mapArr[j, i] != '.')
                 {
                     Vector2 position = new Vector2(i, j);
                     walkable.Add(position);

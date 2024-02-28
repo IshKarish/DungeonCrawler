@@ -3,33 +3,40 @@
 public class Object
 {
     public Transform Transform { get; private set; }
-    public char Graphics { get; init; }
+    public Graphics Graphics { get; init; }
 
     public Object()
     {
         Transform = new Transform();
-        Graphics = '&';
+        Graphics = new Graphics('&', ConsoleColor.Red);
+    }
+    
+    public Object(Graphics graphics)
+    {
+        Transform = new Transform();
+        Graphics = graphics;
     }
 
-    public Object(int scaleX, int scaleY)
+    public Object(int scaleX, int scaleY, Graphics graphics)
     {
         Transform = new Transform();
         Transform.SetScale(scaleX, scaleY);
-        Graphics = '&';
+        Graphics = graphics;
     }
 
-    public Object(int scaleX, int scaleY, int xPosition, int yPosition)
+    public Object(int scaleX, int scaleY, int xPosition, int yPosition, Graphics graphics)
     {
         Vector2 position = new Vector2(xPosition, yPosition);
         Vector2 scale = new Vector2(scaleX, scaleY);
         
         Transform = new Transform(position, scale);
         
-        Graphics = '&';
+        Graphics = graphics;
     }
 
-    public Object(Vector2 position, Vector2 scale)
+    public Object(Vector2 position, Vector2 scale, Graphics graphics)
     {
+        Graphics = graphics;
         Transform = new Transform(position, scale);
     }
 }

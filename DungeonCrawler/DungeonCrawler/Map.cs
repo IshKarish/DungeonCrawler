@@ -86,10 +86,10 @@ public class Map
                             else firstY = currentObject.Transform.Position.Y;
                         }
                         
-                        if (i == firstX && j == firstY) MapArr[j, i] = ' ';
+                        if (i == firstX && j == firstY) MapArr[j, i] = '.';
                         else MapArr[j, i] = '&';
                     }
-                    else MapArr[j, i] = currentObject.Graphics;
+                    else MapArr[j, i] = currentObject.Graphics.Symbol;
                 }
             }
         }
@@ -118,8 +118,12 @@ public class Map
             Console.Write(_verticalBorder);
             for (int j = 0; j < _cols; j++)
             {
-                if (MapArr[i, j] == '&') Console.BackgroundColor = ConsoleColor.Red;
-                else Console.BackgroundColor = ConsoleColor.Black;
+                Console.BackgroundColor = ConsoleColor.Black;
+                for (int k = 0; k < Objects.Length; k++)
+                {
+                    if (MapArr[i, j] == Objects[k].Graphics.Symbol) Console.BackgroundColor = Objects[k].Graphics.Color;
+                    //else Console.BackgroundColor = ConsoleColor.Black;
+                }
                 
                 Console.Write(MapArr[i, j]);
             }

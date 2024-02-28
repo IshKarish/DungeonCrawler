@@ -8,11 +8,29 @@ public class Door : Object
     {
         Transform.SetScale(2, 1);
         Transform.SetPosition(x, y);
-        //Graphics = '!';
+        Graphics.Color = ConsoleColor.Red;
     }
 
     public Door(int x, int y, DoorOrientation doorOrientation, int direction)
     {
+        Graphics.Color = ConsoleColor.Red;
+        DoorOrientation = doorOrientation;
+        Direction = direction;
+        switch (DoorOrientation)
+        {
+            case DoorOrientation.Horizontal:
+                Transform.SetScale(2, 1);
+                break;
+            case DoorOrientation.Vertical:
+                Transform.SetScale(1, 2);
+                break;
+        }
+        Transform.SetPosition(x, y);
+    }
+    
+    public Door(int x, int y, DoorOrientation doorOrientation, int direction, ConsoleColor color)
+    {
+        Graphics.Color = color;
         DoorOrientation = doorOrientation;
         Direction = direction;
         switch (DoorOrientation)
