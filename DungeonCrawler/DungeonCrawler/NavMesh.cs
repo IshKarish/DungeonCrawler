@@ -21,9 +21,10 @@ public class NavMesh
         {
             for (int j = 0; j < cols; j++)
             {
-                if (mapArr[j, i] != ' ' && mapArr[j, i] != '*' && mapArr[j, i] != '.')
+                if (mapArr[i, j] != ' ' && mapArr[i, j] != '*' && mapArr[i, j] != '.')
                 {
-                    Vector2 position = new Vector2(i, j);
+                    Console.WriteLine($"{j}, {i}");
+                    Vector2 position = new Vector2(j, i);
                     blocked.Add(position);
                 }
             }

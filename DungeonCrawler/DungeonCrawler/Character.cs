@@ -11,12 +11,10 @@ public class Character
     
     public void MoveUp(int axis, Map map)
     {
-        if (!inMapBounds()) return;
-        
         int xPos = Transform.Position.X;
         int yPos = Transform.Position.Y;
 
-        int lastPos = map.MapArr.GetLength(1) - 1;
+        int lastPos = map.MapArr.GetLength(0) - 1;
 
         bool isTryingToExitMap = (yPos == 0 && axis < 0) || (yPos == lastPos && axis > 0);
         if (isTryingToExitMap) return;
@@ -26,28 +24,15 @@ public class Character
 
     public void MoveRight(int axis, Map map)
     {
-        if (!inMapBounds()) return;
-        
         int xPos = Transform.Position.X;
         int yPos = Transform.Position.Y;
         
-        int lastPos = map.MapArr.GetLength(0) - 1;
+        int lastPos = map.MapArr.GetLength(1) - 1;
 
         bool isTryingToExitMap = (xPos == 0 && axis < 0) || (xPos == lastPos && axis > 0);
         if (isTryingToExitMap) return;
         
         Transform.SetPosition(xPos + axis, yPos);
-    }
-
-    public bool inMapBounds()
-    {
-        int xPos = Transform.Position.X;
-        int yPos = Transform.Position.Y;
-
-        bool inXBounds = xPos >= 0 && xPos < 20;
-        bool inYBounds = yPos >= 0 && yPos < 20;
-
-        return inXBounds && inYBounds;
     }
 
     // Colliding states

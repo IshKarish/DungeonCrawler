@@ -33,7 +33,7 @@ public class Map
         {
             for (int j = 0; j < _cols; j++)
             {
-                MapArr[j, i] = ' ';
+                MapArr[i, j] = ' ';
             }
         }
 
@@ -84,7 +84,7 @@ public class Map
                         if (i == firstX && j == firstY) MapArr[j, i] = '.';
                         else MapArr[j, i] = '&';
                     }
-                    else MapArr[j, i] = currentObject.Graphics.Symbol;
+                    else MapArr[i, j] = currentObject.Graphics.Symbol;
                 }
             }
         }
