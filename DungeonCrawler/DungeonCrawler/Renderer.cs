@@ -18,7 +18,6 @@ public static class Renderer
             bool drawHasStarted = i == 0;
             bool drawHasEnded = i == rows - 1;
             
-            
             if (drawHasStarted) PrintHorizontalBorder(cols);
             Console.BackgroundColor = ConsoleColor.Black;
             Console.Write('|');
@@ -36,7 +35,7 @@ public static class Renderer
                 
                 foreach (Vector2 position in enemiesPositions)
                 {
-                    if (i == position.X && j == position.Y)
+                    if (j == position.X && i == position.Y)
                     {
                         Console.Write('@');
                         printedEnemy = true;

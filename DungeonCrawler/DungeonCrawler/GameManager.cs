@@ -4,9 +4,9 @@ public class GameManager
 {
     public Game CreateGame(int mapSize, Character player, Object[] objects)
     {
-        Map map = new Map(mapSize, mapSize * 2, objects);
+        Map map = new Map(mapSize, objects);
         NavMesh navMesh = new NavMesh(map);
-        Character[] enemies = Enemies(100, mapSize, navMesh);
+        Character[] enemies = Enemies(80, mapSize, navMesh);
         Game game = new Game(map, navMesh, player, enemies);
 
         return game;
@@ -23,22 +23,20 @@ public class GameManager
         {
             Vector2 pos = GetRandomPosition(mapSize);
             
-            while (IsBlocked2(navMesh.Blocked, pos) || IsBlocked(lol.ToArray(), pos)) pos = GetRandomPosition(mapSize);
+            while (IsBlocked(navMesh.Blocked, pos) || IsBlocked(lol.ToArray(), pos)) pos = GetRandomPosition(mapSize);
 
             lol.Add(pos);
 
             Character enemy = new Character(pos.X, pos.Y);
             enemies[i] = enemy;
-
-            Console.WriteLine(lol.Count);
         }
         return enemies;
     }
 
     Vector2 GetRandomPosition(int mapSize)
     {
-        int xPos = Random.Shared.Next(mapSize);
-        int yPos = Random.Shared.Next(mapSize * 2);
+        int xPos = Random.Shared.Next(mapSize * 2);
+        int yPos = Random.Shared.Next(mapSize);
         
         Vector2 pos = new Vector2(xPos, yPos);
         
@@ -50,16 +48,6 @@ public class GameManager
         foreach (Vector2 b in blocked)
         {
             if (current.X == b.X && current.Y == b.Y) return true;
-        }
-
-        return false;
-    }
-    
-    bool IsBlocked2(Vector2[] blocked, Vector2 current)
-    {
-        foreach (Vector2 b in blocked)
-        {
-            if (current.Y == b.X && current.X == b.Y) return true;
         }
 
         return false;

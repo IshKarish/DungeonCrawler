@@ -9,7 +9,7 @@ public class Map
     
     public Map(int size, Object[] objects)
     {
-        MapArr = new char[size, size];
+        MapArr = new char[size, size * 2];
         Objects = objects;
         
         CreateMap();
@@ -59,7 +59,7 @@ public class Map
         {
             for (int j = 0; j < _cols; j++)
             {
-                Vector2 currentPosition = new Vector2(i, j);
+                Vector2 currentPosition = new Vector2(j, i);
                 bool isObjectInCurrentPosition = IsObjectInCurrentPosition(currentPosition, currentObject);
 
                 if (isObjectInCurrentPosition)
@@ -84,7 +84,8 @@ public class Map
                         if (j == firstX && i == firstY) MapArr[i, j] = '.';
                         else MapArr[i, j] = '&';
                     }
-                    else MapArr[i, j] = currentObject.Graphics.Symbol;
+                    else
+                    MapArr[i, j] = currentObject.Graphics.Symbol;
                 }
             }
         }
@@ -94,8 +95,8 @@ public class Map
     {
         Vector2 objectPosition = obj.Transform.Position;
         
-        bool inXPosition = (position.Y >= objectPosition.X) && (position.Y <= objectPosition.X + obj.Transform.Scale.X);
-        bool inYPosition = (position.X >= objectPosition.Y) && (position.X <= objectPosition.Y + obj.Transform.Scale.Y);
+        bool inXPosition = (position.X >= objectPosition.X) && (position.X <= objectPosition.X + obj.Transform.Scale.X);
+        bool inYPosition = (position.Y >= objectPosition.Y) && (position.Y <= objectPosition.Y + obj.Transform.Scale.Y);
         return inXPosition && inYPosition;
     }
 }
