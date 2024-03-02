@@ -23,7 +23,6 @@ public class NavMesh
             {
                 if (mapArr[i, j] != ' ' && mapArr[i, j] != '*' && mapArr[i, j] != '.')
                 {
-                    Console.WriteLine($"{j}, {i}");
                     Vector2 position = new Vector2(j, i);
                     blocked.Add(position);
                 }

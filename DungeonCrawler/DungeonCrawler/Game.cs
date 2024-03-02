@@ -5,16 +5,19 @@ public class Game
     public Map Map { get; private set; }
     public NavMesh NavMesh { get; private set; }
     public Character Player { get; private set; }
+    public Character[] Enemies { get; private set; }
 
-    public Game(Map map, Character player)
+    public Game(Map map, Character player, Character[] enemies)
     {
         Map = map;
         Player = player;
+        Enemies = enemies;
     }
-    public Game(Map map, NavMesh navMesh, Character player)
+    public Game(Map map, NavMesh navMesh, Character player, Character[] enemies)
     {
         Map = map;
         Player = player;
+        Enemies = enemies;
         NavMesh = navMesh;
     }
 

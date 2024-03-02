@@ -8,6 +8,11 @@ public class Character
     {
         Transform = new Transform();
     }
+
+    public Character(int x, int y)
+    {
+        Transform = new Transform(new Vector2(x, y));
+    }
     
     public void MoveUp(int axis, Map map)
     {
@@ -20,6 +25,7 @@ public class Character
         if (isTryingToExitMap) return;
         
         Transform.SetPosition(xPos, yPos + axis);
+        Console.Beep(4578, 1);
     }
 
     public void MoveRight(int axis, Map map)
@@ -33,6 +39,7 @@ public class Character
         if (isTryingToExitMap) return;
         
         Transform.SetPosition(xPos + axis, yPos);
+        Console.Beep(4578, 1);
     }
 
     // Colliding states

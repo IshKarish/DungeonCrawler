@@ -81,8 +81,8 @@ public class Map
                             else firstY = currentObject.Transform.Position.Y;
                         }
                         
-                        if (i == firstX && j == firstY) MapArr[j, i] = '.';
-                        else MapArr[j, i] = '&';
+                        if (j == firstX && i == firstY) MapArr[i, j] = '.';
+                        else MapArr[i, j] = '&';
                     }
                     else MapArr[i, j] = currentObject.Graphics.Symbol;
                 }
@@ -94,8 +94,8 @@ public class Map
     {
         Vector2 objectPosition = obj.Transform.Position;
         
-        bool inXPosition = (position.X >= objectPosition.X) && (position.X <= objectPosition.X + obj.Transform.Scale.X);
-        bool inYPosition = (position.Y >= objectPosition.Y) && (position.Y <= objectPosition.Y + obj.Transform.Scale.Y);
+        bool inXPosition = (position.Y >= objectPosition.X) && (position.Y <= objectPosition.X + obj.Transform.Scale.X);
+        bool inYPosition = (position.X >= objectPosition.Y) && (position.X <= objectPosition.Y + obj.Transform.Scale.Y);
         return inXPosition && inYPosition;
     }
 }

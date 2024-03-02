@@ -34,9 +34,22 @@ public class Object
         Graphics = graphics;
     }
 
+    public Object(Vector2 scale, Graphics graphics)
+    {
+        Transform = new Transform();
+        Transform.SetScale(scale.X, scale.Y);
+        Graphics = graphics;
+    }
+
     public Object(Vector2 position, Vector2 scale, Graphics graphics)
     {
         Graphics = graphics;
         Transform = new Transform(position, scale);
+    }
+
+    public Object(Transform transform, Graphics graphics)
+    {
+        Transform = transform;
+        Graphics = graphics;
     }
 }

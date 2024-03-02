@@ -44,4 +44,38 @@ public class Door : Object
         }
         Transform.SetPosition(x, y);
     }
+
+    public Door(Vector2 position, DoorOrientation doorOrientation, int direction, ConsoleColor color)
+    {
+        Graphics.Color = color;
+        DoorOrientation = doorOrientation;
+        Direction = direction;
+        switch (DoorOrientation)
+        {
+            case DoorOrientation.Horizontal:
+                Transform.SetScale(2, 1);
+                break;
+            case DoorOrientation.Vertical:
+                Transform.SetScale(1, 2);
+                break;
+        }
+        Transform.SetPosition(position.X, position.Y);
+    }
+    
+    public Door(Vector2 position, DoorOrientation doorOrientation, int direction)
+    {
+        Graphics.Color = ConsoleColor.Red;
+        DoorOrientation = doorOrientation;
+        Direction = direction;
+        switch (DoorOrientation)
+        {
+            case DoorOrientation.Horizontal:
+                Transform.SetScale(2, 1);
+                break;
+            case DoorOrientation.Vertical:
+                Transform.SetScale(1, 2);
+                break;
+        }
+        Transform.SetPosition(position.X, position.Y);
+    }
 }
