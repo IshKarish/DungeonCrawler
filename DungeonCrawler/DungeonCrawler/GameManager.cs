@@ -23,7 +23,6 @@ public class GameManager
         {
             Vector2 pos = GetRandomPosition(mapSize);
             
-            //
             while (IsBlocked2(navMesh.Blocked, pos) || IsBlocked(lol.ToArray(), pos)) pos = GetRandomPosition(mapSize);
 
             lol.Add(pos);

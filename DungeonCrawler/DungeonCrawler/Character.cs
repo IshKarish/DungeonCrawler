@@ -25,7 +25,7 @@ public class Character
         if (isTryingToExitMap) return;
         
         Transform.SetPosition(xPos, yPos + axis);
-        Console.Beep(4578, 1);
+        Console.Beep(500, 100);
     }
 
     public void MoveRight(int axis, Map map)
@@ -39,7 +39,7 @@ public class Character
         if (isTryingToExitMap) return;
         
         Transform.SetPosition(xPos + axis, yPos);
-        Console.Beep(4578, 1);
+        Console.Beep(500, 100);
     }
 
     // Colliding states
