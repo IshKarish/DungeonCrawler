@@ -14,7 +14,7 @@ public class Character
         Transform = new Transform(new Vector2(x, y));
     }
     
-    public void MoveUp(int axis, Map map)
+    public void MoveUp(int axis, Map map, NavMesh navMesh)
     {
         int xPos = Transform.Position.X;
         int yPos = Transform.Position.Y;
@@ -22,13 +22,20 @@ public class Character
         int lastPos = map.MapArr.GetLength(0) - 1;
 
         bool isTryingToExitMap = (yPos == 0 && axis < 0) || (yPos == lastPos && axis > 0);
-        if (isTryingToExitMap) return;
+        bool isCollidingFromTop = this.isCollidingFromTop(navMesh) && axis < 0;
+        bool isCollidingFromBottom = this.isCollidingFromBottom(navMesh) && axis > 0;
+
+        if (isTryingToExitMap || isCollidingFromBottom || isCollidingFromTop)
+        {
+            Console.Beep(7500, 10);
+            return;
+        }
         
         Transform.SetPosition(xPos, yPos + axis);
         Console.Beep(500, 100);
     }
 
-    public void MoveRight(int axis, Map map)
+    public void MoveRight(int axis, Map map, NavMesh navMesh)
     {
         int xPos = Transform.Position.X;
         int yPos = Transform.Position.Y;
@@ -36,7 +43,14 @@ public class Character
         int lastPos = map.MapArr.GetLength(1) - 1;
 
         bool isTryingToExitMap = (xPos == 0 && axis < 0) || (xPos == lastPos && axis > 0);
-        if (isTryingToExitMap) return;
+        bool isCollidingFromRight = IsCollidingFromRight(navMesh) && axis > 0;
+        bool isCollidingFromLeft = this.isCollidingFromLeft(navMesh) && axis < 0;
+
+        if (isTryingToExitMap || isCollidingFromLeft || isCollidingFromRight)
+        {
+            Console.Beep(7500, 10);
+            return;
+        }
         
         Transform.SetPosition(xPos + axis, yPos);
         Console.Beep(500, 100);

@@ -15,9 +15,9 @@ public class Map
         CreateMap();
     }
     
-    public Map(int sizeX, int sizeY, Object[] objects)
+    public Map(Vector2 size, Object[] objects)
     {
-        MapArr = new char[sizeX, sizeY];
+        MapArr = new char[size.X, size.Y];
         Objects = objects;
         
         CreateMap();
