@@ -4,6 +4,8 @@ class Program
 {
     public static void Main(string[] args)
     {
+        Console.CursorVisible = false;
+        
         GameManager gameManager = new GameManager();
         
         Pawn player = new Pawn(0, 0, new Graphics('*', ConsoleColor.White));
