@@ -5,9 +5,9 @@ public class GameManager
     public void StartGame(Game game)
     {
         Map map = game.Map;
-        Character player = game.Player;
+        Pawn player = game.Player;
         NavMesh navMesh = game.NavMesh;
-        Character[] enemies = game.Enemies;
+        Pawn[] enemies = game.Enemies;
         
         while (true)
         {

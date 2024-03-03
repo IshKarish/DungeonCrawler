@@ -1,15 +1,15 @@
 ﻿namespace DungeonCrawler;
 
-public class Character
+public class Pawn
 {
     public Transform Transform { get; private set; }
 
-    public Character()
+    public Pawn()
     {
         Transform = new Transform();
     }
 
-    public Character(int x, int y)
+    public Pawn(int x, int y)
     {
         Transform = new Transform(new Vector2(x, y));
     }

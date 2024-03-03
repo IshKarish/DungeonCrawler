@@ -2,7 +2,7 @@
 
 public static class Physics
 {
-    public static bool IsNextXColliding(Character player, NavMesh navMesh, int direction)
+    public static bool IsNextXColliding(Pawn player, NavMesh navMesh, int direction)
     {
         if (direction > 0) direction = 1;
         else direction = -1;
@@ -24,7 +24,7 @@ public static class Physics
         return false;
     }
 
-    public static bool IsNextYColliding(Character player, NavMesh navMesh, int direction)
+    public static bool IsNextYColliding(Pawn player, NavMesh navMesh, int direction)
     {
         if (direction > 0) direction = 1;
         else direction = -1;

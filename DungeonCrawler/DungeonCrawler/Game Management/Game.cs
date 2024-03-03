@@ -4,28 +4,28 @@ public class Game
 {
     public Map Map { get; private set; }
     public NavMesh NavMesh { get; private set; } = null!;
-    public Character Player { get; private set; }
-    public Character[] Enemies { get; private set; } = null!;
+    public Pawn Player { get; private set; }
+    public Pawn[] Enemies { get; private set; } = null!;
 
-    public Game(Map map, Character player)
+    public Game(Map map, Pawn player)
     {
         Map = map;
         Player = player;
     }
 
-    public Game(Map map, NavMesh navMesh, Character player)
+    public Game(Map map, NavMesh navMesh, Pawn player)
     {
         Map = map;
         Player = player;
         NavMesh = navMesh;
     }
 
-    public static Game CreateInstance(Map map, NavMesh navMesh, Character player)
+    public static Game CreateInstance(Map map, NavMesh navMesh, Pawn player)
     {
         return new Game(map, navMesh, player);
     }
 
-    public void AddEnemies(Character[] enemies)
+    public void AddEnemies(Pawn[] enemies)
     {
         Enemies = enemies;
     }

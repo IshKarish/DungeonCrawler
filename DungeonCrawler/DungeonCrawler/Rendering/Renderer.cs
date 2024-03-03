@@ -2,10 +2,10 @@
 
 public static class Renderer
 {
-    public static void PrintMap(Map map, Character player, Character[] enemies)
+    public static void PrintMap(Map map, Pawn player, Pawn[] enemies)
     {
         char[,] mapArr = map.MapArr;
-        Object[] objects = map.Objects;
+        Actor[] objects = map.Objects;
         
         int rows = map.MapArr.GetLength(0);
         int cols = map.MapArr.GetLength(1);
@@ -47,7 +47,7 @@ public static class Renderer
                     if (mapArr[i, j] == '.') Console.Write(' ');
                     else
                     {
-                        foreach (Object o in objects)
+                        foreach (Actor o in objects)
                         {
                             if (mapArr[i, j] == o.Graphics.Symbol) Console.BackgroundColor = o.Graphics.Color;
                         }
@@ -65,10 +65,10 @@ public static class Renderer
         Console.WriteLine();
     }
     
-    public static void PrintMap(Map map, Character player)
+    public static void PrintMap(Map map, Pawn player)
     {
         char[,] mapArr = map.MapArr;
-        Object[] objects = map.Objects;
+        Actor[] objects = map.Objects;
         
         int rows = map.MapArr.GetLength(0);
         int cols = map.MapArr.GetLength(1);
@@ -90,7 +90,7 @@ public static class Renderer
                 else if (mapArr[i, j] == '.') Console.Write(' ');
                 else
                 {
-                    foreach (Object o in objects)
+                    foreach (Actor o in objects)
                     {
                         if (mapArr[i, j] == o.Graphics.Symbol) Console.BackgroundColor = o.Graphics.Color;
                     }
@@ -118,12 +118,12 @@ public static class Renderer
         Console.WriteLine();
     }
 
-    static bool IsPlayerInPosition(Character player, int i, int j)
+    static bool IsPlayerInPosition(Pawn player, int i, int j)
     {
         return (j == player.Transform.Position.X && i == player.Transform.Position.Y);
     }
 
-    static Vector2[] EnemiesPositions(Character[] enemies)
+    static Vector2[] EnemiesPositions(Pawn[] enemies)
     {
         Vector2[] arr = new Vector2[enemies.Length];
 

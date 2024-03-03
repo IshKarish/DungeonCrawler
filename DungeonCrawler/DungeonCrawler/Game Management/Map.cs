@@ -3,11 +3,11 @@
 public class Map
 {
     public char[,] MapArr { get; private set; }
-    public Object[] Objects { get; private set; }
+    public Actor[] Objects { get; private set; }
     private static int _rows;
     private static int _cols;
     
-    public Map(int size, Object[] objects)
+    public Map(int size, Actor[] objects)
     {
         MapArr = new char[size, size * 2];
         Objects = objects;
@@ -15,7 +15,7 @@ public class Map
         CreateMap();
     }
     
-    public Map(Vector2 size, Object[] objects)
+    public Map(Vector2 size, Actor[] objects)
     {
         MapArr = new char[size.X, size.Y];
         Objects = objects;
@@ -48,11 +48,11 @@ public class Map
 
     void AddObjects(int currentObjectIndex)
     {
-        Object currentObject = Objects[currentObjectIndex];
+        Actor currentActor = Objects[currentObjectIndex];
 
-        bool isDoor = currentObject is Door;
+        bool isDoor = currentActor is Door;
         int doorDirection = 1;
-        if (isDoor) doorDirection = ((Door)currentObject).Direction;
+        if (isDoor) doorDirection = ((Door)currentActor).Direction;
         
         
         for (int i = 0; i < _rows; i++)
@@ -60,38 +60,38 @@ public class Map
             for (int j = 0; j < _cols; j++)
             {
                 Vector2 currentPosition = new Vector2(j, i);
-                bool isObjectInCurrentPosition = IsObjectInCurrentPosition(currentPosition, currentObject);
+                bool isObjectInCurrentPosition = IsObjectInCurrentPosition(currentPosition, currentActor);
 
                 if (isObjectInCurrentPosition)
                 {
                     if (isDoor)
                     {
-                        int firstX = currentObject.Transform.Position.X + 1;
-                        int firstY = currentObject.Transform.Position.Y + 1;
+                        int firstX = currentActor.Transform.Position.X + 1;
+                        int firstY = currentActor.Transform.Position.Y + 1;
 
-                        if (((Door)currentObject).DoorOrientation == DoorOrientation.Vertical)
+                        if (((Door)currentActor).DoorOrientation == DoorOrientation.Vertical)
                         {
-                            if (doorDirection > 0) firstX = currentObject.Transform.Position.X + 1;
-                            else firstX = currentObject.Transform.Position.X;
+                            if (doorDirection > 0) firstX = currentActor.Transform.Position.X + 1;
+                            else firstX = currentActor.Transform.Position.X;
                         }
 
-                        if (((Door)currentObject).DoorOrientation == DoorOrientation.Horizontal)
+                        if (((Door)currentActor).DoorOrientation == DoorOrientation.Horizontal)
                         {
-                            if (doorDirection < 0) firstY = currentObject.Transform.Position.Y + 1;
-                            else firstY = currentObject.Transform.Position.Y;
+                            if (doorDirection < 0) firstY = currentActor.Transform.Position.Y + 1;
+                            else firstY = currentActor.Transform.Position.Y;
                         }
                         
                         if (j == firstX && i == firstY) MapArr[i, j] = '.';
                         else MapArr[i, j] = '&';
                     }
                     else
-                    MapArr[i, j] = currentObject.Graphics.Symbol;
+                    MapArr[i, j] = currentActor.Graphics.Symbol;
                 }
             }
         }
     }
 
-    bool IsObjectInCurrentPosition(Vector2 position, Object obj)
+    bool IsObjectInCurrentPosition(Vector2 position, Actor obj)
     {
         Vector2 objectPosition = obj.Transform.Position;
         

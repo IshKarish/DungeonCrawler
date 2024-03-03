@@ -1,6 +1,6 @@
 ﻿namespace DungeonCrawler;
 
-public class Door : Object
+public class Door : Actor
 {
     public DoorOrientation DoorOrientation { get; private set; }
     public int Direction { get; private set; }
