@@ -6,7 +6,7 @@ class Program
     {
         GameManager gameManager = new GameManager();
         
-        Pawn player = new Pawn();
+        Pawn player = new Pawn(0, 0, new Graphics('*', ConsoleColor.White));
 
         Graphics objGraphics = new Graphics('/', ConsoleColor.Blue);
         Graphics objGraphics2 = new Graphics('!', ConsoleColor.Yellow);

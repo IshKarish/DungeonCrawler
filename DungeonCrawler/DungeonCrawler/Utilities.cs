@@ -50,9 +50,10 @@ public static class Utilities
         return enemies;
     }
     
-    public static Pawn[] GenerateEnemies(int enemyCount, Vector2 mapSize, NavMesh navMesh)
+    public static Pawn[] GenerateEnemies(int enemyPercentage, Vector2 mapSize, NavMesh navMesh)
     {
-        if (enemyCount > 100) enemyCount = 100;
+        int enemyCount = (mapSize.X * mapSize.Y) * enemyPercentage / 100;
+        if (enemyCount > 50) enemyCount = 50;
         
         Pawn[] enemies = new Pawn[enemyCount];
         List<Vector2> takenPositions = new List<Vector2>();

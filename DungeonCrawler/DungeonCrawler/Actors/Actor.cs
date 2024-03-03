@@ -2,7 +2,7 @@
 
 public class Actor
 {
-    public Transform Transform { get; private set; }
+    public Transform Transform { get; init; }
     public Graphics Graphics { get; init; }
 
     public Actor()
