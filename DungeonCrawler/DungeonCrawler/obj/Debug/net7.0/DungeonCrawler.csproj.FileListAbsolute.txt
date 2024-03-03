@@ -30,3 +30,6 @@ C:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\DungeonC
 C:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\ref\DungeonCrawler.dll
 F:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.csproj.CopyComplete
 F:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\Sanford.Multimedia.Midi.dll
+C:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\Sanford.Multimedia.Midi.dll
+C:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.csproj.AssemblyReference.cache
+C:\Tiltan\DungeonCrawler\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\DungeonC.EA0EDB72.Up2Date

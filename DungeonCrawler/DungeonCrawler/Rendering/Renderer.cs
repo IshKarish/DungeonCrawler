@@ -65,6 +65,48 @@ public static class Renderer
         Console.WriteLine();
     }
     
+    public static void PrintMap(Map map, Character player)
+    {
+        char[,] mapArr = map.MapArr;
+        Object[] objects = map.Objects;
+        
+        int rows = map.MapArr.GetLength(0);
+        int cols = map.MapArr.GetLength(1);
+        
+        for (int i = 0; i < rows; i++)
+        {
+            // States
+            bool drawHasStarted = i == 0;
+            bool drawHasEnded = i == rows - 1;
+            
+            if (drawHasStarted) PrintHorizontalBorder(cols);
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.Write('|');
+            for (int j = 0; j < cols; j++)
+            {
+                Console.BackgroundColor = ConsoleColor.Black;
+
+                if (IsPlayerInPosition(player, i, j)) Console.Write('*');
+                else if (mapArr[i, j] == '.') Console.Write(' ');
+                else
+                {
+                    foreach (Object o in objects)
+                    {
+                        if (mapArr[i, j] == o.Graphics.Symbol) Console.BackgroundColor = o.Graphics.Color;
+                    }
+                    Console.Write(mapArr[i, j]);
+                }
+            }
+            
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.WriteLine('|');
+            
+            if (drawHasEnded) PrintHorizontalBorder(cols);
+        }
+
+        Console.WriteLine();
+    }
+    
     static void PrintHorizontalBorder(int cols)
     {
         Console.BackgroundColor = ConsoleColor.Black;

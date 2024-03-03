@@ -7,16 +7,13 @@ public class GameManager
         Map map = game.Map;
         Character player = game.Player;
         NavMesh navMesh = game.NavMesh;
+        Character[] enemies = game.Enemies;
         
         while (true)
         {
-            Renderer.PrintMap(map, player, game.Enemies);
+            if (enemies != null) Renderer.PrintMap(map, player, game.Enemies);
+            else Renderer.PrintMap(map, player);
             Console.WriteLine(game.IsPlayerStandingOnDoor());
-
-            bool isCollidingFromRight = player.IsCollidingFromRight(navMesh);
-            bool isCollidingFromLeft = player.isCollidingFromLeft(navMesh);
-            bool isCollidingFromTop = player.isCollidingFromTop(navMesh);
-            bool isCollidingFromBottom = player.isCollidingFromBottom(navMesh);
             
             ConsoleKeyInfo cki = Console.ReadKey();
             switch (cki.Key)

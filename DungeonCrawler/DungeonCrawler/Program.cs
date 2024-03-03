@@ -23,7 +23,7 @@ class Program
         };
 
         Game game = Utilities.CreateGame(new Vector2(20, 100), player, objects);
-        Character[] enemies = Utilities.GenerateEnemies(100, new Vector2(20, 100), game.NavMesh);
+        Character[] enemies = Utilities.GenerateEnemies(10, new Vector2(20, 100), game.NavMesh);
         game.AddEnemies(enemies);
         
         gameManager.StartGame(game);

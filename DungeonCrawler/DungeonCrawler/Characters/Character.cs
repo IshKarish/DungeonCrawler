@@ -27,7 +27,7 @@ public class Character
 
         if (isTryingToExitMap || isCollidingFromBottom || isCollidingFromTop)
         {
-            Console.Beep(7500, 10);
+            Console.Beep(7500, 50);
             return;
         }
         
@@ -48,7 +48,7 @@ public class Character
 
         if (isTryingToExitMap || isCollidingFromLeft || isCollidingFromRight)
         {
-            Console.Beep(7500, 10);
+            Console.Beep(7500, 50);
             return;
         }
         
