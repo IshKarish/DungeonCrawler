@@ -29,6 +29,7 @@ public static class Renderer
 
                 if (IsPlayerInPosition(player, i, j))
                 {
+                    Console.BackgroundColor = ConsoleColor.White;
                     Console.Write('*');
                     continue;
                 }
