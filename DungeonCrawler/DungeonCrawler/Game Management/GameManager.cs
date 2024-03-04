@@ -9,15 +9,14 @@ public class GameManager
         NavMesh navMesh = game.NavMesh;
         Pawn[] enemies = game.Enemies;
         
-        if (enemies != null) Renderer.PrintMap(map, player, game.Enemies);
-                    else Renderer.PrintMap(map, player);
+        if (enemies != null) Renderer.PrintMap(map, game.Enemies);
+        else Renderer.PrintMap(map);
+        
+        //Renderer.UpdatePawnPosition(player);
         
         while (true)
         {
-            
-            //Console.WriteLine(game.IsPlayerStandingOnDoor());
-            
-            ConsoleKeyInfo cki = Console.ReadKey();
+            ConsoleKeyInfo cki = Console.ReadKey(true);
             switch (cki.Key)
             {
                 case ConsoleKey.UpArrow:
@@ -38,7 +37,7 @@ public class GameManager
                     break;
             } 
             
-            //Console.Clear();
+            //Renderer.UpdatePawnPosition(player);
         }
     }
 }

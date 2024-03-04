@@ -23,6 +23,8 @@ public class Pawn : Actor
     {
         Transform.SetPosition(x, y);
         Graphics = graphics;
+        
+        Renderer.UpdatePawnPosition(this);
     }
 
     public Pawn(Vector2 position)
@@ -33,7 +35,6 @@ public class Pawn : Actor
     
     public void MoveUp(int axis, Map map, NavMesh navMesh)
     {
-        (int x, int y) = Console.GetCursorPosition();
         
         int xPos = Transform.Position.X;
         int yPos = Transform.Position.Y;
@@ -52,16 +53,10 @@ public class Pawn : Actor
         
         Transform.SetPosition(xPos, yPos + axis);
         Console.Beep(500, 100);
-        
-        Console.SetCursorPosition(Transform.Position.X + 1, Transform.Position.Y + 1);
-        Console.Write('*');
-        Console.SetCursorPosition(x, y);
     }
 
     public void MoveRight(int axis, Map map, NavMesh navMesh)
     {
-        (int x, int y) = Console.GetCursorPosition();
-        
         int xPos = Transform.Position.X;
         int yPos = Transform.Position.Y;
         
@@ -79,10 +74,6 @@ public class Pawn : Actor
         
         Transform.SetPosition(xPos + axis, yPos);
         Console.Beep(500, 100);
-        
-        Console.SetCursorPosition(Transform.Position.X + 1, Transform.Position.Y + 1);
-        Console.Write('*');
-        Console.SetCursorPosition(x, y);
     }
 
     // Colliding states

@@ -2,7 +2,7 @@
 
 public static class Renderer
 {
-    public static void PrintMap(Map map, Pawn player, Pawn[] enemies)
+    public static void PrintMap(Map map, Pawn[] enemies)
     {
         char[,] mapArr = map.MapArr;
         Actor[] objects = map.Objects;
@@ -26,13 +26,6 @@ public static class Renderer
                 bool printedEnemy = false;
                 
                 Console.BackgroundColor = ConsoleColor.Black;
-
-                if (IsPlayerInPosition(player, i, j))
-                {
-                    Console.BackgroundColor = player.Graphics.Color;
-                    Console.Write(player.Graphics.Symbol);
-                    continue;
-                }
                 
                 foreach (Vector2 position in enemiesPositions)
                 {
@@ -66,7 +59,7 @@ public static class Renderer
         Console.WriteLine();
     }
     
-    public static void PrintMap(Map map, Pawn player)
+    public static void PrintMap(Map map)
     {
         char[,] mapArr = map.MapArr;
         Actor[] objects = map.Objects;
@@ -86,9 +79,8 @@ public static class Renderer
             for (int j = 0; j < cols; j++)
             {
                 Console.BackgroundColor = ConsoleColor.Black;
-
-                if (IsPlayerInPosition(player, i, j)) Console.Write('*');
-                else if (mapArr[i, j] == '.') Console.Write(' ');
+                
+                if (mapArr[i, j] == '.') Console.Write(' ');
                 else
                 {
                     foreach (Actor o in objects)
@@ -106,6 +98,18 @@ public static class Renderer
         }
 
         Console.WriteLine();
+    }
+
+    public static void UpdatePawnPosition(Pawn pawn)
+    {
+        Console.Write(' ');
+        Console.SetCursorPosition(pawn.Transform.Position.X + 1, pawn.Transform.Position.Y + 1);
+        
+        Console.BackgroundColor = pawn.Graphics.Color;
+        Console.Write(pawn.Graphics.Symbol);
+        
+        Console.SetCursorPosition(pawn.Transform.Position.X + 1, pawn.Transform.Position.Y + 1);
+        Console.BackgroundColor = ConsoleColor.Black;
     }
     
     static void PrintHorizontalBorder(int cols)

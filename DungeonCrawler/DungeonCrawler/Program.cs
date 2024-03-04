@@ -4,7 +4,7 @@ class Program
 {
     public static void Main(string[] args)
     {
-        Console.CursorVisible = false;
+        //Console.CursorVisible = false;
         
         GameManager gameManager = new GameManager();
         
