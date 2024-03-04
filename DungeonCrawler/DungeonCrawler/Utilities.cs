@@ -72,6 +72,28 @@ public static class Utilities
         return enemies;
     }
     
+    public static Pawn[] GenerateEnemies(int enemyPercentage, Vector2 mapSize, NavMesh navMesh, Graphics graphics)
+    {
+        int enemyCount = (mapSize.X * mapSize.Y) * enemyPercentage / 100;
+        if (enemyCount > 50) enemyCount = 50;
+        
+        Pawn[] enemies = new Pawn[enemyCount];
+        List<Vector2> takenPositions = new List<Vector2>();
+        
+        for (int i = 0; i < enemyCount; i++)
+        {
+            Vector2 pos = GetRandomPosition(mapSize);
+            
+            while (IsBlocked(navMesh.Blocked, pos) || IsBlocked(takenPositions.ToArray(), pos)) pos = GetRandomPosition(mapSize);
+
+            takenPositions.Add(pos);
+
+            Pawn enemy = new Pawn(pos.X, pos.Y, graphics);
+            enemies[i] = enemy;
+        }
+        return enemies;
+    }
+    
     static Vector2 GetRandomPosition(int mapSize)
     {
         int xPos = Random.Shared.Next(mapSize * 2);

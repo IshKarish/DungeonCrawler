@@ -23,8 +23,6 @@ public class Pawn : Actor
     {
         Transform.SetPosition(x, y);
         Graphics = graphics;
-        
-        Renderer.UpdatePawnPosition(this);
     }
 
     public Pawn(Vector2 position)
@@ -35,7 +33,6 @@ public class Pawn : Actor
     
     public void MoveUp(int axis, Map map, NavMesh navMesh)
     {
-        
         int xPos = Transform.Position.X;
         int yPos = Transform.Position.Y;
 

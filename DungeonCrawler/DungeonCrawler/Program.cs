@@ -4,7 +4,7 @@ class Program
 {
     public static void Main(string[] args)
     {
-        //Console.CursorVisible = false;
+        Console.CursorVisible = false;
         
         GameManager gameManager = new GameManager();
         
@@ -25,7 +25,7 @@ class Program
         };
 
         Game game = Utilities.CreateGame(new Vector2(20, 100), player, objects);
-        Pawn[] enemies = Utilities.GenerateEnemies(10, new Vector2(20, 100), game.NavMesh);
+        Pawn[] enemies = Utilities.GenerateEnemies(10, new Vector2(20, 100), game.NavMesh, new Graphics('!', ConsoleColor.DarkRed));
         game.AddEnemies(enemies);
         
         gameManager.StartGame(game);

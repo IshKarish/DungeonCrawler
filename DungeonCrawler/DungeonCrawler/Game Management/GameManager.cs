@@ -5,15 +5,20 @@ public class GameManager
     public void StartGame(Game game)
     {
         Map map = game.Map;
-        Pawn player = game.Player;
         NavMesh navMesh = game.NavMesh;
+        
+        Renderer.PrintMap(map);
+        
+        Pawn player = game.Player;
+        Renderer.UpdatePawnPosition(player, false);
+        
         Pawn[] enemies = game.Enemies;
+        foreach (Pawn enemy in enemies)
+        {
+            Renderer.UpdatePawnPosition(enemy, false);
+        }
         
-        if (enemies != null) Renderer.PrintMap(map, game.Enemies);
-        else Renderer.PrintMap(map);
-        
-        //Renderer.UpdatePawnPosition(player);
-        
+        Console.SetCursorPosition(player.Transform.Position.X + 1, player.Transform.Position.Y + 1);
         while (true)
         {
             ConsoleKeyInfo cki = Console.ReadKey(true);
@@ -37,7 +42,7 @@ public class GameManager
                     break;
             } 
             
-            //Renderer.UpdatePawnPosition(player);
+            Renderer.UpdatePawnPosition(player, true);
         }
     }
 }
