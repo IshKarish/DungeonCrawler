@@ -50,12 +50,12 @@ public static class Utilities
         return enemies;
     }
     
-    public static Pawn[] GenerateEnemies(int enemyPercentage, Vector2 mapSize, NavMesh navMesh)
+    public static Enemy[] GenerateEnemies(int enemyPercentage, Vector2 mapSize, NavMesh navMesh)
     {
         int enemyCount = (mapSize.X * mapSize.Y) * enemyPercentage / 100;
         if (enemyCount > 50) enemyCount = 50;
         
-        Pawn[] enemies = new Pawn[enemyCount];
+        Enemy[] enemies = new Enemy[enemyCount];
         List<Vector2> takenPositions = new List<Vector2>();
         
         for (int i = 0; i < enemyCount; i++)
@@ -66,18 +66,18 @@ public static class Utilities
 
             takenPositions.Add(pos);
 
-            Pawn enemy = new Pawn(pos.X, pos.Y);
+            Enemy enemy = new Enemy(pos.X, pos.Y);
             enemies[i] = enemy;
         }
         return enemies;
     }
     
-    public static Pawn[] GenerateEnemies(int enemyPercentage, Vector2 mapSize, NavMesh navMesh, Graphics graphics)
+    public static Enemy[] GenerateEnemies(int enemyPercentage, Vector2 mapSize, NavMesh navMesh, Graphics graphics)
     {
         int enemyCount = (mapSize.X * mapSize.Y) * enemyPercentage / 100;
         if (enemyCount > 50) enemyCount = 50;
         
-        Pawn[] enemies = new Pawn[enemyCount];
+        Enemy[] enemies = new Enemy[enemyCount];
         List<Vector2> takenPositions = new List<Vector2>();
         
         for (int i = 0; i < enemyCount; i++)
@@ -88,7 +88,7 @@ public static class Utilities
 
             takenPositions.Add(pos);
 
-            Pawn enemy = new Pawn(pos.X, pos.Y, graphics);
+            Enemy enemy = new Enemy(pos.X, pos.Y, graphics);
             enemies[i] = enemy;
         }
         return enemies;

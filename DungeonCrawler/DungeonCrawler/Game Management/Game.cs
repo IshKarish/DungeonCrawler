@@ -5,7 +5,7 @@ public class Game
     public Map Map { get; private set; }
     public NavMesh NavMesh { get; private set; } = null!;
     public Pawn Player { get; private set; }
-    public Pawn[] Enemies { get; private set; } = null!;
+    public Enemy[] Enemies { get; private set; } = null!;
 
     public Game(Map map, Pawn player)
     {
@@ -25,7 +25,7 @@ public class Game
         return new Game(map, navMesh, player);
     }
 
-    public void AddEnemies(Pawn[] enemies)
+    public void AddEnemies(Enemy[] enemies)
     {
         Enemies = enemies;
     }

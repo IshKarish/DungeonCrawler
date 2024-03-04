@@ -31,6 +31,11 @@ public class Pawn : Actor
         Graphics = new Graphics('*', ConsoleColor.White);
     }
     
+    public Pawn(Graphics graphics)
+    {
+        Graphics = graphics;
+    }
+    
     public void MoveUp(int axis, Map map, NavMesh navMesh)
     {
         int xPos = Transform.Position.X;
