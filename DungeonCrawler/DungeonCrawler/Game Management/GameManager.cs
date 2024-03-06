@@ -27,11 +27,11 @@ public class GameManager
             {
                 case ConsoleKey.UpArrow:
                 case ConsoleKey.W:
-                    player.PawnMovement.MoveUp(-1, map, navMesh);
+                    player.PawnMovement.MoveUp(1, map, navMesh);
                     break;
                 case ConsoleKey.DownArrow:
                 case ConsoleKey.S:
-                    player.PawnMovement.MoveUp(1, map, navMesh);
+                    player.PawnMovement.MoveUp(-1, map, navMesh);
                     break;
                 case ConsoleKey.RightArrow:
                 case ConsoleKey.D:
@@ -43,11 +43,11 @@ public class GameManager
                     break;
             }
             
-            //Renderer.UpdatePawnPosition(player, true);
+            Renderer.UpdatePawnPosition(player, true);
             
             foreach (Enemy enemy in enemies)
             {
-                enemy.PawnMovement.MoveRight(1, map, navMesh);
+                //enemy.PawnMovement.MoveRight(1, map, navMesh);
                 //Renderer.UpdatePawnPosition(enemy, true);
             }
         }

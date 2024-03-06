@@ -13,6 +13,8 @@ public class PawnMovement
     
     public void MoveUp(int axis, Map map, NavMesh navMesh)
     {
+        axis *= -1;
+        
         int xPos = _transform.Position.X;
         int yPos = _transform.Position.Y;
 
