@@ -24,7 +24,7 @@ public class Actor
         Graphics = graphics;
     }
 
-    public Actor(int scaleX, int scaleY, int xPosition, int yPosition, Graphics graphics)
+    public Actor(int xPosition, int yPosition, int scaleX, int scaleY, Graphics graphics)
     {
         Vector2 position = new Vector2(xPosition, yPosition);
         Vector2 scale = new Vector2(scaleX, scaleY);
@@ -51,5 +51,11 @@ public class Actor
     {
         Transform = transform;
         Graphics = graphics;
+    }
+    
+    public Actor(Transform transform)
+    {
+        Transform = transform;
+        Graphics = new Graphics('&', ConsoleColor.Red);
     }
 }

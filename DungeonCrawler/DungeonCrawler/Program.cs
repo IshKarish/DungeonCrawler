@@ -14,20 +14,22 @@ class Program
         Graphics objGraphics2 = new Graphics('!', ConsoleColor.Yellow);
         Graphics objGraphics3 = new Graphics('^', ConsoleColor.DarkGreen);
         
-        Actor obj = new Actor(3, 4, 2, 6, objGraphics);
-        Actor obj2 = new Actor(6, 2, 78, 6, objGraphics2);
-        Actor obj3 = new Actor(4, 4, 50, 18, objGraphics3);
-        Actor obj4 = new Actor(3, 5, 6, 9, objGraphics);
+        Actor obj = new Actor(2, 6, 3, 4, objGraphics);
+        Actor obj2 = new Actor(78, 6, 6, 2, objGraphics2);
+        Actor obj3 = new Actor(50, 18, 4, 4, objGraphics3);
+        Actor obj4 = new Actor(6, 9,3, 5,  objGraphics);
+        
         Door doorBenDoor = new Door(97, 0, DoorOrientation.Horizontal, -1);
+        
         Actor[] objects =
         {
             obj, obj2, obj3, obj4, doorBenDoor
         };
 
-        Game game = Utilities.CreateGame(new Vector2(20, 100), player, objects);
-        Enemy[] enemies = Utilities.GenerateEnemies(10, new Vector2(20, 100), game.NavMesh);
-        game.AddEnemies(enemies);
+        Level level = Utilities.CreateLevel(new Vector2(20, 100), player, objects);
+        Enemy[] enemies = Utilities.GenerateEnemies(1, new Vector2(20, 100), level.NavMesh);
+        level.AddEnemies(enemies);
         
-        gameManager.StartGame(game);
+        gameManager.StartGame(level);
     }
 }

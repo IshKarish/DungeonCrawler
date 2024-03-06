@@ -2,23 +2,24 @@
 
 public class GameManager
 {
-    public void StartGame(Game game)
+    public void StartGame(Level level)
     {
-        Map map = game.Map;
-        NavMesh navMesh = game.NavMesh;
+        Map map = level.Map;
+        NavMesh navMesh = level.NavMesh;
         
         Renderer.PrintMap(map);
         
-        Pawn player = game.Player;
+        Pawn player = level.Player;
         Renderer.UpdatePawnPosition(player, false);
         
-        Pawn[] enemies = game.Enemies;
-        foreach (Pawn enemy in enemies)
+        Enemy[] enemies = level.Enemies;
+        foreach (Enemy enemy in enemies)
         {
             Renderer.UpdatePawnPosition(enemy, false);
         }
         
         Console.SetCursorPosition(player.Transform.Position.X + 1, player.Transform.Position.Y + 1);
+        
         while (true)
         {
             ConsoleKeyInfo cki = Console.ReadKey(true);
@@ -26,23 +27,29 @@ public class GameManager
             {
                 case ConsoleKey.UpArrow:
                 case ConsoleKey.W:
-                    player.MoveUp(-1, map, navMesh);
+                    player.PawnMovement.MoveUp(-1, map, navMesh);
                     break;
                 case ConsoleKey.DownArrow:
                 case ConsoleKey.S:
-                    player.MoveUp(1, map, navMesh);
+                    player.PawnMovement.MoveUp(1, map, navMesh);
                     break;
                 case ConsoleKey.RightArrow:
                 case ConsoleKey.D:
-                    player.MoveRight(1, map, navMesh);
+                    player.PawnMovement.MoveRight(1, map, navMesh);
                     break;
                 case ConsoleKey.LeftArrow:
                 case ConsoleKey.A:
-                    player.MoveRight(-1, map, navMesh);
+                    player.PawnMovement.MoveRight(-1, map, navMesh);
                     break;
-            } 
+            }
             
-            Renderer.UpdatePawnPosition(player, true);
+            //Renderer.UpdatePawnPosition(player, true);
+            
+            foreach (Enemy enemy in enemies)
+            {
+                enemy.PawnMovement.MoveRight(1, map, navMesh);
+                //Renderer.UpdatePawnPosition(enemy, true);
+            }
         }
     }
 }

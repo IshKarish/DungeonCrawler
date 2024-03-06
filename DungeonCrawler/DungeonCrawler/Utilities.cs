@@ -3,29 +3,29 @@
 public static class Utilities
 {
     // Game creation
-    public static Game CreateGame(int mapSize, Pawn player, Actor[] objects)
+    public static Level CreateLevel(int mapSize, Pawn player, Actor[] objects)
     {
         Map map = new Map(mapSize, objects);
         NavMesh navMesh = new NavMesh(map);
-        Game game = new Game(map, navMesh, player);
+        Level level = new Level(map, navMesh, player);
 
-        return game;
+        return level;
     }
-    public static Game CreateGame(Vector2 mapSize, Pawn player, Actor[] objects)
+    public static Level CreateLevel(Vector2 mapSize, Pawn player, Actor[] objects)
     {
         Map map = new Map(mapSize, objects);
         NavMesh navMesh = new NavMesh(map);
-        Game game = new Game(map, navMesh, player);
+        Level level = new Level(map, navMesh, player);
 
-        return game;
+        return level;
     }
-    public static Game CreateGame(int mapSizeX, int mapSizeY, Pawn player, Actor[] objects)
+    public static Level CreateLevel(int mapSizeX, int mapSizeY, Pawn player, Actor[] objects)
     {
         Map map = new Map(new Vector2(mapSizeX, mapSizeY), objects);
         NavMesh navMesh = new NavMesh(map);
-        Game game = new Game(map, navMesh, player);
+        Level level = new Level(map, navMesh, player);
 
-        return game;
+        return level;
     }
     
     // Enemies stuff
