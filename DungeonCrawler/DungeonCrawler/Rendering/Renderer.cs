@@ -45,11 +45,7 @@ public static class Renderer
 
     public static void UpdatePawnPosition(Pawn pawn, bool overrideCurrent)
     {
-        if (overrideCurrent)
-        {
-            Console.SetCursorPosition(pawn.Transform.Position.X, pawn.Transform.Position.Y + 1);
-            Console.Write(' ');
-        }
+        if (overrideCurrent) Console.Write(' ');
         Console.SetCursorPosition(pawn.Transform.Position.X + 1, pawn.Transform.Position.Y + 1);
         
         Console.BackgroundColor = pawn.Graphics.Color;

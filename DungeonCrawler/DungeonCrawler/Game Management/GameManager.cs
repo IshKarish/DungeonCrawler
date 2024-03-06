@@ -43,12 +43,12 @@ public class GameManager
                     break;
             }
             
-            Renderer.UpdatePawnPosition(player, true);
-
+            //Renderer.UpdatePawnPosition(player, true);
+            
             foreach (Enemy enemy in enemies)
             {
                 enemy.PawnMovement.MoveRight(1, map, navMesh);
-                Renderer.UpdatePawnPosition(enemy, true);
+                //Renderer.UpdatePawnPosition(enemy, true);
             }
         }
     }
