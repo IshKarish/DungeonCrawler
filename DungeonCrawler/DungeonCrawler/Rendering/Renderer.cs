@@ -42,10 +42,33 @@ public static class Renderer
 
         Console.WriteLine();
     }
-
-    public static void UpdatePawnPosition(Pawn pawn, bool overrideCurrent)
+    
+    public static void ClearPawnPosition(Pawn pawn)
     {
-        if (overrideCurrent) Console.Write(' ');
+        Console.SetCursorPosition(pawn.Transform.Position.X + 1, pawn.Transform.Position.Y + 1);
+    }
+    
+    public static void ClearPawnPosition(Vector2 position)
+    {
+        Console.SetCursorPosition(position.X + 1, position.Y + 1);
+    }
+
+    public static void PrintPawnPosition(Pawn pawn)
+    {
+        Console.BackgroundColor = ConsoleColor.Black;
+        Console.Write(' ');
+        
+        Console.SetCursorPosition(pawn.Transform.Position.X + 1, pawn.Transform.Position.Y + 1);
+        Console.BackgroundColor = pawn.Graphics.Color;
+        Console.Write(pawn.Graphics.Symbol);
+    }
+
+    public static void UpdatePawnPosition(Pawn pawn)
+    {
+        Console.SetCursorPosition(pawn.Transform.Position.X, pawn.Transform.Position.Y + 1);
+        
+        Console.BackgroundColor = ConsoleColor.Black;
+        Console.Write(' ');
         Console.SetCursorPosition(pawn.Transform.Position.X + 1, pawn.Transform.Position.Y + 1);
         
         Console.BackgroundColor = pawn.Graphics.Color;
@@ -54,7 +77,7 @@ public static class Renderer
         Console.SetCursorPosition(pawn.Transform.Position.X + 1, pawn.Transform.Position.Y + 1);
         Console.BackgroundColor = ConsoleColor.Black;
     }
-    
+
     static void PrintHorizontalBorder(int cols)
     {
         Console.BackgroundColor = ConsoleColor.Black;

@@ -1,55 +1,117 @@
-﻿namespace DungeonCrawler;
+﻿using System.Diagnostics;
+
+namespace DungeonCrawler;
 
 public class GameManager
 {
+    private Map _map;
+    private NavMesh _navMesh;
+    private Pawn _player;
+    private Enemy[] _enemies;
+    private Level _level;
+
+    private Vector2 _playerLastPos;
+    private Vector2[] _enemyLastPos;
+
     public void StartGame(Level level)
     {
-        Map map = level.Map;
-        NavMesh navMesh = level.NavMesh;
+        _level = level;
+        _map = _level.Map;
+        _navMesh = _level.NavMesh;
         
-        Renderer.PrintMap(map);
+        Renderer.PrintMap(_map);
         
-        Pawn player = level.Player;
-        Renderer.UpdatePawnPosition(player, false);
+        _player = _level.Player;
+        Renderer.PrintPawnPosition(_player);
+        _playerLastPos = _player.Transform.Position;
         
-        Enemy[] enemies = level.Enemies;
-        foreach (Enemy enemy in enemies)
+        _enemies = _level.Enemies;
+        foreach (Enemy enemy in _enemies)
         {
-            Renderer.UpdatePawnPosition(enemy, false);
+            Renderer.ClearPawnPosition(enemy);
+            Renderer.PrintPawnPosition(enemy);
+        }
+
+        _enemyLastPos = new Vector2[_enemies.Length];
+        for (int i = 0; i < _enemyLastPos.Length; i++)
+        {
+            _enemyLastPos[i] = _enemies[i].Transform.Position;
         }
         
-        Console.SetCursorPosition(player.Transform.Position.X + 1, player.Transform.Position.Y + 1);
+        Thread t = new Thread(PlayerMovement);
+        Thread t2 = new Thread(EnemiesMovement);
+        Thread t3 = new Thread(Render);
         
+        t.Start();
+        t2.Start();
+        t3.Start();
+    }
+    
+    public void PlayerMovement()
+    {
         while (true)
         {
             ConsoleKeyInfo cki = Console.ReadKey(true);
+            
+            _playerLastPos = _player.Transform.Position;
             switch (cki.Key)
             {
                 case ConsoleKey.UpArrow:
                 case ConsoleKey.W:
-                    player.PawnMovement.MoveUp(1, map, navMesh);
+                    _player.PawnMovement.MoveUp(1, _map, _navMesh);
                     break;
                 case ConsoleKey.DownArrow:
                 case ConsoleKey.S:
-                    player.PawnMovement.MoveUp(-1, map, navMesh);
+                    _player.PawnMovement.MoveUp(-1, _map, _navMesh);
                     break;
                 case ConsoleKey.RightArrow:
                 case ConsoleKey.D:
-                    player.PawnMovement.MoveRight(1, map, navMesh);
+                    _player.PawnMovement.MoveRight(1, _map, _navMesh);
                     break;
                 case ConsoleKey.LeftArrow:
                 case ConsoleKey.A:
-                    player.PawnMovement.MoveRight(-1, map, navMesh);
+                    _player.PawnMovement.MoveRight(-1, _map, _navMesh);
                     break;
             }
-            
-            Renderer.UpdatePawnPosition(player, true);
-            
-            foreach (Enemy enemy in enemies)
+        }
+    }
+
+    void EnemiesMovement()
+    {
+        while (true)
+        {
+            foreach (Enemy enemy in _enemies)
             {
-                //enemy.PawnMovement.MoveRight(1, map, navMesh);
-                //Renderer.UpdatePawnPosition(enemy, true);
+                if (enemy.PawnSensing.CanSee(_player.Transform.Position) || enemy.BehaviorTree.ShouldChase)
+                {
+                    enemy.BehaviorTree.ShouldChase = true;
+                    Debug.WriteLine("I see you");
+                }
+                else
+                {
+                    for (int i = 0; i < _enemyLastPos.Length; i++)
+                    {
+                        _enemyLastPos[i] = _enemies[i].Transform.Position;
+                    }
+                    
+                    enemy.BehaviorTree.Patrol(_map, _navMesh);
+                }
             }
+        }
+    }
+
+    void Render()
+    {
+        while (true)
+        {
+            for (int i = 0; i < _enemyLastPos.Length; i++)
+            {
+                Renderer.ClearPawnPosition(_enemyLastPos[i]);
+                Renderer.PrintPawnPosition(_enemies[i]);
+            }
+        
+            Renderer.ClearPawnPosition(_playerLastPos);
+            Renderer.PrintPawnPosition(_player);
         }
     }
 }
