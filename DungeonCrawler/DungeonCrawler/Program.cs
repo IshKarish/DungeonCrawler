@@ -15,15 +15,20 @@ class Program
         Graphics objGraphics3 = new Graphics('^', ConsoleColor.DarkGreen);
         
         Actor obj = new Actor(2, 6, 3, 4, objGraphics);
-        Actor obj2 = new Actor(78, 6, 6, 2, objGraphics2);
-        Actor obj3 = new Actor(50, 18, 4, 4, objGraphics3);
-        Actor obj4 = new Actor(6, 9,3, 5,  objGraphics);
+        Actor obj2 = new Actor(6, 9,3, 4,  objGraphics);
+        Actor obj3 = new Actor(10, 6, 3, 4, objGraphics);
+        Actor obj4 = new Actor(14, 9, 3, 4, objGraphics);
+        Actor obj5 = new Actor(18, 6, 3, 4, objGraphics);
+        
+        Actor obj6 = new Actor(78, 6, 10, 4, objGraphics2);
+        
+        Actor obj7 = new Actor(50, 18, 4, 4, objGraphics3);
         
         Door doorBenDoor = new Door(97, 0, DoorOrientation.Horizontal, -1);
         
         Actor[] objects =
         {
-            obj, obj2, obj3, obj4, doorBenDoor
+            obj, obj2, obj3, obj4, obj5, obj6, obj7, doorBenDoor
         };
 
         Vector2 l = new Vector2(20, 100);
