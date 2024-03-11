@@ -30,7 +30,7 @@ public class PawnMovement
             return;
         }
         
-        _transform.SetPosition(xPos, yPos + axis);
+        _transform.SetPosition(xPos, yPos + axis * _pawn.Speed);
         Console.Beep(500, 100);
     }
 
@@ -51,7 +51,7 @@ public class PawnMovement
             return;
         }
         
-        _transform.SetPosition(xPos + axis, yPos);
+        _transform.SetPosition(xPos + axis * _pawn.Speed, yPos);
         Console.Beep(500, 100);
     }
 

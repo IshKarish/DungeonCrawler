@@ -50,8 +50,10 @@ public static class Utilities
         return enemies;
     }
     
-    public static Enemy[] GenerateEnemies(int enemyPercentage, Vector2 mapSize, NavMesh navMesh)
+    public static Enemy[] GenerateEnemies(int enemyPercentage, Map map, NavMesh navMesh)
     {
+        Vector2 mapSize = new Vector2(map.MapArr.GetLength(0), map.MapArr.GetLength(1));
+        
         int enemyCount = (mapSize.X * mapSize.Y) * enemyPercentage / 100;
         //if (enemyCount > 50) enemyCount = 50;
         

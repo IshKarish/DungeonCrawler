@@ -2,7 +2,7 @@
 
 public class Map
 {
-    public char[,] MapArr { get; private set; }
+    public char[,] MapArr { get; set; }
     public Actor[] Objects { get; private set; }
     private static int _rows;
     private static int _cols;
@@ -85,7 +85,7 @@ public class Map
                         else MapArr[i, j] = '&';
                     }
                     else
-                    MapArr[i, j] = currentActor.Graphics.Symbol;
+                        MapArr[i, j] = currentActor.Graphics.Symbol;
                 }
             }
         }

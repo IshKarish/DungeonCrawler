@@ -1,9 +1,10 @@
-﻿namespace DungeonCrawler;
+﻿using System.Diagnostics;
+
+namespace DungeonCrawler;
 
 public class BehaviorTree
 {
-    private Pawn _pawn;
-    public bool ShouldChase { get; set; }
+    private readonly Pawn _pawn;
 
     public BehaviorTree(Pawn pawn)
     {
@@ -12,16 +13,17 @@ public class BehaviorTree
 
     public void Patrol(Map map, NavMesh navMesh)
     {
-        int direction = Random.Shared.Next(0, 2);
-        int dir = 0;
+        int axis = Random.Shared.Next(0, 2);
+        int direction = Random.Shared.Next(-1, 2);
 
-        while (dir == 0)
+        while (direction == 0)
         {
-            dir = Random.Shared.Next(-1, 1);
+            direction = Random.Shared.Next(-1, 2);
         }
+        Debug.WriteLine(direction);
         
-        if (direction == 1) _pawn.PawnMovement.MoveRight(dir, map, navMesh);
-        else _pawn.PawnMovement.MoveUp(dir, map, navMesh);
+        if (axis == 1) _pawn.PawnMovement.MoveRight(direction, map, navMesh);
+        else _pawn.PawnMovement.MoveUp(direction, map, navMesh);
 
         if (_pawn is Enemy e) e.PawnSensing.SetCenter(_pawn.Transform.Position);
     }

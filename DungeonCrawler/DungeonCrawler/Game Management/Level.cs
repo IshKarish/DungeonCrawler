@@ -37,6 +37,8 @@ public class Level
     
     char StandingChar()
     {
-        return Map.MapArr[Player.Transform.Position.Y, Player.Transform.Position.X];
+
+        return 'a';
+        //return Map.MapArr[Player.Transform.Position.Y, Player.Transform.Position.X];
     }
 }

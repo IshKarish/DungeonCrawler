@@ -10,9 +10,6 @@ public class GameManager
     private Enemy[] _enemies;
     private Level _level;
 
-    private Vector2 _playerLastPos;
-    private Vector2[] _enemyLastPos;
-
     public void StartGame(Level level)
     {
         _level = level;
@@ -21,29 +18,30 @@ public class GameManager
         
         Renderer.PrintMap(_map);
         
+        Console.SetCursorPosition(0, _map.MapArr.GetLength(0) + 2);
+        Console.Write("Lol");
+        
         _player = _level.Player;
         Renderer.PrintPawnPosition(_player);
-        _playerLastPos = _player.Transform.Position;
-        
-        _enemies = _level.Enemies;
-        foreach (Enemy enemy in _enemies)
-        {
-            Renderer.ClearPawnPosition(enemy);
-            Renderer.PrintPawnPosition(enemy);
-        }
 
-        _enemyLastPos = new Vector2[_enemies.Length];
-        for (int i = 0; i < _enemyLastPos.Length; i++)
+        if (_level.Enemies != null)
         {
-            _enemyLastPos[i] = _enemies[i].Transform.Position;
+            _enemies = _level.Enemies;
+            
+            foreach (Enemy enemy in _enemies)
+            {
+                Renderer.ClearPawnPosition(enemy);
+                Renderer.PrintPawnPosition(enemy);
+            }
         }
+        else _enemies = new Enemy[0];
         
         Thread t = new Thread(PlayerMovement);
         Thread t2 = new Thread(EnemiesMovement);
         Thread t3 = new Thread(Render);
         
         t.Start();
-        t2.Start();
+        if (_enemies.Length > 0) t2.Start();
         t3.Start();
     }
     
@@ -53,7 +51,6 @@ public class GameManager
         {
             ConsoleKeyInfo cki = Console.ReadKey(true);
             
-            _playerLastPos = _player.Transform.Position;
             switch (cki.Key)
             {
                 case ConsoleKey.UpArrow:
@@ -82,18 +79,12 @@ public class GameManager
         {
             foreach (Enemy enemy in _enemies)
             {
-                if (enemy.PawnSensing.CanSee(_player.Transform.Position) || enemy.BehaviorTree.ShouldChase)
+                if (enemy.PawnSensing.CanSee(_player.Transform.Position))
                 {
-                    enemy.BehaviorTree.ShouldChase = true;
                     Debug.WriteLine("I see you");
                 }
                 else
                 {
-                    for (int i = 0; i < _enemyLastPos.Length; i++)
-                    {
-                        _enemyLastPos[i] = _enemies[i].Transform.Position;
-                    }
-                    
                     enemy.BehaviorTree.Patrol(_map, _navMesh);
                 }
             }
@@ -104,14 +95,17 @@ public class GameManager
     {
         while (true)
         {
-            for (int i = 0; i < _enemyLastPos.Length; i++)
-            {
-                Renderer.ClearPawnPosition(_enemyLastPos[i]);
-                Renderer.PrintPawnPosition(_enemies[i]);
-            }
-        
-            Renderer.ClearPawnPosition(_playerLastPos);
+            Renderer.ClearPawnPosition(_player.Transform.LastTransform.Position);
             Renderer.PrintPawnPosition(_player);
+            
+            if (_enemies.Length > 0)
+            {
+                for (int i = 0; i < _enemies.Length; i++)
+                {
+                    Renderer.ClearPawnPosition(_enemies[i].Transform.LastTransform.Position);
+                    Renderer.PrintPawnPosition(_enemies[i]);
+                }
+            }
         }
     }
 }

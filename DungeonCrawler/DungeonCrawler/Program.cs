@@ -26,8 +26,10 @@ class Program
             obj, obj2, obj3, obj4, doorBenDoor
         };
 
-        Level level = Utilities.CreateLevel(new Vector2(20, 100), player, objects);
-        Enemy[] enemies = Utilities.GenerateEnemies(1, new Vector2(20, 100), level.NavMesh);
+        Vector2 l = new Vector2(20, 100);
+        
+        Level level = Utilities.CreateLevel(l, player, objects);
+        Enemy[] enemies = Utilities.GenerateEnemies(1, level.Map, level.NavMesh);
         level.AddEnemies(enemies);
         
         gameManager.StartGame(level);
