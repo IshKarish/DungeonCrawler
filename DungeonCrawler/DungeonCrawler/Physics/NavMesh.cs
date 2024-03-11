@@ -3,7 +3,7 @@
 public class NavMesh
 {
     public Vector2[] Blocked { get; private set; }
-
+    
     public NavMesh(Map map)
     {
         Blocked = CreateNavMesh(map);

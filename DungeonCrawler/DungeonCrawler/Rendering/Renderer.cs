@@ -5,7 +5,7 @@ public static class Renderer
     public static void PrintMap(Map map)
     {
         char[,] mapArr = map.MapArr;
-        Actor[] objects = map.Objects;
+        Actor[] objects = map.Actors;
         
         int rows = map.MapArr.GetLength(0);
         int cols = map.MapArr.GetLength(1);

@@ -2,23 +2,21 @@
 
 public class Map
 {
-    public char[,] MapArr { get; set; }
-    public Actor[] Objects { get; private set; }
+    public char[,] MapArr { get; private set; }
+    public Actor[] Actors { get; private set; }
     private static int _rows;
     private static int _cols;
     
-    public Map(int size, Actor[] objects)
+    public Map(int size)
     {
         MapArr = new char[size, size * 2];
-        Objects = objects;
         
         CreateMap();
     }
     
-    public Map(Vector2 size, Actor[] objects)
+    public Map(Vector2 size)
     {
         MapArr = new char[size.X, size.Y];
-        Objects = objects;
         
         CreateMap();
     }
@@ -36,19 +34,23 @@ public class Map
                 MapArr[i, j] = ' ';
             }
         }
+    }
 
-        if (Objects.Length > 0)
+    public void AddActors(Actor[] actors)
+    {
+        Actors = actors;
+        if (actors.Length > 0)
         {
-            for (int i = 0; i < Objects.Length; i++)
+            for (int i = 0; i < actors.Length; i++)
             {
-                AddObjects(i);
+                AddActor(i);
             }
         }
     }
-
-    void AddObjects(int currentObjectIndex)
+    
+    void AddActor(int currentObjectIndex)
     {
-        Actor currentActor = Objects[currentObjectIndex];
+        Actor currentActor = Actors[currentObjectIndex];
 
         bool isDoor = currentActor is Door;
         int doorDirection = 1;

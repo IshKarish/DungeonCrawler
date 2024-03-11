@@ -2,69 +2,48 @@
 
 public static class Utilities
 {
-    // Game creation
-    public static Level CreateLevel(int mapSize, Pawn player, Actor[] objects)
+    // Level creation
+    public static Level CreateLevel(int mapSize)
     {
-        Map map = new Map(mapSize, objects);
+        Map map = new Map(mapSize);
         NavMesh navMesh = new NavMesh(map);
-        Level level = new Level(map, navMesh, player);
+        Level level = new Level(map, navMesh);
 
         return level;
     }
-    public static Level CreateLevel(Vector2 mapSize, Pawn player, Actor[] objects)
+    public static Level CreateLevel(Vector2 mapSize)
     {
-        Map map = new Map(mapSize, objects);
+        Map map = new Map(mapSize);
         NavMesh navMesh = new NavMesh(map);
-        Level level = new Level(map, navMesh, player);
+        Level level = new Level(map, navMesh);
 
         return level;
     }
-    public static Level CreateLevel(int mapSizeX, int mapSizeY, Pawn player, Actor[] objects)
+    public static Level CreateLevel(int mapSizeX, int mapSizeY)
     {
-        Map map = new Map(new Vector2(mapSizeX, mapSizeY), objects);
+        Map map = new Map(new Vector2(mapSizeX, mapSizeY));
         NavMesh navMesh = new NavMesh(map);
-        Level level = new Level(map, navMesh, player);
+        Level level = new Level(map, navMesh);
 
         return level;
     }
+    
     
     // Enemies stuff
-    public static Pawn[] GenerateEnemies(int enemyCount, int mapSize, NavMesh navMesh)
-    {
-        if (enemyCount > 100) enemyCount = 100;
-        
-        Pawn[] enemies = new Pawn[enemyCount];
-        List<Vector2> takenPositions = new List<Vector2>();
-        
-        for (int i = 0; i < enemyCount; i++)
-        {
-            Vector2 pos = GetRandomPosition(mapSize);
-            
-            while (IsBlocked(navMesh.Blocked, pos) || IsBlocked(takenPositions.ToArray(), pos)) pos = GetRandomPosition(mapSize);
-
-            takenPositions.Add(pos);
-
-            Pawn enemy = new Pawn(pos.X, pos.Y);
-            enemies[i] = enemy;
-        }
-        return enemies;
-    }
-    
     public static Enemy[] GenerateEnemies(int enemyPercentage, Map map, NavMesh navMesh)
     {
         Vector2 mapSize = new Vector2(map.MapArr.GetLength(0), map.MapArr.GetLength(1));
         
         int enemyCount = (mapSize.X * mapSize.Y) * enemyPercentage / 100;
-        //if (enemyCount > 50) enemyCount = 50;
         
         Enemy[] enemies = new Enemy[enemyCount];
         List<Vector2> takenPositions = new List<Vector2>();
         
         for (int i = 0; i < enemyCount; i++)
         {
-            Vector2 pos = GetRandomPosition(mapSize);
+            Vector2 pos = GetRandomVector(mapSize);
             
-            while (IsBlocked(navMesh.Blocked, pos) || IsBlocked(takenPositions.ToArray(), pos)) pos = GetRandomPosition(mapSize);
+            while (IsBlocked(navMesh.Blocked, pos) || IsBlocked(takenPositions.ToArray(), pos)) pos = GetRandomVector(mapSize);
 
             takenPositions.Add(pos);
 
@@ -74,42 +53,84 @@ public static class Utilities
         return enemies;
     }
     
-    public static Enemy[] GenerateEnemies(int enemyPercentage, Vector2 mapSize, NavMesh navMesh, Graphics graphics)
+    
+    // Actors stuff
+    public static Actor[] GenerateActors(int actorsPercentage, Map map, Graphics graphics)
     {
-        int enemyCount = (mapSize.X * mapSize.Y) * enemyPercentage / 100;
-        if (enemyCount > 50) enemyCount = 50;
+        Vector2 mapSize = new Vector2(map.MapArr.GetLength(0), map.MapArr.GetLength(1));
         
-        Enemy[] enemies = new Enemy[enemyCount];
-        List<Vector2> takenPositions = new List<Vector2>();
+        int enemyCount = (mapSize.X * mapSize.Y) * actorsPercentage / 100;
+
+        Actor[] actors = new Actor[enemyCount];
         
         for (int i = 0; i < enemyCount; i++)
         {
-            Vector2 pos = GetRandomPosition(mapSize);
-            
-            while (IsBlocked(navMesh.Blocked, pos) || IsBlocked(takenPositions.ToArray(), pos)) pos = GetRandomPosition(mapSize);
+            Vector2 pos = GetRandomVector(mapSize);
+            Vector2 size = GetRandomVector(5);
 
-            takenPositions.Add(pos);
-
-            Enemy enemy = new Enemy(pos.X, pos.Y, graphics);
-            enemies[i] = enemy;
+            Actor actor = new Actor(pos, size, graphics);
+            actors[i] = actor;
         }
-        return enemies;
+
+        return actors;
     }
     
-    static Vector2 GetRandomPosition(int mapSize)
+    public static Actor[] GenerateActors(int actorsPercentage, Map map, Graphics graphics, int sizeLimit)
     {
-        int xPos = Random.Shared.Next(mapSize * 2);
-        int yPos = Random.Shared.Next(mapSize);
+        Vector2 mapSize = new Vector2(map.MapArr.GetLength(0), map.MapArr.GetLength(1));
         
-        Vector2 pos = new Vector2(xPos, yPos);
+        int enemyCount = (mapSize.X * mapSize.Y) * actorsPercentage / 100;
+
+        Actor[] actors = new Actor[enemyCount];
+        
+        for (int i = 0; i < enemyCount; i++)
+        {
+            Vector2 pos = GetRandomVector(mapSize);
+            Vector2 size = GetRandomVector(sizeLimit);
+
+            Actor actor = new Actor(pos, size, graphics);
+            actors[i] = actor;
+        }
+
+        return actors;
+    }
+    
+    public static Actor[] GenerateActors(int actorsPercentage, Map map, Graphics graphics, Vector2 sizeLimit)
+    {
+        Vector2 mapSize = new Vector2(map.MapArr.GetLength(0), map.MapArr.GetLength(1));
+        
+        int enemyCount = (mapSize.X * mapSize.Y) * actorsPercentage / 100;
+
+        Actor[] actors = new Actor[enemyCount];
+        
+        for (int i = 0; i < enemyCount; i++)
+        {
+            Vector2 pos = GetRandomVector(mapSize);
+            Vector2 size = GetRandomVector(sizeLimit);
+
+            Actor actor = new Actor(pos, size, graphics);
+            actors[i] = actor;
+        }
+
+        return actors;
+    }
+    
+    
+    // Other stuff
+    static Vector2 GetRandomVector(Vector2 limit)
+    {
+        int xPos = Random.Shared.Next(limit.X);
+        int yPos = Random.Shared.Next(limit.Y);
+
+        Vector2 pos = new Vector2(yPos, xPos);
         
         return pos;
     }
-    
-    static Vector2 GetRandomPosition(Vector2 mapSize)
+
+    static Vector2 GetRandomVector(int limit)
     {
-        int xPos = Random.Shared.Next(mapSize.X);
-        int yPos = Random.Shared.Next(mapSize.Y);
+        int xPos = Random.Shared.Next(limit);
+        int yPos = Random.Shared.Next(limit);
 
         Vector2 pos = new Vector2(yPos, xPos);
         

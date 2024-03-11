@@ -33,9 +33,16 @@ class Program
 
         Vector2 l = new Vector2(20, 100);
         
-        Level level = Utilities.CreateLevel(l, player, objects);
+        Level level = Utilities.CreateLevel(l);
+        
+        player.SetNavMesh(level.NavMesh);
+        level.AddPlayer(player);
+        
         Enemy[] enemies = Utilities.GenerateEnemies(1, level.Map, level.NavMesh);
         level.AddEnemies(enemies);
+
+        Actor[] actors = Utilities.GenerateActors(1, level.Map, objGraphics);
+        level.Map.AddActors(actors);
         
         gameManager.StartGame(level);
     }

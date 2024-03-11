@@ -4,6 +4,7 @@ public class Pawn : Actor
 {
     public int Speed { get; init; }
     public PawnMovement PawnMovement { get; init; }
+    private NavMesh _navMesh;
     
     public Pawn()
     {
@@ -49,5 +50,10 @@ public class Pawn : Actor
         PawnMovement = new PawnMovement(this);
         Graphics = graphics;
         Speed = 1;
+    }
+
+    public void SetNavMesh(NavMesh navMesh)
+    {
+        _navMesh = navMesh;
     }
 }

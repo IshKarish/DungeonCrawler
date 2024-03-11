@@ -7,22 +7,25 @@ public class Level
     public Pawn Player { get; private set; }
     public Enemy[] Enemies { get; private set; } = null!;
 
-    public Level(Map map, Pawn player)
+    public Level(Map map)
     {
         Map = map;
-        Player = player;
     }
 
-    public Level(Map map, NavMesh navMesh, Pawn player)
+    public Level(Map map, NavMesh navMesh)
     {
         Map = map;
-        Player = player;
         NavMesh = navMesh;
     }
 
     public static Level CreateInstance(Map map, NavMesh navMesh, Pawn player)
     {
-        return new Level(map, navMesh, player);
+        return new Level(map, navMesh);
+    }
+
+    public void AddPlayer(Pawn player)
+    {
+        Player = player;
     }
 
     public void AddEnemies(Enemy[] enemies)
