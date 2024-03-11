@@ -3,27 +3,31 @@
 public static class Utilities
 {
     // Level creation
-    public static Level CreateLevel(int mapSize)
+    public static Level CreateLevel(Map map)
     {
-        Map map = new Map(mapSize);
-        NavMesh navMesh = new NavMesh(map);
-        Level level = new Level(map, navMesh);
+        Level level = new Level(map, new NavMesh(map));
 
         return level;
     }
-    public static Level CreateLevel(Vector2 mapSize)
+
+    public static Level CreateRandomLevel(Vector2 mapSize, int actorsPercentage, int enemyPercentage)
     {
         Map map = new Map(mapSize);
-        NavMesh navMesh = new NavMesh(map);
-        Level level = new Level(map, navMesh);
-
-        return level;
-    }
-    public static Level CreateLevel(int mapSizeX, int mapSizeY)
-    {
-        Map map = new Map(new Vector2(mapSizeX, mapSizeY));
-        NavMesh navMesh = new NavMesh(map);
-        Level level = new Level(map, navMesh);
+        
+        // Actors generation
+        Graphics objGraphics = new Graphics('/', ConsoleColor.Blue);
+        Actor[] actors = GenerateActors(actorsPercentage, map, objGraphics);
+        
+        //Door doorBenDoor = new Door(97, 0, DoorOrientation.Horizontal, -1);
+        
+        map.AddActors(actors);
+        //map.AddActor(doorBenDoor);
+        
+        Level level = CreateLevel(map);
+        
+        // Enemies Generation
+        Enemy[] enemies = GenerateEnemies(enemyPercentage, map, level.NavMesh);
+        level.AddEnemies(enemies);
 
         return level;
     }
@@ -34,7 +38,8 @@ public static class Utilities
     {
         Vector2 mapSize = new Vector2(map.MapArr.GetLength(0), map.MapArr.GetLength(1));
         
-        int enemyCount = (mapSize.X * mapSize.Y) * enemyPercentage / 100;
+        int enemyCount = ((mapSize.X * mapSize.Y) * enemyPercentage / 100) / 20;
+        if (enemyCount == 0) enemyCount = 1;
         
         Enemy[] enemies = new Enemy[enemyCount];
         List<Vector2> takenPositions = new List<Vector2>();
@@ -59,11 +64,12 @@ public static class Utilities
     {
         Vector2 mapSize = new Vector2(map.MapArr.GetLength(0), map.MapArr.GetLength(1));
         
-        int enemyCount = (mapSize.X * mapSize.Y) * actorsPercentage / 100;
+        int actorCount = ((mapSize.X * mapSize.Y) * actorsPercentage / 100) / 20;
+        if (actorCount == 0) actorCount = 1;
 
-        Actor[] actors = new Actor[enemyCount];
+        Actor[] actors = new Actor[actorCount];
         
-        for (int i = 0; i < enemyCount; i++)
+        for (int i = 0; i < actorCount; i++)
         {
             Vector2 pos = GetRandomVector(mapSize);
             Vector2 size = GetRandomVector(5);
@@ -79,11 +85,12 @@ public static class Utilities
     {
         Vector2 mapSize = new Vector2(map.MapArr.GetLength(0), map.MapArr.GetLength(1));
         
-        int enemyCount = (mapSize.X * mapSize.Y) * actorsPercentage / 100;
+        int actorCount = ((mapSize.X * mapSize.Y) * actorsPercentage / 100) / 20;
+        if (actorCount == 0) actorCount = 1;
 
-        Actor[] actors = new Actor[enemyCount];
+        Actor[] actors = new Actor[actorCount];
         
-        for (int i = 0; i < enemyCount; i++)
+        for (int i = 0; i < actorCount; i++)
         {
             Vector2 pos = GetRandomVector(mapSize);
             Vector2 size = GetRandomVector(sizeLimit);
@@ -99,11 +106,12 @@ public static class Utilities
     {
         Vector2 mapSize = new Vector2(map.MapArr.GetLength(0), map.MapArr.GetLength(1));
         
-        int enemyCount = (mapSize.X * mapSize.Y) * actorsPercentage / 100;
+        int actorCount = ((mapSize.X * mapSize.Y) * actorsPercentage / 100) / 20;
+        if (actorCount == 0) actorCount = 1;
 
-        Actor[] actors = new Actor[enemyCount];
+        Actor[] actors = new Actor[actorCount];
         
-        for (int i = 0; i < enemyCount; i++)
+        for (int i = 0; i < actorCount; i++)
         {
             Vector2 pos = GetRandomVector(mapSize);
             Vector2 size = GetRandomVector(sizeLimit);

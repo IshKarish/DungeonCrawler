@@ -47,6 +47,56 @@ public class Map
             }
         }
     }
+
+    public void AddActor(Actor actor)
+    {
+        Actor[] newArr = new Actor[Actors.Length + 1];
+        for (int i = 0; i < Actors.Length; i++)
+        {
+            newArr[i] = Actors[i];
+        }
+        newArr[^1] = actor;
+        Actors = newArr;
+        
+        bool isDoor = actor is Door;
+        int doorDirection = 1;
+        if (isDoor) doorDirection = ((Door)actor).Direction;
+        
+        for (int i = 0; i < _rows; i++)
+        {
+            for (int j = 0; j < _cols; j++)
+            {
+                Vector2 currentPosition = new Vector2(j, i);
+                bool isObjectInCurrentPosition = IsObjectInCurrentPosition(currentPosition, actor);
+
+                if (isObjectInCurrentPosition)
+                {
+                    if (isDoor)
+                    {
+                        int firstX = actor.Transform.Position.X + 1;
+                        int firstY = actor.Transform.Position.Y + 1;
+
+                        if (((Door)actor).DoorOrientation == DoorOrientation.Vertical)
+                        {
+                            if (doorDirection > 0) firstX = actor.Transform.Position.X + 1;
+                            else firstX = actor.Transform.Position.X;
+                        }
+
+                        if (((Door)actor).DoorOrientation == DoorOrientation.Horizontal)
+                        {
+                            if (doorDirection < 0) firstY = actor.Transform.Position.Y + 1;
+                            else firstY = actor.Transform.Position.Y;
+                        }
+                        
+                        if (j == firstX && i == firstY) MapArr[i, j] = '.';
+                        else MapArr[i, j] = '&';
+                    }
+                    else
+                        MapArr[i, j] = actor.Graphics.Symbol;
+                }
+            }
+        }
+    }
     
     void AddActor(int currentObjectIndex)
     {
