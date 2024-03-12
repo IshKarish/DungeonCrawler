@@ -10,7 +10,7 @@ class Program
         
         Pawn player = new Pawn(0, 0, new Graphics('*', ConsoleColor.White));
 
-        Level level = Utilities.CreateRandomLevel(new Vector2(20, 100), 10, 50);
+        Level level = Utilities.CreateRandomLevel(new Vector2(20, 100), 100, 0);
         
         // Player setup
         player.SetNavMesh(level.NavMesh);

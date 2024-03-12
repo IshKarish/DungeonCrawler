@@ -1,4 +1,6 @@
-﻿namespace DungeonCrawler;
+﻿using System.Diagnostics;
+
+namespace DungeonCrawler;
 
 public static class Utilities
 {
@@ -18,17 +20,22 @@ public static class Utilities
         Graphics objGraphics = new Graphics('/', ConsoleColor.Blue);
         Actor[] actors = GenerateActors(actorsPercentage, map, objGraphics);
         
-        //Door doorBenDoor = new Door(97, 0, DoorOrientation.Horizontal, -1);
-        
+        NavMesh navMesh = new NavMesh(map);
         map.AddActors(actors);
-        //map.AddActor(doorBenDoor);
+
+        Door dorBenDor = new Door(97, 0, DoorOrientation.Horizontal, -1);
+        Door[] doors = GenerateDoors(5, map, navMesh);
+        map.AddActors(doors);
         
         Level level = CreateLevel(map);
         
         // Enemies Generation
-        Enemy[] enemies = GenerateEnemies(enemyPercentage, map, level.NavMesh);
-        level.AddEnemies(enemies);
-
+        if (enemyPercentage > 0)
+        {
+            Enemy[] enemies = GenerateEnemies(enemyPercentage, map, level.NavMesh);
+            level.AddEnemies(enemies);
+        }
+        
         return level;
     }
     
@@ -58,7 +65,6 @@ public static class Utilities
         return enemies;
     }
     
-    
     // Actors stuff
     public static Actor[] GenerateActors(int actorsPercentage, Map map, Graphics graphics)
     {
@@ -73,6 +79,11 @@ public static class Utilities
         {
             Vector2 pos = GetRandomVector(mapSize);
             Vector2 size = GetRandomVector(5);
+
+            while (pos.X <= 4 || pos.X >= mapSize.Y - 7)
+            {
+                pos = GetRandomVector(mapSize);
+            }
 
             Actor actor = new Actor(pos, size, graphics);
             actors[i] = actor;
@@ -94,6 +105,11 @@ public static class Utilities
         {
             Vector2 pos = GetRandomVector(mapSize);
             Vector2 size = GetRandomVector(sizeLimit);
+            
+            while (pos.X <= 4 || pos.X >= mapSize.Y - 7)
+            {
+                pos = GetRandomVector(mapSize);
+            }
 
             Actor actor = new Actor(pos, size, graphics);
             actors[i] = actor;
@@ -115,12 +131,39 @@ public static class Utilities
         {
             Vector2 pos = GetRandomVector(mapSize);
             Vector2 size = GetRandomVector(sizeLimit);
+            
+            while (pos.X <= 4 || pos.X >= mapSize.Y - 7)
+            {
+                pos = GetRandomVector(mapSize);
+            }
 
             Actor actor = new Actor(pos, size, graphics);
             actors[i] = actor;
         }
 
         return actors;
+    }
+    
+    // Doors stuff
+    public static Door[] GenerateDoors(int doorsCount, Map map, NavMesh navMesh)
+    {
+        Vector2 mapSize = new Vector2(map.MapArr.GetLength(0), map.MapArr.GetLength(1));
+        
+        Door[] enemies = new Door[doorsCount];
+        List<Vector2> takenPositions = new List<Vector2>();
+        
+        for (int i = 0; i < doorsCount; i++)
+        {
+            Vector2 pos = new Vector2(0 ,GetRandomVector(mapSize.X).Y);
+            
+            while (IsBlocked(navMesh.Blocked, pos) || IsBlocked(takenPositions.ToArray(), pos)) pos = GetRandomVector(mapSize);
+    
+            takenPositions.Add(pos);
+    
+            Door enemy = new Door(pos.X, pos.Y, DoorOrientation.Vertical, -1);
+            enemies[i] = enemy;
+        }
+        return enemies;
     }
     
     
@@ -150,6 +193,16 @@ public static class Utilities
         foreach (Vector2 b in blocked)
         {
             if (current.X == b.X && current.Y == b.Y) return true;
+        }
+
+        return false;
+    }
+
+    static bool DoorSafe(Vector2[] blocked, Vector2 current)
+    {
+        foreach (Vector2 b in blocked)
+        {
+            
         }
 
         return false;
