@@ -16,17 +16,16 @@ public static class Utilities
     {
         Map map = new Map(mapSize);
         
+        // Door generation
+        Door[] doors = GenerateDoors(30, map);
+        map.AddActors(doors);
+        
         // Actors generation
         Graphics objGraphics = new Graphics('/', ConsoleColor.Blue);
         Actor[] actors = GenerateActors(actorsPercentage, map, objGraphics);
+        //map.AddActors(actors);
         
-        NavMesh navMesh = new NavMesh(map);
-        map.AddActors(actors);
-
-        Door dorBenDor = new Door(97, 0, DoorOrientation.Horizontal, -1);
-        Door[] doors = GenerateDoors(5, map, navMesh);
-        map.AddActors(doors);
-        
+        // Level generation
         Level level = CreateLevel(map);
         
         // Enemies Generation
@@ -145,27 +144,26 @@ public static class Utilities
     }
     
     // Doors stuff
-    public static Door[] GenerateDoors(int doorsCount, Map map, NavMesh navMesh)
+    public static Door[] GenerateDoors(int doorsCount, Map map)
     {
         Vector2 mapSize = new Vector2(map.MapArr.GetLength(0), map.MapArr.GetLength(1));
         
-        Door[] enemies = new Door[doorsCount];
+        Door[] doors = new Door[doorsCount];
         List<Vector2> takenPositions = new List<Vector2>();
         
         for (int i = 0; i < doorsCount; i++)
         {
-            Vector2 pos = new Vector2(0 ,GetRandomVector(mapSize.X).Y);
+            Vector2 pos = GetRandomDoorPosition(mapSize, out int direction, out DoorOrientation orientation);
             
-            while (IsBlocked(navMesh.Blocked, pos) || IsBlocked(takenPositions.ToArray(), pos)) pos = GetRandomVector(mapSize);
-    
+            while (DoorSafe(takenPositions.ToArray(), pos)) pos = GetRandomDoorPosition(mapSize, out direction, out orientation);
+            
             takenPositions.Add(pos);
     
-            Door enemy = new Door(pos.X, pos.Y, DoorOrientation.Vertical, -1);
-            enemies[i] = enemy;
+            Door enemy = new Door(pos.X, pos.Y, orientation, direction);
+            doors[i] = enemy;
         }
-        return enemies;
+        return doors;
     }
-    
     
     // Other stuff
     static Vector2 GetRandomVector(Vector2 limit)
@@ -187,6 +185,34 @@ public static class Utilities
         
         return pos;
     }
+
+    static Vector2 GetRandomDoorPosition(Vector2 mapSize, out int side, out DoorOrientation orientation)
+    {
+        int randomOrientation = Random.Shared.Next(2);
+        if (randomOrientation == 1) orientation = DoorOrientation.Vertical;
+        else orientation = DoorOrientation.Horizontal;
+        
+        Debug.WriteLine(orientation);
+        
+        side = Random.Shared.Next(-1, 2);
+        while (side == 0)
+        {
+            side = Random.Shared.Next(-1, 2);
+        }
+        
+        if (orientation == DoorOrientation.Vertical)
+        {
+            int yPosition = Random.Shared.Next(2, mapSize.X - 3);
+            
+            if (side == 1) return new Vector2(0, yPosition);
+            return new Vector2(mapSize.Y - 2, yPosition);
+        }
+        
+        int xPosition = Random.Shared.Next(2, mapSize.Y - 2);
+        
+        if (side == 1) return new Vector2(xPosition, mapSize.X - 2);
+        return new Vector2(xPosition, 0);
+    }
     
     static bool IsBlocked(Vector2[] blocked, Vector2 current)
     {
@@ -197,12 +223,15 @@ public static class Utilities
 
         return false;
     }
-
+    
     static bool DoorSafe(Vector2[] blocked, Vector2 current)
     {
         foreach (Vector2 b in blocked)
         {
-            
+            bool xSafe = current.X >= b.X - 3 && current.X < b.X + 4;
+            bool ySafe = current.Y >= b.Y - 3 && current.Y < b.Y + 4;
+
+            if (xSafe && ySafe) return true;
         }
 
         return false;
