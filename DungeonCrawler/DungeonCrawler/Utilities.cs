@@ -19,11 +19,12 @@ public static class Utilities
         // Door generation
         Door[] doors = GenerateDoors(30, map);
         map.AddActors(doors);
+        NavMesh navMesh = new NavMesh(map);
         
         // Actors generation
         Graphics objGraphics = new Graphics('/', ConsoleColor.Blue);
-        Actor[] actors = GenerateActors(actorsPercentage, map, objGraphics);
-        //map.AddActors(actors);
+        Actor[] actors = GenerateActors(actorsPercentage, map, objGraphics, navMesh);
+        map.AddActors(actors);
         
         // Level generation
         Level level = CreateLevel(map);
@@ -65,7 +66,7 @@ public static class Utilities
     }
     
     // Actors stuff
-    public static Actor[] GenerateActors(int actorsPercentage, Map map, Graphics graphics)
+    public static Actor[] GenerateActors(int actorsPercentage, Map map, Graphics graphics, NavMesh navMesh)
     {
         Vector2 mapSize = new Vector2(map.MapArr.GetLength(0), map.MapArr.GetLength(1));
         
@@ -79,7 +80,8 @@ public static class Utilities
             Vector2 pos = GetRandomVector(mapSize);
             Vector2 size = GetRandomVector(5);
 
-            while (pos.X <= 4 || pos.X >= mapSize.Y - 7)
+            bool insideLimit = (pos.X <= 4 || pos.X >= mapSize.Y - 7) || (pos.Y <= 3 || pos.Y >= mapSize.X - 7);
+            while (IsBlocked(navMesh.Blocked, pos))
             {
                 pos = GetRandomVector(mapSize);
             }
