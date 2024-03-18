@@ -59,8 +59,7 @@ public class Enemy : Pawn
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = pawnSensing;
     }
-
-
+    
     public Enemy(Vector2 position)
     {
         Transform.SetPosition(position.X, position.Y);

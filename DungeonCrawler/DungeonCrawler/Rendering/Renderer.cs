@@ -4,6 +4,8 @@ public static class Renderer
 {
     public static void PrintMap(Map map)
     {
+        Console.SetCursorPosition(0, 0);
+        
         char[,] mapArr = map.MapArr;
         Actor[] objects = map.Actors;
         
@@ -61,21 +63,6 @@ public static class Renderer
         Console.SetCursorPosition(pawn.Transform.Position.X + 1, pawn.Transform.Position.Y + 1);
         Console.BackgroundColor = pawn.Graphics.Color;
         Console.Write(pawn.Graphics.Symbol);
-    }
-
-    public static void UpdatePawnPosition(Pawn pawn)
-    {
-        Console.SetCursorPosition(pawn.Transform.Position.X, pawn.Transform.Position.Y + 1);
-        
-        Console.BackgroundColor = ConsoleColor.Black;
-        Console.Write(' ');
-        Console.SetCursorPosition(pawn.Transform.Position.X + 1, pawn.Transform.Position.Y + 1);
-        
-        Console.BackgroundColor = pawn.Graphics.Color;
-        Console.Write(pawn.Graphics.Symbol);
-        
-        Console.SetCursorPosition(pawn.Transform.Position.X + 1, pawn.Transform.Position.Y + 1);
-        Console.BackgroundColor = ConsoleColor.Black;
     }
 
     static void PrintHorizontalBorder(int cols)

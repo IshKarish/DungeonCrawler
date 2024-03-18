@@ -4,6 +4,7 @@ public class Door : Actor
 {
     public DoorOrientation DoorOrientation { get; private set; }
     public int Direction { get; private set; }
+    
     public Door(int x, int y)
     {
         Transform.SetScale(2, 1);
@@ -16,6 +17,7 @@ public class Door : Actor
         Graphics.Color = ConsoleColor.Red;
         DoorOrientation = doorOrientation;
         Direction = direction;
+        
         switch (DoorOrientation)
         {
             case DoorOrientation.Horizontal:
@@ -25,6 +27,7 @@ public class Door : Actor
                 Transform.SetScale(1, 2);
                 break;
         }
+        
         Transform.SetPosition(x, y);
     }
     
@@ -33,6 +36,7 @@ public class Door : Actor
         Graphics.Color = color;
         DoorOrientation = doorOrientation;
         Direction = direction;
+        
         switch (DoorOrientation)
         {
             case DoorOrientation.Horizontal:
@@ -42,6 +46,7 @@ public class Door : Actor
                 Transform.SetScale(1, 2);
                 break;
         }
+        
         Transform.SetPosition(x, y);
     }
 
@@ -50,6 +55,7 @@ public class Door : Actor
         Graphics.Color = color;
         DoorOrientation = doorOrientation;
         Direction = direction;
+        
         switch (DoorOrientation)
         {
             case DoorOrientation.Horizontal:
@@ -59,6 +65,7 @@ public class Door : Actor
                 Transform.SetScale(1, 2);
                 break;
         }
+        
         Transform.SetPosition(position.X, position.Y);
     }
     
@@ -67,6 +74,7 @@ public class Door : Actor
         Graphics.Color = ConsoleColor.Red;
         DoorOrientation = doorOrientation;
         Direction = direction;
+        
         switch (DoorOrientation)
         {
             case DoorOrientation.Horizontal:
@@ -76,6 +84,7 @@ public class Door : Actor
                 Transform.SetScale(1, 2);
                 break;
         }
+        
         Transform.SetPosition(position.X, position.Y);
     }
 }

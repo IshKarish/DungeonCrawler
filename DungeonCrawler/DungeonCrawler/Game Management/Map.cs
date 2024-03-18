@@ -4,23 +4,21 @@ public class Map
 {
     public char[,] MapArr { get; private set; }
     public Actor[] Actors { get; private set; }
-    public Door[] Doors { get; private set; }
-    
     private static int _rows;
     private static int _cols;
     
-    public Map(int size)
+    public Map(int size, Actor[] actors)
     {
         MapArr = new char[size, size * 2];
-        Actors = new Actor[0];
+        Actors = actors;
         
         CreateMap();
     }
     
-    public Map(Vector2 size)
+    public Map(Vector2 size, Actor[] actors)
     {
         MapArr = new char[size.X, size.Y];
-        Actors = new Actor[0];
+        Actors = actors;
         
         CreateMap();
     }
@@ -38,49 +36,17 @@ public class Map
                 MapArr[i, j] = ' ';
             }
         }
-    }
 
-    public void AddActors(Actor[] actors)
-    {
-        List<Actor> newLst = new List<Actor>();
-        
-        foreach (Actor a in Actors)
+        if (Actors.Length > 0)
         {
-            newLst.Add(a);
-        }
-
-        foreach (Actor a in actors)
-        {
-            newLst.Add(a);
-        }
-        
-        Actors = newLst.ToArray();
-        
-        if (actors.Length > 0)
-        {
-            for (int i = 0; i < actors.Length; i++)
+            for (int i = 0; i < Actors.Length; i++)
             {
-                AddActor(i);
+                AddObjects(i);
             }
         }
     }
 
-    public void AddActor(Actor actor)
-    {
-        List<Actor> newLst = new List<Actor>();
-        
-        foreach (Actor a in Actors)
-        {
-            newLst.Add(a);
-        }
-        newLst.Add(actor);
-        
-        Actors = newLst.ToArray();
-        
-        AddActor(Actors.Length - 1);
-    }
-    
-    void AddActor(int currentObjectIndex)
+    void AddObjects(int currentObjectIndex)
     {
         Actor currentActor = Actors[currentObjectIndex];
 
@@ -124,7 +90,7 @@ public class Map
             }
         }
     }
-    
+
     bool IsObjectInCurrentPosition(Vector2 position, Actor obj)
     {
         Vector2 objectPosition = obj.Transform.Position;

@@ -4,12 +4,11 @@ public class Pawn : Actor
 {
     public int Speed { get; init; }
     public PawnMovement PawnMovement { get; init; }
-    private NavMesh _navMesh;
     
     public Pawn()
     {
         PawnMovement = new PawnMovement(this);
-        Graphics = new Graphics('*', ConsoleColor.White);
+        Graphics = new Graphics('@', ConsoleColor.Gray);
         Speed = 1;
     }
 
@@ -17,7 +16,7 @@ public class Pawn : Actor
     {
         PawnMovement = new PawnMovement(this);
         Transform.SetPosition(x, y);
-        Graphics = new Graphics('*', ConsoleColor.White);
+        Graphics = new Graphics('@', ConsoleColor.Gray);
         Speed = 1;
     }
 
@@ -41,7 +40,7 @@ public class Pawn : Actor
     {
         PawnMovement = new PawnMovement(this);
         Transform.SetPosition(position.X, position.Y);
-        Graphics = new Graphics('*', ConsoleColor.White);
+        Graphics = new Graphics('@', ConsoleColor.Gray);
         Speed = 1;
     }
     
@@ -50,10 +49,5 @@ public class Pawn : Actor
         PawnMovement = new PawnMovement(this);
         Graphics = graphics;
         Speed = 1;
-    }
-
-    public void SetNavMesh(NavMesh navMesh)
-    {
-        _navMesh = navMesh;
     }
 }

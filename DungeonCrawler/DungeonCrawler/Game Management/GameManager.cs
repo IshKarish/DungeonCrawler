@@ -10,18 +10,28 @@ public class GameManager
     private Enemy[] _enemies;
     private Level _level;
 
-    public void StartGame(Level level)
+    private bool switchingLevel;
+
+    public void StartGame(Level firstLevel)
     {
+        StartLevel(firstLevel);
+    }
+    
+    public void StartLevel(Level level)
+    {
+        Console.Clear();
+        
         _level = level;
         _map = _level.Map;
         _navMesh = _level.NavMesh;
         
         Renderer.PrintMap(_map);
         
-        Console.SetCursorPosition(0, _map.MapArr.GetLength(0) + 2);
-        Console.Write("Lol");
+        //Console.SetCursorPosition(0, _map.MapArr.GetLength(0) + 2);
+        //Console.Write("Lol");
         
         _player = _level.Player;
+        _player.Transform.SetPosition(0, 0);
         Renderer.PrintPawnPosition(_player);
 
         if (_level.Enemies != null)
@@ -36,6 +46,8 @@ public class GameManager
         }
         else _enemies = new Enemy[0];
         
+        switchingLevel = false;
+        
         Thread t = new Thread(PlayerMovement);
         Thread t2 = new Thread(EnemiesMovement);
         Thread t3 = new Thread(Render);
@@ -44,10 +56,25 @@ public class GameManager
         if (_enemies.Length > 0) t2.Start();
         t3.Start();
     }
+
+    public void SwitchLevel(Level level)
+    {
+        switchingLevel = true;
+        
+        Console.Clear();
+        Thread.Sleep(2000);
+        
+        Console.SetCursorPosition(0, 0);
+        Console.BackgroundColor = ConsoleColor.Black;
+        
+        Console.WriteLine("Lol");
+        
+        StartLevel(level);
+    }
     
     public void PlayerMovement()
     {
-        while (true)
+        while (!switchingLevel)
         {
             ConsoleKeyInfo cki = Console.ReadKey(true);
             
@@ -70,12 +97,17 @@ public class GameManager
                     _player.PawnMovement.MoveRight(-1, _map, _navMesh);
                     break;
             }
+
+            if (_level.IsPlayerStandingOnDoor())
+            {
+                SwitchLevel(Utilities.CreateLevel(new Vector2(20, 50), _player, new Actor[0]));
+            }
         }
     }
 
     void EnemiesMovement()
     {
-        while (true)
+        while (!switchingLevel)
         {
             foreach (Enemy enemy in _enemies)
             {
@@ -93,19 +125,23 @@ public class GameManager
 
     void Render()
     {
-        while (true)
+        while (!switchingLevel)
         {
+            Console.BackgroundColor = ConsoleColor.Black;
+            
             Renderer.ClearPawnPosition(_player.Transform.LastTransform.Position);
             Renderer.PrintPawnPosition(_player);
             
             if (_enemies.Length > 0)
             {
-                for (int i = 0; i < _enemies.Length; i++)
+                foreach (Enemy e in _enemies)
                 {
-                    Renderer.ClearPawnPosition(_enemies[i].Transform.LastTransform.Position);
-                    Renderer.PrintPawnPosition(_enemies[i]);
+                    Renderer.ClearPawnPosition(e.Transform.LastTransform.Position);
+                    Renderer.PrintPawnPosition(e);
                 }
             }
+            
+            Console.BackgroundColor = ConsoleColor.Black;
         }
     }
 }
