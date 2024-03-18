@@ -11,7 +11,8 @@ public class PawnMovement
         _transform = pawn.Transform;
     }
     
-    public void MoveUp(int axis, Map map, NavMesh navMesh)
+    // Movement
+    public void MoveUp(int axis, Map map)
     {
         axis *= -1;
         
@@ -21,8 +22,8 @@ public class PawnMovement
         int lastPos = map.MapArr.GetLength(0) - 1;
 
         bool isTryingToExitMap = (yPos == 0 && axis < 0) || (yPos == lastPos && axis > 0);
-        bool isCollidingFromTop = this.isCollidingFromTop(navMesh) && axis < 0;
-        bool isCollidingFromBottom = this.isCollidingFromBottom(navMesh) && axis > 0;
+        bool isCollidingFromTop = IsCollidingFromTop(map) && axis < 0;
+        bool isCollidingFromBottom = IsCollidingFromBottom(map) && axis > 0;
 
         if (isTryingToExitMap || isCollidingFromBottom || isCollidingFromTop)
         {
@@ -34,7 +35,7 @@ public class PawnMovement
         Console.Beep(500, 100);
     }
 
-    public void MoveRight(int axis, Map map, NavMesh navMesh)
+    public void MoveRight(int axis, Map map)
     {
         int xPos = _transform.Position.X;
         int yPos = _transform.Position.Y;
@@ -42,8 +43,8 @@ public class PawnMovement
         int lastPos = map.MapArr.GetLength(1) - 1;
 
         bool isTryingToExitMap = (xPos == 0 && axis < 0) || (xPos == lastPos && axis > 0);
-        bool isCollidingFromRight = IsCollidingFromRight(navMesh) && axis > 0;
-        bool isCollidingFromLeft = this.isCollidingFromLeft(navMesh) && axis < 0;
+        bool isCollidingFromRight = IsCollidingFromRight(map) && axis > 0;
+        bool isCollidingFromLeft = IsCollidingFromLeft(map) && axis < 0;
 
         if (isTryingToExitMap || isCollidingFromLeft || isCollidingFromRight)
         {
@@ -54,25 +55,25 @@ public class PawnMovement
         _transform.SetPosition(xPos + axis * _pawn.Speed, yPos);
         Console.Beep(500, 100);
     }
-
-    // Colliding states
-    public bool IsCollidingFromRight(NavMesh navMesh)
+    
+    // Colliding
+    public bool IsCollidingFromRight(Map map)
     {
-        return Physics.IsNextXColliding(_pawn, navMesh, 1);
+        return Physics.LineTrace(_transform.Position, map, 1, Direction.Right, out char hit);
     }
 
-    public bool isCollidingFromLeft(NavMesh navMesh)
+    public bool IsCollidingFromLeft(Map map)
     {
-        return Physics.IsNextXColliding(_pawn, navMesh, -1);
+        return Physics.LineTrace(_transform.Position, map, 1, Direction.Left, out char hit);
     }
 
-    public bool isCollidingFromTop(NavMesh navMesh)
+    public bool IsCollidingFromTop(Map map)
     {
-        return Physics.IsNextYColliding(_pawn, navMesh, -1);
+        return Physics.LineTrace(_transform.Position, map, 1, Direction.Up, out char hit);
     }
 
-    public bool isCollidingFromBottom(NavMesh navMesh)
+    public bool IsCollidingFromBottom(Map map)
     {
-        return Physics.IsNextYColliding(_pawn, navMesh, 1);
+        return Physics.LineTrace(_transform.Position, map, 1, Direction.Down, out char hit);
     }
 }

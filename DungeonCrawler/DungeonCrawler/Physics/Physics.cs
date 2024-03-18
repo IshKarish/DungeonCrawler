@@ -2,77 +2,51 @@
 
 public static class Physics
 {
-    public static bool IsNextXColliding(Pawn player, NavMesh navMesh, int direction)
+    public static bool LineTrace(Vector2 start, Map map, int length, Direction direction, out char hit)
     {
-        if (direction > 0) direction = 1;
-        else direction = -1;
-
-        int[] yPositions = CorrespondingYPositions(navMesh, player.Transform.Position.X, direction);
-
-        foreach (Vector2 w in navMesh.Blocked)
+        hit = ' ';
+        
+        for (int i = 0; i <= length; i++)
         {
-            bool isNextXColliding = player.Transform.Position.X + direction == w.X;
-            if (isNextXColliding)
+            try
             {
-                foreach (int y in yPositions)
+                switch (direction)
                 {
-                    if (player.Transform.Position.Y == y) return true;
+                    case Direction.Up:
+                        hit = map.MapArr[start.Y - i, start.X];
+                        break;
+                    case Direction.Down:
+                        hit = map.MapArr[start.Y + i, start.X];
+                        break;
+                    case Direction.Left:
+                        hit = map.MapArr[start.Y, start.X - i];
+                        break;
+                    case Direction.Right:
+                        hit = map.MapArr[start.Y, start.X + i];
+                        break;
+                    case Direction.UpLeft:
+                        hit = map.MapArr[start.Y - i, start.X - i];
+                        break;
+                    case Direction.UpRight:
+                        hit = map.MapArr[start.Y - i, start.X + i];
+                        break;
+                    case Direction.DownLeft:
+                        hit = map.MapArr[start.Y + i, start.X - i];
+                        break;
+                    case Direction.DownRight:
+                        hit = map.MapArr[start.Y + i, start.X + i];
+                        break;
                 }
             }
-        }
-        
-        return false;
-    }
-
-    public static bool IsNextYColliding(Pawn player, NavMesh navMesh, int direction)
-    {
-        if (direction > 0) direction = 1;
-        else direction = -1;
-
-        int[] xPositions = CorrespondingXPositions(navMesh, player.Transform.Position.Y, direction);
-
-        foreach (Vector2 w in navMesh.Blocked)
-        {
-            bool isNextXColliding = player.Transform.Position.Y + direction == w.Y;
-            if (isNextXColliding)
+            catch (Exception e)
             {
-                foreach (int x in xPositions)
-                {
-                    if (player.Transform.Position.X == x) return true;
-                }
+                return false;
             }
+            
+            if (hit != ' ') return true;
         }
-        
+
+        hit = ' ';
         return false;
-    }
-
-    static int[] CorrespondingXPositions(NavMesh navMesh, int yPosition, int direction)
-    {
-        if (direction > 0) direction = 1;
-        else direction = -1;
-        
-        List<int> x = new List<int>();
-        
-        foreach (Vector2 v in navMesh.Blocked)
-        {
-            if (v.Y == yPosition + direction) x.Add(v.X);
-        }
-
-        return x.ToArray();
-    }
-    
-    static int[] CorrespondingYPositions(NavMesh navMesh, int xPosition, int direction)
-    {
-        if (direction > 0) direction = 1;
-        else direction = -1;
-        
-        List<int> y = new List<int>();
-        
-        foreach (Vector2 v in navMesh.Blocked)
-        {
-            if (v.X == xPosition + direction) y.Add(v.Y);
-        }
-
-        return y.ToArray();
     }
 }

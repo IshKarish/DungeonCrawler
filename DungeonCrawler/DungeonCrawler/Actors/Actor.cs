@@ -4,7 +4,6 @@ public class Actor
 {
     public Transform Transform { get; init; }
     public Graphics Graphics { get; init; }
-    public bool Collider { get; init; }
 
     public Actor()
     {

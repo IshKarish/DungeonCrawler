@@ -11,6 +11,7 @@ public class GameManager
     private Level _level;
 
     private bool switchingLevel;
+    private bool playerMoved = false;
 
     public void StartGame(Level firstLevel)
     {
@@ -31,22 +32,9 @@ public class GameManager
         //Console.Write("Lol");
         
         _player = _level.Player;
-        _player.Transform.SetPosition(0, 0);
-        Renderer.PrintPawnPosition(_player);
 
-        if (_level.Enemies != null)
-        {
-            _enemies = _level.Enemies;
-            
-            foreach (Enemy enemy in _enemies)
-            {
-                Renderer.ClearPawnPosition(enemy);
-                Renderer.PrintPawnPosition(enemy);
-            }
-        }
+        if (_level.Enemies != null) _enemies = _level.Enemies;
         else _enemies = new Enemy[0];
-        
-        switchingLevel = false;
         
         Thread t = new Thread(PlayerMovement);
         Thread t2 = new Thread(EnemiesMovement);
@@ -62,13 +50,11 @@ public class GameManager
         switchingLevel = true;
         
         Console.Clear();
-        Thread.Sleep(2000);
-        
-        Console.SetCursorPosition(0, 0);
         Console.BackgroundColor = ConsoleColor.Black;
         
-        Console.WriteLine("Lol");
+        _player.Transform.SetPosition(0, 0);
         
+        switchingLevel = false;
         StartLevel(level);
     }
     
@@ -77,26 +63,30 @@ public class GameManager
         while (!switchingLevel)
         {
             ConsoleKeyInfo cki = Console.ReadKey(true);
+            if (!playerMoved) playerMoved = true;
             
             switch (cki.Key)
             {
                 case ConsoleKey.UpArrow:
                 case ConsoleKey.W:
-                    _player.PawnMovement.MoveUp(1, _map, _navMesh);
+                    _player.PawnMovement.MoveUp(1, _map);
                     break;
                 case ConsoleKey.DownArrow:
                 case ConsoleKey.S:
-                    _player.PawnMovement.MoveUp(-1, _map, _navMesh);
+                    _player.PawnMovement.MoveUp(-1, _map);
                     break;
                 case ConsoleKey.RightArrow:
                 case ConsoleKey.D:
-                    _player.PawnMovement.MoveRight(1, _map, _navMesh);
+                    _player.PawnMovement.MoveRight(1, _map);
                     break;
                 case ConsoleKey.LeftArrow:
                 case ConsoleKey.A:
-                    _player.PawnMovement.MoveRight(-1, _map, _navMesh);
+                    _player.PawnMovement.MoveRight(-1, _map);
                     break;
             }
+
+            bool LineTrace = Physics.LineTrace(_player.Transform.Position, _map, 1, Direction.UpLeft, out char hit);
+            if (LineTrace) Debug.WriteLine(hit);
 
             if (_level.IsPlayerStandingOnDoor())
             {

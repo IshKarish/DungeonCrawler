@@ -22,8 +22,8 @@ public class BehaviorTree
         }
         Debug.WriteLine(direction);
         
-        if (axis == 1) _pawn.PawnMovement.MoveRight(direction, map, navMesh);
-        else _pawn.PawnMovement.MoveUp(direction, map, navMesh);
+        if (axis == 1) _pawn.PawnMovement.MoveRight(direction, map);
+        else _pawn.PawnMovement.MoveUp(direction, map);
 
         if (_pawn is Enemy e) e.PawnSensing.SetCenter(_pawn.Transform.Position);
     }
