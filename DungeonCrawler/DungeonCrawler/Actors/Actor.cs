@@ -5,14 +5,14 @@ public class Actor
     public Transform Transform { get; init; }
     public Graphics Graphics { get; init; }
     public bool Trigger { get; set; }
-    public bool CanInteract { get; set; }
+    public bool Interactable { get; set; }
 
     public Actor()
     {
         Transform = new Transform();
         Graphics = new Graphics('&', ConsoleColor.Red);
         Trigger = false;
-        CanInteract = false;
+        Interactable = false;
     }
     
     public Actor(Graphics graphics)
@@ -20,7 +20,7 @@ public class Actor
         Transform = new Transform();
         Graphics = graphics;
         Trigger = false;
-        CanInteract = false;
+        Interactable = false;
     }
 
     public Actor(int scaleX, int scaleY, Graphics graphics)
@@ -29,7 +29,7 @@ public class Actor
         Transform.SetScale(scaleX, scaleY);
         Graphics = graphics;
         Trigger = false;
-        CanInteract = false;
+        Interactable = false;
     }
 
     public Actor(int xPosition, int yPosition, int scaleX, int scaleY, Graphics graphics)
@@ -40,7 +40,7 @@ public class Actor
         
         Graphics = graphics;
         Trigger = false;
-        CanInteract = false;
+        Interactable = false;
     }
 
     public Actor(Vector2 scale, Graphics graphics)
@@ -49,7 +49,7 @@ public class Actor
         Transform.SetScale(scale.X, scale.Y);
         Graphics = graphics;
         Trigger = false;
-        CanInteract = false;
+        Interactable = false;
     }
 
     public Actor(Vector2 position, Vector2 scale, Graphics graphics)
@@ -57,7 +57,7 @@ public class Actor
         Graphics = graphics;
         Transform = new Transform(position, scale);
         Trigger = false;
-        CanInteract = false;
+        Interactable = false;
     }
 
     public Actor(Transform transform, Graphics graphics)
@@ -65,7 +65,7 @@ public class Actor
         Transform = transform;
         Graphics = graphics;
         Trigger = false;
-        CanInteract = false;
+        Interactable = false;
     }
     
     public Actor(Transform transform)
@@ -73,6 +73,6 @@ public class Actor
         Transform = transform;
         Graphics = new Graphics('&', ConsoleColor.Red);
         Trigger = false;
-        CanInteract = false;
+        Interactable = false;
     }
 }

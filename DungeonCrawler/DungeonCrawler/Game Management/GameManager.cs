@@ -6,13 +6,12 @@ public class GameManager
 {
     private Map _map;
     private NavMesh _navMesh;
-    private Pawn _player;
+    private Player _player;
     private Enemy[] _enemies;
     private Level _level;
     private World _world;
 
     private bool switchingLevel;
-    private bool playerMoved = false;
 
     public void StartGame(Level firstLevel)
     {
@@ -29,9 +28,6 @@ public class GameManager
         _world = _level.World;
         
         Renderer.PrintMap(_map);
-        
-        //Console.SetCursorPosition(0, _map.MapArr.GetLength(0) + 2);
-        //Console.Write("Lol");
         
         _player = _level.Player;
 
@@ -65,7 +61,6 @@ public class GameManager
         while (!switchingLevel)
         {
             ConsoleKeyInfo cki = Console.ReadKey(true);
-            if (!playerMoved) playerMoved = true;
             
             switch (cki.Key)
             {
@@ -119,6 +114,13 @@ public class GameManager
     {
         while (!switchingLevel)
         {
+            Console.SetCursorPosition(0, _world.WorldArr.GetLength(0) + 2);
+            
+            bool playerCanInteract = _player.Ineractor.CanInteract(_world);
+            
+            if (playerCanInteract) Console.WriteLine("Press E to interact");
+            else Console.WriteLine("                      ");
+            
             Console.BackgroundColor = ConsoleColor.Black;
             
             Renderer.ClearPawnPosition(_player.Transform.LastTransform.Position);

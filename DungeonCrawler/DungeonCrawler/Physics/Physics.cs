@@ -14,16 +14,16 @@ public static class Physics
                 switch (direction)
                 {
                     case Direction.Up:
-                        hitActor = world.WorldArr[start.Y - i - 1, start.X];
+                        hitActor = world.WorldArr[start.Y - i, start.X];
                         break;
                     case Direction.Down:
-                        hitActor = world.WorldArr[start.Y + i + 1, start.X];
+                        hitActor = world.WorldArr[start.Y + i, start.X];
                         break;
                     case Direction.Left:
-                        hitActor = world.WorldArr[start.Y, start.X - i - 1];
+                        hitActor = world.WorldArr[start.Y, start.X - i];
                         break;
                     case Direction.Right:
-                        hitActor = world.WorldArr[start.Y, start.X + i + 1];
+                        hitActor = world.WorldArr[start.Y, start.X + i];
                         break;
                     case Direction.UpLeft:
                         hitActor = world.WorldArr[start.Y - i, start.X - i];
@@ -44,8 +44,6 @@ public static class Physics
                     hitResult = new HitResult(hitActor, i);
                     return true;
                 }
-
-                return false;
             }
             catch (Exception e)
             {
