@@ -13,8 +13,12 @@ class Program
         Graphics objGraphics = new Graphics('/', ConsoleColor.Blue);
         Graphics objGraphics2 = new Graphics('!', ConsoleColor.Yellow);
         Graphics objGraphics3 = new Graphics('^', ConsoleColor.DarkGreen);
-        
-        Actor obj = new Actor(2, 6, 3, 4, objGraphics);
+
+        Actor obj = new Actor(2, 6, 3, 4, objGraphics)
+        {
+            CanInteract = true
+        };
+
         Actor obj2 = new Actor(78, 6, 6, 2, objGraphics2);
         Actor obj3 = new Actor(50, 18, 4, 4, objGraphics3);
         Actor obj4 = new Actor(6, 9,3, 5,  objGraphics);

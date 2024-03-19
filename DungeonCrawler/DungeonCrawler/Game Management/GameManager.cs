@@ -9,6 +9,7 @@ public class GameManager
     private Pawn _player;
     private Enemy[] _enemies;
     private Level _level;
+    private World _world;
 
     private bool switchingLevel;
     private bool playerMoved = false;
@@ -25,6 +26,7 @@ public class GameManager
         _level = level;
         _map = _level.Map;
         _navMesh = _level.NavMesh;
+        _world = _level.World;
         
         Renderer.PrintMap(_map);
         
@@ -69,23 +71,23 @@ public class GameManager
             {
                 case ConsoleKey.UpArrow:
                 case ConsoleKey.W:
-                    _player.PawnMovement.MoveUp(1, _map);
+                    _player.PawnMovement.MoveUp(1, _world);
                     break;
                 case ConsoleKey.DownArrow:
                 case ConsoleKey.S:
-                    _player.PawnMovement.MoveUp(-1, _map);
+                    _player.PawnMovement.MoveUp(-1, _world);
                     break;
                 case ConsoleKey.RightArrow:
                 case ConsoleKey.D:
-                    _player.PawnMovement.MoveRight(1, _map);
+                    _player.PawnMovement.MoveRight(1, _world);
                     break;
                 case ConsoleKey.LeftArrow:
                 case ConsoleKey.A:
-                    _player.PawnMovement.MoveRight(-1, _map);
+                    _player.PawnMovement.MoveRight(-1, _world);
                     break;
             }
 
-            bool LineTrace = Physics.LineTrace(_player.Transform.Position, _map, 1, Direction.Right, out HitResult hitResult);
+            bool LineTrace = Physics.LineTrace(_player.Transform.Position, _world, 1, Direction.Right, out HitResult hitResult);
             if (LineTrace) Debug.WriteLine($"Hit {hitResult.HitActor.Graphics.Symbol} with {hitResult.HitActor.Graphics.Color} color.");
 
             if (_level.IsPlayerStandingOnDoor())
@@ -107,7 +109,7 @@ public class GameManager
                 }
                 else
                 {
-                    enemy.BehaviorTree.Patrol(_map, _navMesh);
+                    enemy.BehaviorTree.Patrol(_world);
                 }
             }
         }

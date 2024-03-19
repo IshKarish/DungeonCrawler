@@ -2,7 +2,7 @@
 
 public static class Physics
 {
-    public static bool LineTrace(Vector2 start, Map map, int length, Direction direction, out HitResult hitResult)
+    public static bool LineTrace(Vector2 start, World world, int length, Direction direction, out HitResult hitResult)
     {
         hitResult = new HitResult();
         
@@ -14,28 +14,28 @@ public static class Physics
                 switch (direction)
                 {
                     case Direction.Up:
-                        hitActor = map.WorldArr[start.Y - i - 1, start.X];
+                        hitActor = world.WorldArr[start.Y - i - 1, start.X];
                         break;
                     case Direction.Down:
-                        hitActor = map.WorldArr[start.Y + i + 1, start.X];
+                        hitActor = world.WorldArr[start.Y + i + 1, start.X];
                         break;
                     case Direction.Left:
-                        hitActor = map.WorldArr[start.Y, start.X - i - 1];
+                        hitActor = world.WorldArr[start.Y, start.X - i - 1];
                         break;
                     case Direction.Right:
-                        hitActor = map.WorldArr[start.Y, start.X + i + 1];
+                        hitActor = world.WorldArr[start.Y, start.X + i + 1];
                         break;
                     case Direction.UpLeft:
-                        hitActor = map.WorldArr[start.Y - i, start.X - i];
+                        hitActor = world.WorldArr[start.Y - i, start.X - i];
                         break;
                     case Direction.UpRight:
-                        hitActor = map.WorldArr[start.Y - i, start.X + i];
+                        hitActor = world.WorldArr[start.Y - i, start.X + i];
                         break;
                     case Direction.DownLeft:
-                        hitActor = map.WorldArr[start.Y + i, start.X - i];
+                        hitActor = world.WorldArr[start.Y + i, start.X - i];
                         break;
                     case Direction.DownRight:
-                        hitActor = map.WorldArr[start.Y + i, start.X + i];
+                        hitActor = world.WorldArr[start.Y + i, start.X + i];
                         break;
                 }
 
@@ -53,6 +53,19 @@ public static class Physics
             }
         }
         
+        return false;
+    }
+    
+    public static bool LineTrace(Vector2 point, World world, out HitResult hitResult)
+    {
+        hitResult = new HitResult();
+        Actor hitActor = world.WorldArr[point.Y, point.X];
+        
+        if (hitActor != null)
+        {
+            hitResult = new HitResult(hitActor, 0);
+            return true;
+        }
         return false;
     }
 }
