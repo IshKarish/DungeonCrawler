@@ -59,21 +59,21 @@ public class PawnMovement
     // Colliding
     public bool IsCollidingFromRight(Map map)
     {
-        return Physics.LineTrace(_transform.Position, map, 1, Direction.Right, out char hit);
+        return Physics.LineTrace(_transform.Position, map, 1, Direction.Right, out HitResult hitResult);
     }
 
     public bool IsCollidingFromLeft(Map map)
     {
-        return Physics.LineTrace(_transform.Position, map, 1, Direction.Left, out char hit);
+        return Physics.LineTrace(_transform.Position, map, 1, Direction.Left, out HitResult hitResult);
     }
 
     public bool IsCollidingFromTop(Map map)
     {
-        return Physics.LineTrace(_transform.Position, map, 1, Direction.Up, out char hit);
+        return Physics.LineTrace(_transform.Position, map, 1, Direction.Up, out HitResult hitResult);
     }
 
     public bool IsCollidingFromBottom(Map map)
     {
-        return Physics.LineTrace(_transform.Position, map, 1, Direction.Down, out char hit);
+        return Physics.LineTrace(_transform.Position, map, 1, Direction.Down, out HitResult hitResult);
     }
 }

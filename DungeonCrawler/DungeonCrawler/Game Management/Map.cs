@@ -1,8 +1,11 @@
-﻿namespace DungeonCrawler;
+﻿using System.Diagnostics;
+
+namespace DungeonCrawler;
 
 public class Map
 {
     public char[,] MapArr { get; private set; }
+    public Actor[,] WorldArr { get; private set; }
     public Actor[] Actors { get; private set; }
     private static int _rows;
     private static int _cols;
@@ -10,6 +13,8 @@ public class Map
     public Map(int size, Actor[] actors)
     {
         MapArr = new char[size, size * 2];
+        WorldArr = new Actor[size, size * 2];
+        
         Actors = actors;
         
         CreateMap();
@@ -18,6 +23,8 @@ public class Map
     public Map(Vector2 size, Actor[] actors)
     {
         MapArr = new char[size.X, size.Y];
+        WorldArr = new Actor[size.X, size.Y];
+        
         Actors = actors;
         
         CreateMap();
@@ -86,6 +93,27 @@ public class Map
                     }
                     else
                         MapArr[i, j] = currentActor.Graphics.Symbol;
+                }
+            }
+        }
+    }
+
+    public void UpdateWorldArr(Actor[] actors)
+    {
+        foreach (Actor a in actors)
+        {
+            int startPosX = a.Transform.Position.X;
+            int scaleX = a.Transform.Scale.X + 1;
+
+            int startPosY = a.Transform.Position.Y;
+            int scaleY = a.Transform.Scale.Y + 1;
+        
+            for (int i = startPosX; i < startPosX + scaleX; i++)
+            {
+                for (int j = startPosY; j < startPosY + scaleY; j++)
+                {
+                    if (j >= WorldArr.GetLength(0)) break;
+                    WorldArr[j, i] = a;
                 }
             }
         }

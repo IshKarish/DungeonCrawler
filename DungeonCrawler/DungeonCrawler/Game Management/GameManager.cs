@@ -85,8 +85,8 @@ public class GameManager
                     break;
             }
 
-            bool LineTrace = Physics.LineTrace(_player.Transform.Position, _map, 1, Direction.UpLeft, out char hit);
-            if (LineTrace) Debug.WriteLine(hit);
+            bool LineTrace = Physics.LineTrace(_player.Transform.Position, _map, 1, Direction.Right, out HitResult hitResult);
+            if (LineTrace) Debug.WriteLine($"Hit {hitResult.HitActor.Graphics.Symbol} with {hitResult.HitActor.Graphics.Color} color.");
 
             if (_level.IsPlayerStandingOnDoor())
             {

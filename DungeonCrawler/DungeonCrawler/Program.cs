@@ -27,6 +27,8 @@ class Program
         };
 
         Level level = Utilities.CreateLevel(new Vector2(20, 100), player, objects);
+        level.Map.UpdateWorldArr(objects);
+        
         Enemy[] enemies = Utilities.GenerateEnemies(10, level);
         //level.SetEnemies(enemies);
 
