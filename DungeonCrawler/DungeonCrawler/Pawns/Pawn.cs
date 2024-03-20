@@ -4,6 +4,7 @@ public class Pawn : Actor
 {
     public int Speed { get; init; }
     public PawnMovement PawnMovement { get; init; }
+    public bool IsDead { get; private set; }
     
     public Pawn()
     {
@@ -49,5 +50,10 @@ public class Pawn : Actor
         PawnMovement = new PawnMovement(this);
         Graphics = graphics;
         Speed = 1;
+    }
+
+    public void Kill()
+    {
+        IsDead = true;
     }
 }

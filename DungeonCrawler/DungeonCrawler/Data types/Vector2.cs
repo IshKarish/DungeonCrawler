@@ -7,8 +7,8 @@ public class Vector2
 
     public Vector2()
     {
-        X = 1;
-        Y = 1;
+        X = 0;
+        Y = 0;
     }
 
     public Vector2(int x, int y)

@@ -15,7 +15,7 @@ public class Transform
     public Transform(Vector2 position, Vector2 scale)
     {
         Position = position;
-        Scale = scale;
+        Scale = new Vector2(scale.X - 1, scale.Y - 1);
     }
 
     public Transform(Vector2 position)
@@ -39,12 +39,12 @@ public class Transform
     public void SetScale(int x, int y)
     {
         LastTransform = new Transform(Position, Scale);
-        Scale = new Vector2(x, y);
+        Scale = new Vector2(x - 1, y - 1);
     }
     
     public void SetScale(Vector2 scale)
     {
         LastTransform = new Transform(Position, Scale);
-        Scale = scale;
+        Scale = new Vector2(scale.X - 1, scale.Y - 1);
     }
 }

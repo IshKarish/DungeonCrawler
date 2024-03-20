@@ -54,6 +54,18 @@ public static class Physics
         return false;
     }
     
+    public static bool LineTrace(Vector2 start, Pawn pawn, int length, Direction direction, out HitResult hitResult)
+    {
+        hitResult = new HitResult();
+        
+        for (int i = 0; i <= length; i++)
+        {
+            if (pawn.Transform.Position.Y == start.Y && pawn.Transform.Position.X == start.X + i) return true;
+        }
+        
+        return false;
+    }
+    
     public static bool LineTrace(Vector2 point, World world, out HitResult hitResult)
     {
         hitResult = new HitResult();

@@ -14,16 +14,16 @@ class Program
         Graphics objGraphics2 = new Graphics('!', ConsoleColor.Yellow);
         Graphics objGraphics3 = new Graphics('^', ConsoleColor.DarkGreen);
 
-        Actor obj = new Actor(2, 6, 3, 4, objGraphics)
+        Actor obj = new Actor(2, 6, 6, 4, objGraphics)
         {
             Interactable = true
         };
 
-        Actor obj2 = new Actor(78, 6, 6, 2, objGraphics2);
+        Actor obj2 = new Actor(78, 6, 18, 2, objGraphics2);
         Actor obj3 = new Actor(50, 18, 4, 4, objGraphics3);
-        Actor obj4 = new Actor(6, 9,3, 5,  objGraphics);
+        Actor obj4 = new Actor(6, 9, 5, 5,  objGraphics);
 
-        Actor trap = new Actor(0, 15, 0, 3, new Graphics('>', ConsoleColor.Black));
+        Trap trap = new Trap(0, 15);
         
         Door doorBenDoor = new Door(97, 0, DoorOrientation.Horizontal, -1);
         
