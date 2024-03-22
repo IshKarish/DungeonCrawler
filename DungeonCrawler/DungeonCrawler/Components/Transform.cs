@@ -47,4 +47,9 @@ public class Transform
         LastTransform = new Transform(Position, Scale);
         Scale = new Vector2(scale.X - 1, scale.Y - 1);
     }
+
+    public void SetLastTransform(Transform transform)
+    {
+        LastTransform = new Transform(transform.Position, transform.Scale);
+    }
 }

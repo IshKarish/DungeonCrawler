@@ -10,7 +10,7 @@ class Program
         
         Player player = new Player(0, 0, new Graphics('*', ConsoleColor.White));
         
-        Level level2 = Utilities.CreateLevel(new Vector2(20, 50), player);
+        Level level2 = Utilities.CreateLevel(new Vector2(10, 50), player);
 
         #region MyRegion
         Graphics objGraphics = new Graphics('/', ConsoleColor.Blue);
@@ -21,17 +21,18 @@ class Program
         {
             Interactable = true
         };
-        
         Actor obj2 = new Actor(78, 6, 18, 2, objGraphics2);
         Actor obj3 = new Actor(50, 18, 4, 4, objGraphics3);
         Actor obj4 = new Actor(6, 9, 5, 5,  objGraphics);
                 
         Door doorBenDoor = new Door(97, 0, DoorDirection.Down, level2);
         Door door2 = new Door(45, 3, DoorDirection.Left);
+
+        Chest chest = new Chest();
                 
         Actor[] objects =
         {
-            obj, obj2, obj3, obj4, doorBenDoor, door2
+            obj, obj2, obj3, obj4, doorBenDoor, door2, chest
         };
         #endregion
         

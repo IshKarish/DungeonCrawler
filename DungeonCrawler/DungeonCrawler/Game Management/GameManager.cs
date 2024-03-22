@@ -32,19 +32,18 @@ public class GameManager
         Renderer.PrintMap(_map);
         
         _player = _level.Player;
-
         bool foundEntrance = false;
         foreach (Actor a in _map.Actors)
         {
             if (a is Door door && door.IsEntrance)
             {
                 if (!foundEntrance) foundEntrance = true;
-                else throw new Exception("There must be only one entrance in for the level");
+                //else throw new Exception("There must be only one entrance in for the level");
                 _player.Transform.SetPosition(door.PlayerSpawnPoint);
+                _player.Transform.SetLastTransform(_player.Transform);
             }
         }
-        
-        if (!foundEntrance) throw new Exception("There must be one entrance in for the level");
+        //if (!foundEntrance) throw new Exception("There must be one entrance in for the level");
 
         if (_level.Enemies != null) _enemies = _level.Enemies;
         else _enemies = new Enemy[0];
@@ -81,6 +80,7 @@ public class GameManager
         {
             ConsoleKeyInfo cki = Console.ReadKey(true);
             if (!playerMoved) playerMoved = true;
+            if (_player.IsDead) break;
             
             switch (cki.Key)
             {
@@ -102,10 +102,7 @@ public class GameManager
                     break;
             }
 
-            bool LineTrace = Physics.LineTrace(_player.Transform.Position, _world, 1, Direction.Up, out HitResult hitResult);
-            if (LineTrace && hitResult.HitActor is Teleporter) Debug.WriteLine($"Lol");
-
-            if (_level.IsPlayerStandingOnDoor(out Teleporter teleporter) && teleporter.Destination != null)
+            if (_level.IsPlayerStandingOnDoor(out Actor actor) && actor is Teleporter teleporter && teleporter.Destination != null)
             {
                 SwitchLevel(teleporter.Destination);
             }
@@ -134,18 +131,18 @@ public class GameManager
     {
         while (!switchingLevel)
         {
-            //Console.SetCursorPosition(0, _world.WorldArr.GetLength(0) + 2);
-            //
-            //bool playerCanInteract = _player.Ineractor.CanInteract(_world);
-            //if (playerCanInteract) Console.WriteLine("Press E to interact");
-            //else Console.WriteLine("                      ");
-            //
-            //if (_player.IsDead) Console.WriteLine("You ded lol");
-            //else Console.WriteLine("                      ");
-            //
-            //Console.WriteLine(playerMoved);
-            //
-            //Console.BackgroundColor = ConsoleColor.Black;
+            Console.SetCursorPosition(0, _world.WorldArr.GetLength(0) + 2);
+            
+            bool playerCanInteract = _player.Ineractor.CanInteract(_world);
+            if (playerCanInteract) Console.WriteLine("Press E to interact");
+            else Console.WriteLine("                      ");
+            
+            if (_player.IsDead) Console.WriteLine("You ded lol");
+            else Console.WriteLine("                      ");
+
+            Console.WriteLine("Lol");
+            
+            Console.BackgroundColor = ConsoleColor.Black;
             
             if (playerMoved) Renderer.ClearPosition(_player.Transform.LastTransform.Position);
             Renderer.PrintPawnPosition(_player);
@@ -177,9 +174,9 @@ public class GameManager
             {
                 if (a is Trap t && t.ShouldKill(_player))
                 {
-                    shouldRetractTrap = true;
-                    trap = (Trap)a;
                     _player.Kill();
+                    shouldRetractTrap = true;
+                    trap = t;
                 }
             }
         }

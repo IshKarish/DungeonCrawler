@@ -32,10 +32,16 @@ public class Level
         Enemies = enemies;
     }
 
-    public bool IsPlayerStandingOnDoor(out Teleporter door)
+    public bool IsPlayerStandingOnDoor(out Actor actor)
     {
-        door = (Teleporter)WhereIsStanding(Player);
-        return door != null;
+        if (WhereIsStanding(Player) is Teleporter t)
+        {
+            actor = t;
+            return true;
+        }
+
+        actor = new Actor();
+        return false;
     }
     
     Actor WhereIsStanding(Pawn pawn)
