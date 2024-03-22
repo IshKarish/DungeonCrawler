@@ -2,9 +2,8 @@
 
 public class Door : Actor
 {
-    public DoorOrientation DoorOrientation { get; private set; }
-    public int Direction { get; private set; }
-    
+    public DoorDirection Direction { get; private set; }
+
     public Door(int x, int y)
     {
         Transform.SetScale(4, 2);
@@ -12,78 +11,46 @@ public class Door : Actor
         Graphics.Color = ConsoleColor.Red;
     }
 
-    public Door(int x, int y, DoorOrientation doorOrientation, int direction)
+    public Door(int x, int y, DoorDirection direction)
     {
         Graphics.Color = ConsoleColor.Red;
-        DoorOrientation = doorOrientation;
         Direction = direction;
-        
-        switch (DoorOrientation)
-        {
-            case DoorOrientation.Horizontal:
-                Transform.SetScale(3, 2);
-                break;
-            case DoorOrientation.Vertical:
-                Transform.SetScale(2, 3);
-                break;
-        }
+
+        if (direction == DoorDirection.Up || direction == DoorDirection.Down) Transform.SetScale(3, 2);
+        else Transform.SetScale(2, 3);
         
         Transform.SetPosition(x, y);
     }
     
-    public Door(int x, int y, DoorOrientation doorOrientation, int direction, ConsoleColor color)
+    public Door(int x, int y, DoorDirection direction, ConsoleColor color)
     {
         Graphics.Color = color;
-        DoorOrientation = doorOrientation;
         Direction = direction;
         
-        switch (DoorOrientation)
-        {
-            case DoorOrientation.Horizontal:
-                Transform.SetScale(3, 2);
-                break;
-            case DoorOrientation.Vertical:
-                Transform.SetScale(2, 3);
-                break;
-        }
+        if (direction == DoorDirection.Up || direction == DoorDirection.Down) Transform.SetScale(3, 2);
+        else Transform.SetScale(2, 3);
         
         Transform.SetPosition(x, y);
     }
 
-    public Door(Vector2 position, DoorOrientation doorOrientation, int direction, ConsoleColor color)
+    public Door(Vector2 position, DoorDirection direction, ConsoleColor color)
     {
         Graphics.Color = color;
-        DoorOrientation = doorOrientation;
         Direction = direction;
         
-        switch (DoorOrientation)
-        {
-            case DoorOrientation.Horizontal:
-                Transform.SetScale(3, 2);
-                break;
-            case DoorOrientation.Vertical:
-                Transform.SetScale(2, 3);
-                break;
-        }
+        if (direction == DoorDirection.Up || direction == DoorDirection.Down) Transform.SetScale(3, 2);
+        else Transform.SetScale(2, 3);
         
         Transform.SetPosition(position.X, position.Y);
     }
     
-    public Door(Vector2 position, DoorOrientation doorOrientation, int direction)
+    public Door(Vector2 position, DoorDirection direction)
     {
         Graphics.Color = ConsoleColor.Red;
-        DoorOrientation = doorOrientation;
         Direction = direction;
         
-        switch (DoorOrientation)
-        {
-            case DoorOrientation.Horizontal:
-            Transform.SetScale(3, 2);
-            break;
-            case DoorOrientation.Vertical:
-            Transform.SetScale(2, 3);
-            break;
-        }
+        if (direction == DoorDirection.Up || direction == DoorDirection.Down) Transform.SetScale(3, 2);
+        else Transform.SetScale(2, 3);
         
         Transform.SetPosition(position.X, position.Y);
     }

@@ -76,7 +76,7 @@ public class Map
         AddToActorArr(actor);
         
         bool isDoor = actor is Door;
-        int doorDirection = 1;
+        DoorDirection doorDirection = DoorDirection.Left;
         if (isDoor) doorDirection = ((Door)actor).Direction;
         
         
@@ -94,15 +94,15 @@ public class Map
                         int firstX = actor.Transform.Position.X + 1;
                         int firstY = actor.Transform.Position.Y + 1;
 
-                        if (((Door)actor).DoorOrientation == DoorOrientation.Vertical)
+                        if (doorDirection == DoorDirection.Left || doorDirection == DoorDirection.Right)
                         {
-                            if (doorDirection > 0) firstX = actor.Transform.Position.X + 1;
+                            if (doorDirection == DoorDirection.Right) firstX = actor.Transform.Position.X + 1;
                             else firstX = actor.Transform.Position.X;
                         }
 
-                        if (((Door)actor).DoorOrientation == DoorOrientation.Horizontal)
+                        if (doorDirection == DoorDirection.Up || doorDirection == DoorDirection.Down)
                         {
-                            if (doorDirection < 0) firstY = actor.Transform.Position.Y + 1;
+                            if (doorDirection == DoorDirection.Down) firstY = actor.Transform.Position.Y + 1;
                             else firstY = actor.Transform.Position.Y;
                         }
                         

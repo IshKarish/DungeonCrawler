@@ -24,7 +24,7 @@ class Program
         Actor obj3 = new Actor(50, 18, 4, 4, objGraphics3);
         Actor obj4 = new Actor(6, 9, 5, 5,  objGraphics);
                 
-        Door doorBenDoor = new Door(97, 0, DoorOrientation.Horizontal, -1);
+        Door doorBenDoor = new Door(97, 0, DoorDirection.Down);
                 
         Actor[] objects =
         {
