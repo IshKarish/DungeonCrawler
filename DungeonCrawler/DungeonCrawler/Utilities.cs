@@ -30,6 +30,30 @@ public static class Utilities
         return level;
     }
     
+    public static Level CreateLevel(int mapSize, Player player)
+    {
+        Map map = new Map(mapSize);
+        NavMesh navMesh = new NavMesh(map);
+        Level level = new Level(map, navMesh, player);
+
+        return level;
+    }
+    public static Level CreateLevel(Vector2 mapSize, Player player)
+    {
+        Map map = new Map(mapSize);
+        NavMesh navMesh = new NavMesh(map);
+        Level level = new Level(map, navMesh, player);
+
+        return level;
+    }
+    public static Level CreateLevel(int mapSizeX, int mapSizeY, Player player)
+    {
+        Map map = new Map(new Vector2(mapSizeX, mapSizeY));
+        NavMesh navMesh = new NavMesh(map);
+        Level level = new Level(map, navMesh, player);
+
+        return level;
+    }
     
     // Enemies stuff
     public static Enemy[] GenerateEnemies(int enemyPercentage, Level level)

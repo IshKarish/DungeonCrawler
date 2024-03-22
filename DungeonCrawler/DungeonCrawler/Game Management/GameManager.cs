@@ -33,6 +33,19 @@ public class GameManager
         
         _player = _level.Player;
 
+        bool foundEntrance = false;
+        foreach (Actor a in _map.Actors)
+        {
+            if (a is Door door && door.IsEntrance)
+            {
+                if (!foundEntrance) foundEntrance = true;
+                else throw new Exception("There must be only one entrance in for the level");
+                _player.Transform.SetPosition(door.PlayerSpawnPoint);
+            }
+        }
+        
+        if (!foundEntrance) throw new Exception("There must be one entrance in for the level");
+
         if (_level.Enemies != null) _enemies = _level.Enemies;
         else _enemies = new Enemy[0];
         
@@ -92,9 +105,9 @@ public class GameManager
             bool LineTrace = Physics.LineTrace(_player.Transform.Position, _world, 1, Direction.Up, out HitResult hitResult);
             if (LineTrace && hitResult.HitActor is Teleporter) Debug.WriteLine($"Lol");
 
-            if (_level.IsPlayerStandingOnDoor())
+            if (_level.IsPlayerStandingOnDoor(out Teleporter teleporter) && teleporter.Destination != null)
             {
-                SwitchLevel(Utilities.CreateLevel(new Vector2(20, 50), _player, new Actor[0]));
+                SwitchLevel(teleporter.Destination);
             }
         }
     }

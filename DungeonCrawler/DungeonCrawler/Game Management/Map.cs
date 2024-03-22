@@ -65,9 +65,14 @@ public class Map
             }
         }
 
-        for (int i = 0; i < actors.Length; i++)
+        AddActors(actors);
+    }
+
+    public void AddActors(Actor[] actors)
+    {
+        foreach (Actor a in actors)
         {
-            AddActor(actors[i]);
+            AddActor(a);
         }
     }
 
@@ -76,10 +81,6 @@ public class Map
         AddToActorArr(actor);
         
         bool isDoor = actor is Door;
-        DoorDirection doorDirection = DoorDirection.Left;
-        if (isDoor) doorDirection = ((Door)actor).Direction;
-        
-        
         for (int i = 0; i < _rows; i++)
         {
             for (int j = 0; j < _cols; j++)
@@ -91,22 +92,9 @@ public class Map
                 {
                     if (isDoor)
                     {
-                        int firstX = actor.Transform.Position.X + 1;
-                        int firstY = actor.Transform.Position.Y + 1;
-
-                        if (doorDirection == DoorDirection.Left || doorDirection == DoorDirection.Right)
-                        {
-                            if (doorDirection == DoorDirection.Right) firstX = actor.Transform.Position.X + 1;
-                            else firstX = actor.Transform.Position.X;
-                        }
-
-                        if (doorDirection == DoorDirection.Up || doorDirection == DoorDirection.Down)
-                        {
-                            if (doorDirection == DoorDirection.Down) firstY = actor.Transform.Position.Y + 1;
-                            else firstY = actor.Transform.Position.Y;
-                        }
+                        Vector2 entry = ((Door)actor).Entry;
                         
-                        if (j == firstX && i == firstY) MapArr[i, j] = '.';
+                        if (j == entry.X && i == entry.Y) MapArr[i, j] = 'D';
                         else MapArr[i, j] = '&';
                     }
                     else

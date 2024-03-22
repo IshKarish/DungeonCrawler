@@ -32,13 +32,14 @@ public class Level
         Enemies = enemies;
     }
 
-    public bool IsPlayerStandingOnDoor()
+    public bool IsPlayerStandingOnDoor(out Teleporter door)
     {
-        return WhereIsStanding(Player) == '.';
+        door = (Teleporter)WhereIsStanding(Player);
+        return door != null;
     }
     
-    char WhereIsStanding(Pawn pawn)
+    Actor WhereIsStanding(Pawn pawn)
     {
-        return Map.MapArr[pawn.Transform.Position.Y, pawn.Transform.Position.X];
+        return World.WorldArr[pawn.Transform.Position.Y, pawn.Transform.Position.X];
     }
 }

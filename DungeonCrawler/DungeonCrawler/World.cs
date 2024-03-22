@@ -42,7 +42,11 @@ public class World
         {
             for (int j = 0; j < cols; j++)
             {
-                if (map.MapArr[i, j] == '.') WorldArr[i, j] = new Teleporter();
+                if (map.MapArr[i, j] == 'D')
+                {
+                    Door door = (Door)WorldArr[i, j];
+                    WorldArr[i, j] = new Teleporter(door);
+                }
             }
         }
     }

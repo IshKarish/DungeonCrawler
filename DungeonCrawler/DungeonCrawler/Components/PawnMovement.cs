@@ -69,7 +69,7 @@ public class PawnMovement
 
     public bool IsCollidingFromTop(World world)
     {
-        return Physics.LineTrace(_transform.Position, world, 1, Direction.Up, out HitResult hitResult) && !hitResult.HitActor.Trigger && hitResult.HitActor.Graphics.Symbol != '&';
+        return Physics.LineTrace(_transform.Position, world, 1, Direction.Up, out HitResult hitResult) && !hitResult.HitActor.Trigger;
     }
 
     public bool IsCollidingFromBottom(World world)

@@ -25,11 +25,15 @@ public static class Renderer
             {
                 Console.BackgroundColor = ConsoleColor.Black;
                 
-                foreach (Actor o in objects)
+                if (mapArr[i, j] == 'D') Console.Write(' ');
+                else
                 {
-                    if (mapArr[i, j] == o.Graphics.Symbol) Console.BackgroundColor = o.Graphics.Color;
+                    foreach (Actor o in objects)
+                    {
+                        if (mapArr[i, j] == o.Graphics.Symbol) Console.BackgroundColor = o.Graphics.Color;
+                    }
+                    Console.Write(mapArr[i, j]);
                 }
-                Console.Write(mapArr[i, j]);
             }
             
             Console.BackgroundColor = ConsoleColor.Black;
