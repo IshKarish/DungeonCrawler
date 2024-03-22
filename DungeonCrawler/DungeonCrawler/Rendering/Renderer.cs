@@ -25,15 +25,11 @@ public static class Renderer
             {
                 Console.BackgroundColor = ConsoleColor.Black;
                 
-                if (mapArr[i, j] == '.') Console.Write(' ');
-                else
+                foreach (Actor o in objects)
                 {
-                    foreach (Actor o in objects)
-                    {
-                        if (mapArr[i, j] == o.Graphics.Symbol) Console.BackgroundColor = o.Graphics.Color;
-                    }
-                    Console.Write(mapArr[i, j]);
+                    if (mapArr[i, j] == o.Graphics.Symbol) Console.BackgroundColor = o.Graphics.Color;
                 }
+                Console.Write(mapArr[i, j]);
             }
             
             Console.BackgroundColor = ConsoleColor.Black;
@@ -50,7 +46,7 @@ public static class Renderer
         Console.SetCursorPosition(pawn.Transform.Position.X + 1, pawn.Transform.Position.Y + 1);
     }
     
-    public static void ClearPawnPosition(Vector2 position)
+    public static void ClearPosition(Vector2 position)
     {
         Console.SetCursorPosition(position.X + 1, position.Y + 1);
     }
@@ -63,6 +59,34 @@ public static class Renderer
         Console.SetCursorPosition(pawn.Transform.Position.X + 1, pawn.Transform.Position.Y + 1);
         Console.BackgroundColor = pawn.Graphics.Color;
         Console.Write(pawn.Graphics.Symbol);
+    }
+
+    public static void RetractTrap(Trap trap)
+    {
+        trap.Trigger = false;
+        
+        Console.SetCursorPosition(trap.Transform.Position.X + 1, trap.Transform.Position.Y + 1);
+        Console.BackgroundColor = ConsoleColor.Black;
+
+        if (trap.Direction == TrapDirection.Right)
+        {
+            int xPos = trap.Transform.Position.X - trap.Transform.Scale.X + 1;
+            Console.SetCursorPosition(xPos, trap.Transform.Position.Y + 1);
+            Console.Write('<');
+
+            for (int i = 0; i < trap.Transform.Scale.X; i++)
+            {
+                Console.Write('-');
+            }
+        }
+        else
+        {
+            for (int i = 0; i < trap.Transform.Scale.X; i++)
+            {
+                Console.Write('-');
+            }
+            Console.Write('>');
+        }
     }
 
     static void PrintHorizontalBorder(int cols)

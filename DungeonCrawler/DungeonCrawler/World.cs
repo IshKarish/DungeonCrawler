@@ -9,6 +9,7 @@ public class World
         WorldArr = new Actor[map.MapArr.GetLength(0), map.MapArr.GetLength(1)];
         
         UpdateWorldArr(map.Actors);
+        AddDoors(map);
     }
     
     public void UpdateWorldArr(Actor[] actors)
@@ -28,6 +29,20 @@ public class World
                     if (j >= WorldArr.GetLength(0)) break;
                     WorldArr[j, i] = a;
                 }
+            }
+        }
+    }
+
+    void AddDoors(Map map)
+    {
+        int rows = map.MapArr.GetLength(0);
+        int cols = map.MapArr.GetLength(1);
+
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                if (map.MapArr[i, j] == '.') WorldArr[i, j] = new Teleporter();
             }
         }
     }

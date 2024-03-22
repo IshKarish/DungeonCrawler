@@ -27,12 +27,12 @@ public class PawnMovement
 
         if (isTryingToExitMap || isCollidingFromBottom || isCollidingFromTop)
         {
-            Console.Beep(7500, 50);
+            //Console.Beep(7500, 50);
             return;
         }
         
         _transform.SetPosition(xPos, yPos + axis * _pawn.Speed);
-        Console.Beep(500, 100);
+        //Console.Beep(500, 100);
     }
 
     public void MoveRight(int axis, World world)
@@ -48,12 +48,12 @@ public class PawnMovement
 
         if (isTryingToExitMap || isCollidingFromLeft || isCollidingFromRight)
         {
-            Console.Beep(7500, 50);
+            //Console.Beep(7500, 50);
             return;
         }
         
         _transform.SetPosition(xPos + axis * _pawn.Speed, yPos);
-        Console.Beep(500, 100);
+        //Console.Beep(500, 100);
     }
     
     // Colliding
@@ -69,7 +69,7 @@ public class PawnMovement
 
     public bool IsCollidingFromTop(World world)
     {
-        return Physics.LineTrace(_transform.Position, world, 1, Direction.Up, out HitResult hitResult) && !hitResult.HitActor.Trigger;
+        return Physics.LineTrace(_transform.Position, world, 1, Direction.Up, out HitResult hitResult) && !hitResult.HitActor.Trigger && hitResult.HitActor.Graphics.Symbol != '&';
     }
 
     public bool IsCollidingFromBottom(World world)

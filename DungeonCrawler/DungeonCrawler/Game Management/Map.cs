@@ -12,14 +12,28 @@ public class Map
     public Map(int size, Actor[] actors)
     {
         MapArr = new char[size, size * 2];
-        Actors = actors;
-        CreateMap();
+        Actors = new Actor[0];
+        CreateMap(actors);
     }
     
     public Map(Vector2 size, Actor[] actors)
     {
         MapArr = new char[size.X, size.Y];
-        Actors = actors;
+        Actors = new Actor[0];
+        CreateMap(actors);
+    }
+    
+    public Map(int size)
+    {
+        MapArr = new char[size, size * 2];
+        Actors = new Actor[0];
+        CreateMap();
+    }
+    
+    public Map(Vector2 size)
+    {
+        MapArr = new char[size.X, size.Y];
+        Actors = new Actor[0];
         CreateMap();
     }
 
@@ -36,23 +50,34 @@ public class Map
                 MapArr[i, j] = ' ';
             }
         }
+    }
+    
+    void CreateMap(Actor[] actors)
+    {
+        _rows = MapArr.GetLength(0);
+        _cols = MapArr.GetLength(1);
 
-        if (Actors.Length > 0)
+        for (int i = 0; i < _rows; i++)
         {
-            for (int i = 0; i < Actors.Length; i++)
+            for (int j = 0; j < _cols; j++)
             {
-                AddObjects(i);
+                MapArr[i, j] = ' ';
             }
+        }
+
+        for (int i = 0; i < actors.Length; i++)
+        {
+            AddActor(actors[i]);
         }
     }
 
-    void AddObjects(int currentObjectIndex)
+    public void AddActor(Actor actor)
     {
-        Actor currentActor = Actors[currentObjectIndex];
-
-        bool isDoor = currentActor is Door;
+        AddToActorArr(actor);
+        
+        bool isDoor = actor is Door;
         int doorDirection = 1;
-        if (isDoor) doorDirection = ((Door)currentActor).Direction;
+        if (isDoor) doorDirection = ((Door)actor).Direction;
         
         
         for (int i = 0; i < _rows; i++)
@@ -60,35 +85,48 @@ public class Map
             for (int j = 0; j < _cols; j++)
             {
                 Vector2 currentPosition = new Vector2(j, i);
-                bool isObjectInCurrentPosition = IsObjectInCurrentPosition(currentPosition, currentActor);
+                bool isObjectInCurrentPosition = IsObjectInCurrentPosition(currentPosition, actor);
 
                 if (isObjectInCurrentPosition)
                 {
                     if (isDoor)
                     {
-                        int firstX = currentActor.Transform.Position.X + 1;
-                        int firstY = currentActor.Transform.Position.Y + 1;
+                        int firstX = actor.Transform.Position.X + 1;
+                        int firstY = actor.Transform.Position.Y + 1;
 
-                        if (((Door)currentActor).DoorOrientation == DoorOrientation.Vertical)
+                        if (((Door)actor).DoorOrientation == DoorOrientation.Vertical)
                         {
-                            if (doorDirection > 0) firstX = currentActor.Transform.Position.X + 1;
-                            else firstX = currentActor.Transform.Position.X;
+                            if (doorDirection > 0) firstX = actor.Transform.Position.X + 1;
+                            else firstX = actor.Transform.Position.X;
                         }
 
-                        if (((Door)currentActor).DoorOrientation == DoorOrientation.Horizontal)
+                        if (((Door)actor).DoorOrientation == DoorOrientation.Horizontal)
                         {
-                            if (doorDirection < 0) firstY = currentActor.Transform.Position.Y + 1;
-                            else firstY = currentActor.Transform.Position.Y;
+                            if (doorDirection < 0) firstY = actor.Transform.Position.Y + 1;
+                            else firstY = actor.Transform.Position.Y;
                         }
                         
                         if (j == firstX && i == firstY) MapArr[i, j] = '.';
                         else MapArr[i, j] = '&';
                     }
                     else
-                        MapArr[i, j] = currentActor.Graphics.Symbol;
+                        MapArr[i, j] = actor.Graphics.Symbol;
                 }
             }
         }
+
+        Debug.WriteLine(Actors.Length);
+    }
+
+    void AddToActorArr(Actor actor)
+    {
+        Actor[] newArr = new Actor[Actors.Length + 1];
+        for (int i = 0; i < Actors.Length; i++)
+        {
+            newArr[i] = Actors[i];
+        }
+        newArr[^1] = actor;
+        Actors = newArr;
     }
 
     bool IsObjectInCurrentPosition(Vector2 position, Actor obj)

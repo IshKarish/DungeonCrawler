@@ -13,6 +13,9 @@ public class GameManager
     private bool switchingLevel;
     private bool playerMoved;
 
+    private bool shouldRetractTrap;
+    private Trap trap;
+
     public void StartGame(Level firstLevel)
     {
         StartLevel(firstLevel);
@@ -53,6 +56,8 @@ public class GameManager
         
         _player.Transform.SetPosition(0, 0);
         
+        Thread.Sleep(10);
+        
         switchingLevel = false;
         StartLevel(level);
     }
@@ -84,8 +89,8 @@ public class GameManager
                     break;
             }
 
-            bool LineTrace = Physics.LineTrace(_player.Transform.Position, _world, 1, Direction.Right, out HitResult hitResult);
-            if (LineTrace) Debug.WriteLine($"Hit {hitResult.HitActor.Graphics.Symbol} with {hitResult.HitActor.Graphics.Color} color.");
+            bool LineTrace = Physics.LineTrace(_player.Transform.Position, _world, 1, Direction.Up, out HitResult hitResult);
+            if (LineTrace && hitResult.HitActor is Teleporter) Debug.WriteLine($"Lol");
 
             if (_level.IsPlayerStandingOnDoor())
             {
@@ -116,42 +121,53 @@ public class GameManager
     {
         while (!switchingLevel)
         {
-            Console.SetCursorPosition(0, _world.WorldArr.GetLength(0) + 2);
+            //Console.SetCursorPosition(0, _world.WorldArr.GetLength(0) + 2);
+            //
+            //bool playerCanInteract = _player.Ineractor.CanInteract(_world);
+            //if (playerCanInteract) Console.WriteLine("Press E to interact");
+            //else Console.WriteLine("                      ");
+            //
+            //if (_player.IsDead) Console.WriteLine("You ded lol");
+            //else Console.WriteLine("                      ");
+            //
+            //Console.WriteLine(playerMoved);
+            //
+            //Console.BackgroundColor = ConsoleColor.Black;
             
-            bool playerCanInteract = _player.Ineractor.CanInteract(_world);
-            if (playerCanInteract) Console.WriteLine("Press E to interact");
-            else Console.WriteLine("                      ");
-            
-            if (_player.IsDead) Console.WriteLine("You ded lol");
-            else Console.WriteLine("                      ");
-            
-            Console.WriteLine(playerMoved);
-            
-            Console.BackgroundColor = ConsoleColor.Black;
-            
-            if (playerMoved) Renderer.ClearPawnPosition(_player.Transform.LastTransform.Position);
+            if (playerMoved) Renderer.ClearPosition(_player.Transform.LastTransform.Position);
             Renderer.PrintPawnPosition(_player);
             
             if (_enemies.Length > 0)
             {
                 foreach (Enemy e in _enemies)
                 {
-                    Renderer.ClearPawnPosition(e.Transform.LastTransform.Position);
+                    Renderer.ClearPosition(e.Transform.LastTransform.Position);
                     Renderer.PrintPawnPosition(e);
                 }
             }
-            
+
+            if (shouldRetractTrap)
+            {
+                shouldRetractTrap = false;
+                Renderer.RetractTrap(trap);
+            }
+
             Console.BackgroundColor = ConsoleColor.Black;
         }
     }
 
     void TrapsDetector()
     {
-        while (!switchingLevel)
+        while (!switchingLevel && !_player.IsDead)
         {
             foreach (Actor a in _map.Actors)
             {
-                if (a is Trap t && t.ShouldKill(_player)) _player.Kill();
+                if (a is Trap t && t.ShouldKill(_player))
+                {
+                    shouldRetractTrap = true;
+                    trap = (Trap)a;
+                    _player.Kill();
+                }
             }
         }
     }
