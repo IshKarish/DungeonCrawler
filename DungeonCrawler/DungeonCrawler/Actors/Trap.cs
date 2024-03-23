@@ -1,8 +1,11 @@
-﻿namespace DungeonCrawler;
+﻿using System.Diagnostics;
+
+namespace DungeonCrawler;
 
 public class Trap : Actor
 {
     public TrapDirection Direction { get; private set; }
+    public bool Retracted { get; set; }
     private int _range = 5;
     
     public Trap(TrapDirection direction, int y, int range, Map map)
@@ -67,14 +70,24 @@ public class Trap : Actor
         Interactable = false;
     }
     
-    public bool ShouldKill(Pawn pawn)
+    public bool Activate(Pawn pawn)
     {
+        if (Retracted) return false;
+        
         bool xTrigger = pawn.Transform.Position.X == Transform.Position.X;
         bool yTrigger = pawn.Transform.Position.Y == Transform.Position.Y;
         if (xTrigger && yTrigger) return true;
 
         bool inRange = Physics.LineTrace(Transform.Position, pawn, _range, Direction, out HitResult hitResult);
-        if (inRange) Transform.SetScale(new Vector2(hitResult.Distance, hitResult.Distance));
+        if (inRange)
+        {
+            Transform.SetScale(new Vector2(hitResult.Distance, 1));
+            if (Direction == TrapDirection.Right) Transform.SetPosition(pawn.Transform.Position.X + 1, Transform.Position.Y);
+            
+            Retracted = true;
+            Trigger = false;
+        }
+        
         return inRange;
     }
 }

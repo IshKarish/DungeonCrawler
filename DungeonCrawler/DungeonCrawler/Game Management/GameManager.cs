@@ -10,16 +10,15 @@ public class GameManager
     private Level _level;
     private World _world;
 
-    private bool switchingLevel;
-    private bool playerMoved;
+    private bool _switchingLevel;
+    private bool _playerMoved;
 
-    private bool shouldRetractTrap;
-    private Trap trap;
+    private bool _shouldRetractTrap;
+    private Trap _trap;
 
-    private bool canInteract;
-    private Actor interactable;
+    private bool _canInteract;
 
-    private ConsoleKeyInfo input;
+    private ConsoleKeyInfo _input;
 
     public void StartGame(Level firstLevel)
     {
@@ -28,6 +27,12 @@ public class GameManager
     
     public void StartLevel(Level level)
     {
+        _switchingLevel = false;
+        _playerMoved = false;
+        _shouldRetractTrap = false;
+        _canInteract = false;
+        _trap = null!;
+        
         Console.Clear();
         
         _level = level;
@@ -36,19 +41,17 @@ public class GameManager
         
         Renderer.PrintMap(_map);
         
+        Thread.Sleep(1000);
+        
         _player = _level.Player;
-        bool foundEntrance = false;
         foreach (Actor a in _map.Actors)
         {
             if (a is Door door && door.IsEntrance)
             {
-                if (!foundEntrance) foundEntrance = true;
-                //else throw new Exception("There must be only one entrance in for the level");
                 _player.Transform.SetPosition(door.PlayerSpawnPoint);
                 _player.Transform.SetLastTransform(_player.Transform);
             }
         }
-        //if (!foundEntrance) throw new Exception("There must be one entrance in for the level");
 
         if (_level.Enemies != null) _enemies = _level.Enemies;
         else _enemies = new Enemy[0];
@@ -66,7 +69,9 @@ public class GameManager
 
     public void SwitchLevel(Level level)
     {
-        switchingLevel = true;
+        _switchingLevel = true;
+        
+        Thread.Sleep(500);
         
         Console.Clear();
         Console.BackgroundColor = ConsoleColor.Black;
@@ -75,19 +80,19 @@ public class GameManager
         
         Thread.Sleep(10);
         
-        switchingLevel = false;
         StartLevel(level);
     }
     
     void PlayerMovement()
     {
-        while (!switchingLevel && !_player.IsDead)
+        _playerMoved = false;
+        while (!_switchingLevel && !_player.IsDead)
         {
-            input = Console.ReadKey(true);
-            if (!playerMoved) playerMoved = true;
+            _input = Console.ReadKey(true);
+            if (!_playerMoved) _playerMoved = true;
             if (_player.IsDead) break;
             
-            switch (input.Key)
+            switch (_input.Key)
             {
                 case ConsoleKey.UpArrow:
                 case ConsoleKey.W:
@@ -111,7 +116,7 @@ public class GameManager
 
     void EnemiesMovement()
     {
-        while (!switchingLevel)
+        while (!_switchingLevel)
         {
             foreach (Enemy enemy in _enemies)
             {
@@ -130,13 +135,18 @@ public class GameManager
     void Render()
     {
         string emptyLine = "                                                                     ";
+
+        foreach (Actor a in _world.WorldArr)
+        {
+            if (a is Door d && d.IsEntrance) Renderer.OpenDoor(d);
+        }
         
-        while (!switchingLevel)
+        while (!_switchingLevel)
         {
             Console.SetCursorPosition(0, _world.WorldArr.GetLength(0) + 2);
             Console.WriteLine("Lol");
             
-            if (interactable != null) Console.WriteLine($"Press E to interact with {interactable.Graphics.Symbol} with {interactable.Graphics.Color} color.");
+            if (_canInteract) Console.WriteLine("Press E to interact.");
             else Console.WriteLine(emptyLine);
             
             if (_player.IsDead) Console.WriteLine("You ded lol");
@@ -144,30 +154,19 @@ public class GameManager
             
             Console.BackgroundColor = ConsoleColor.Black;
             
-            if (playerMoved) Renderer.ClearPosition(_player.Transform.LastTransform.Position);
+            if (_playerMoved) Renderer.ClearPosition(_player.Transform.LastTransform.Position);
             Renderer.PrintPawnPosition(_player);
-            
-            if (_enemies.Length > 0)
+
+            if (_shouldRetractTrap)
             {
-                foreach (Enemy e in _enemies)
-                {
-                    Renderer.ClearPosition(e.Transform.LastTransform.Position);
-                    Renderer.PrintPawnPosition(e);
-                }
+                _shouldRetractTrap = false;
+                Renderer.RetractTrap(_trap);
             }
 
-            if (shouldRetractTrap)
+            if (_player.Ineractor.OpenDoor)
             {
-                shouldRetractTrap = false;
-                Renderer.RetractTrap(trap);
-            }
-
-            if (input.Key == ConsoleKey.F)
-            {
-                foreach (Actor a in _map.Actors)
-                {
-                    if (a is Door d) Renderer.OpenDoor(d);
-                }
+                if (_player.Ineractor.Interactable is Door d) Renderer.OpenDoor(d);
+                _player.Ineractor.OpenDoor = false;
             }
 
             Console.BackgroundColor = ConsoleColor.Black;
@@ -176,7 +175,7 @@ public class GameManager
     
     void GameManagement()
     {
-        while (!switchingLevel && !_player.IsDead)
+        while (!_switchingLevel && !_player.IsDead)
         {
             TrapsDetector();
             InteractionsManager();
@@ -188,33 +187,27 @@ public class GameManager
     {
         foreach (Actor a in _map.Actors)
         {
-            if (a is Trap t && t.ShouldKill(_player))
+            if (a is Trap t && t.Activate(_player))
             {
-                _player.Kill();
-                shouldRetractTrap = true;
-                trap = t;
+                _shouldRetractTrap = true;
+                _trap = t;
+                _world.UpdateActor(t);
             }
         }
     }
 
     void InteractionsManager()
     {
-        if (_player.Ineractor.CanInteract(_world, out Actor interactable, out _) && !canInteract)
+        _canInteract = _player.Ineractor.CanInteract(_world, out Actor interactable, out _);
+        bool isInteractButtonPressed = _input.Key == ConsoleKey.E;
+        
+        if (isInteractButtonPressed && !_player.Ineractor.IsIteracting)
         {
-            this.interactable = interactable;
-            
-            if (input.Key == ConsoleKey.E && this.interactable is Chest chest)
-            { 
-                Debug.WriteLine("chest.Item.Name"); 
-                if (chest.Item is RickRoll rickRoll) rickRoll.OpenRickRoll();
-            
-                canInteract = true;
-                this.interactable = null!;
-            }
+            _player.Ineractor.Interact(interactable, _input);
         }
-        else
+        else if (!isInteractButtonPressed && _player.Ineractor.IsIteracting)
         {
-            this.interactable = null!;
+            _player.Ineractor.Release();
         }
     }
 

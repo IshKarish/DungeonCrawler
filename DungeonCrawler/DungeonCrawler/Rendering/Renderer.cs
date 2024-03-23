@@ -69,10 +69,10 @@ public static class Renderer
 
         if (trap.Direction == TrapDirection.Right)
         {
-            int xPos = trap.Transform.Position.X - trap.Transform.Scale.X + 1;
+            int xPos = trap.Transform.Position.X + 1;
             Console.SetCursorPosition(xPos, trap.Transform.Position.Y + 1);
-            Console.Write('<');
 
+            Console.Write('<');
             for (int i = 0; i < trap.Transform.Scale.X; i++)
             {
                 Console.Write('-');
@@ -90,7 +90,7 @@ public static class Renderer
 
     public static void OpenDoor(Door door)
     {
-        door.Open();;
+        door.Open();
         
         Console.SetCursorPosition(door.Entry.X + 1, door.Entry.Y + 1);
         Console.BackgroundColor = ConsoleColor.Black;

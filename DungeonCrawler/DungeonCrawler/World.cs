@@ -1,4 +1,6 @@
-﻿namespace DungeonCrawler;
+﻿using System.Diagnostics;
+
+namespace DungeonCrawler;
 
 public class World
 {
@@ -33,7 +35,27 @@ public class World
         }
     }
 
-    void AddDoors(Map map)
+    public void UpdateActor(Actor a)
+    {
+        int startPosX = a.Transform.Position.X;
+        int scaleX = a.Transform.Scale.X + 1;
+
+        int startPosY = a.Transform.Position.Y;
+        int scaleY = a.Transform.Scale.Y + 1;
+        
+        for (int i = startPosX; i < startPosX + scaleX; i++)
+        {
+            for (int j = startPosY; j < startPosY + scaleY; j++)
+            {
+                if (j >= WorldArr.GetLength(0)) break;
+                WorldArr[j, i] = a;
+            }
+        }
+        
+        Debug.WriteLine(a.Trigger);
+    }
+
+    public void AddDoors(Map map)
     {
         int rows = map.MapArr.GetLength(0);
         int cols = map.MapArr.GetLength(1);

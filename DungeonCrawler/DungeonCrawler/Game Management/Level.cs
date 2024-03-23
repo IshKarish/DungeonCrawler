@@ -4,10 +4,8 @@ public class Level
 {
     public Map Map { get; private set; }
     public NavMesh NavMesh { get; private set; } = null!;
-    
     public Player Player { get; private set; }
     public Enemy[] Enemies { get; private set; } = null!;
-    
     public World World { get; private set; }
 
     public Level(Map map, Player player)
@@ -30,6 +28,12 @@ public class Level
     public void SetEnemies(Enemy[] enemies)
     {
         Enemies = enemies;
+    }
+    
+    public void UpdateWorldArr()
+    {
+        World.UpdateWorldArr(Map.Actors);
+        World.AddDoors(Map);
     }
 
     public bool IsPlayerStandingOnDoor(out Actor actor)

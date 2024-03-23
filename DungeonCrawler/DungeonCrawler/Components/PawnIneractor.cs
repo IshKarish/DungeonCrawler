@@ -1,8 +1,14 @@
-﻿namespace DungeonCrawler;
+﻿using System.Diagnostics;
+
+namespace DungeonCrawler;
 
 public class PawnIneractor
 {
     private Transform _transform;
+    
+    public bool IsIteracting { get; private set; }
+    public bool OpenDoor { get; set; }
+    public Actor Interactable { get; set; }
     
     public PawnIneractor(Pawn pawn)
     {
@@ -34,5 +40,35 @@ public class PawnIneractor
         else interactable = new Actor();
         
         return hasHit;
+    }
+    
+    public void Interact(Actor interactable, ConsoleKeyInfo _input)
+    {
+        Interactable = interactable;
+        IsIteracting = true;
+            
+        if (_input.Key == ConsoleKey.E)
+        {
+            switch (interactable)
+            {
+                case Chest chest:
+                {
+                    Debug.WriteLine("chest.Item.Name"); 
+                    if (chest.Item is RickRoll rickRoll) rickRoll.OpenRickRoll();
+                    break;
+                }
+                case Door:
+                    Debug.WriteLine(((Door)Interactable).Destination); 
+                    OpenDoor = true;
+                    break;
+            }
+
+            IsIteracting = true;
+        }
+    }
+
+    public void Release()
+    {
+        IsIteracting = false;
     }
 }
