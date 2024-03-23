@@ -92,18 +92,12 @@ public class Map
                 {
                     if (isDoor)
                     {
-                        Vector2 entry = ((Door)actor).Entry;
-                        
-                        if (j == entry.X && i == entry.Y) MapArr[i, j] = 'D';
-                        else MapArr[i, j] = '&';
+                        MapArr[i, j] = '&';
                     }
-                    else
-                        MapArr[i, j] = actor.Graphics.Symbol;
+                    else MapArr[i, j] = actor.Graphics.Symbol;
                 }
             }
         }
-
-        Debug.WriteLine(Actors.Length);
     }
 
     void AddToActorArr(Actor actor)

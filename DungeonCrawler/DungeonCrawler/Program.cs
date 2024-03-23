@@ -28,11 +28,11 @@ class Program
         Door doorBenDoor = new Door(97, 0, DoorDirection.Down, level2);
         Door door2 = new Door(45, 3, DoorDirection.Left);
 
-        Chest chest = new Chest();
+        Chest chest = new Chest(new RickRoll());
                 
         Actor[] objects =
         {
-            obj, obj2, obj3, obj4, doorBenDoor, door2, chest
+            obj, obj2, obj3, obj4, door2, chest, doorBenDoor
         };
         #endregion
         

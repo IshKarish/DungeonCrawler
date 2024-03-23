@@ -45,11 +45,6 @@ public static class Renderer
         Console.WriteLine();
     }
     
-    public static void ClearPawnPosition(Pawn pawn)
-    {
-        Console.SetCursorPosition(pawn.Transform.Position.X + 1, pawn.Transform.Position.Y + 1);
-    }
-    
     public static void ClearPosition(Vector2 position)
     {
         Console.SetCursorPosition(position.X + 1, position.Y + 1);
@@ -91,6 +86,14 @@ public static class Renderer
             }
             Console.Write('>');
         }
+    }
+
+    public static void OpenDoor(Door door)
+    {
+        Console.SetCursorPosition(door.Entry.X + 1, door.Entry.Y + 1);
+        Console.BackgroundColor = ConsoleColor.Black;
+
+        Console.Write(' ');
     }
 
     static void PrintHorizontalBorder(int cols)

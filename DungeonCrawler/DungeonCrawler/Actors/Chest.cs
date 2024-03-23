@@ -2,10 +2,13 @@
 
 public class Chest : Actor
 {
-    public Chest()
+    public Item Item { get; private set; }
+    
+    public Chest(Item item)
     {
         Transform.SetScale(3, 2);
         Graphics = new Graphics('$', ConsoleColor.Green);
-        Trigger = true;
+        Interactable = true;
+        Item = item;
     }
 }
