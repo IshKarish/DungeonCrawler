@@ -90,10 +90,7 @@ public class Map
 
                 if (isObjectInCurrentPosition)
                 {
-                    if (isDoor)
-                    {
-                        MapArr[i, j] = '&';
-                    }
+                    if (isDoor) MapArr[i, j] = '&';
                     else MapArr[i, j] = actor.Graphics.Symbol;
                 }
             }

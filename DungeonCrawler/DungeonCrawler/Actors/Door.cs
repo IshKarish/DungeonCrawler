@@ -7,6 +7,7 @@ public class Door : Actor
     public Vector2 PlayerSpawnPoint { get; private set; }
     public bool IsEntrance { get; private set; }
     public Level Destination { get; private set; }
+    public Teleporter Teleporter { get; private set; }
 
     public Door(int x, int y, Level destination)
     {
@@ -15,6 +16,7 @@ public class Door : Actor
         Transform.SetPosition(x, y);
         Graphics.Color = ConsoleColor.Red;
         SetEntry();
+        Teleporter = new Teleporter(this);
     }
 
     public Door(int x, int y, DoorDirection direction, Level destination)
@@ -28,6 +30,8 @@ public class Door : Actor
         
         Transform.SetPosition(x, y);
         SetEntry();
+        
+        Teleporter = new Teleporter(this);
     }
     
     public Door(int x, int y, DoorDirection direction, ConsoleColor color, Level destination)
@@ -41,6 +45,8 @@ public class Door : Actor
         
         Transform.SetPosition(x, y);
         SetEntry();
+        
+        Teleporter = new Teleporter(this);
     }
 
     public Door(Vector2 position, DoorDirection direction, ConsoleColor color, Level destination)
@@ -54,6 +60,8 @@ public class Door : Actor
         
         Transform.SetPosition(position.X, position.Y);
         SetEntry();
+        
+        Teleporter = new Teleporter(this);
     }
     
     public Door(Vector2 position, DoorDirection direction, Level destination)
@@ -67,6 +75,8 @@ public class Door : Actor
         
         Transform.SetPosition(position.X, position.Y);
         SetEntry();
+        
+        Teleporter = new Teleporter(this);
     }
     
     public Door(int x, int y)
@@ -77,6 +87,8 @@ public class Door : Actor
         Transform.SetPosition(x, y);
         Graphics.Color = ConsoleColor.Red;
         SetEntry();
+        
+        Teleporter = new Teleporter(this);
     }
 
     public Door(int x, int y, DoorDirection direction)
@@ -90,6 +102,8 @@ public class Door : Actor
         
         Transform.SetPosition(x, y);
         SetEntry();
+        
+        Teleporter = new Teleporter(this);
     }
     
     public Door(int x, int y, DoorDirection direction, ConsoleColor color)
@@ -103,6 +117,8 @@ public class Door : Actor
         
         Transform.SetPosition(x, y);
         SetEntry();
+        
+        Teleporter = new Teleporter(this);
     }
 
     public Door(Vector2 position, DoorDirection direction, ConsoleColor color)
@@ -116,6 +132,8 @@ public class Door : Actor
         
         Transform.SetPosition(position.X, position.Y);
         SetEntry();
+        
+        Teleporter = new Teleporter(this);
     }
     
     public Door(Vector2 position, DoorDirection direction)
@@ -129,6 +147,8 @@ public class Door : Actor
         
         Transform.SetPosition(position.X, position.Y);
         SetEntry();
+        
+        Teleporter = new Teleporter(this);
     }
 
     public void SetEntry()
@@ -165,5 +185,10 @@ public class Door : Actor
         }
 
         Entry = new Vector2(xEntry, yEntry);
+    }
+
+    public void Open()
+    {
+        Teleporter.Trigger = true;
     }
 }

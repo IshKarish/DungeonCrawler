@@ -6,6 +6,5 @@ public class Teleporter : Actor
     public Teleporter(Door door)
     {
         Destination = door.Destination;
-        Trigger = true;
     }
 }

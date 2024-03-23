@@ -90,6 +90,8 @@ public static class Renderer
 
     public static void OpenDoor(Door door)
     {
+        door.Open();;
+        
         Console.SetCursorPosition(door.Entry.X + 1, door.Entry.Y + 1);
         Console.BackgroundColor = ConsoleColor.Black;
 

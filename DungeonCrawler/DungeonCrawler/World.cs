@@ -42,10 +42,10 @@ public class World
         {
             for (int j = 0; j < cols; j++)
             {
-                if (map.MapArr[i, j] == 'D')
+                if (WorldArr[i, j] is Door d)
                 {
-                    Door door = (Door)WorldArr[i, j];
-                    WorldArr[i, j] = new Teleporter(door);
+                    Vector2 entry = d.Entry;
+                    WorldArr[entry.Y, entry.X] = d.Teleporter;
                 }
             }
         }
