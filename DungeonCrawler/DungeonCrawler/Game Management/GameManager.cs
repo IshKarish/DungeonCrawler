@@ -20,6 +20,8 @@ public class GameManager
 
     private ConsoleKeyInfo _input;
 
+    private bool standingOnDoor;
+
     public void StartGame(Level firstLevel)
     {
         StartLevel(firstLevel);
@@ -27,7 +29,7 @@ public class GameManager
     
     public void StartLevel(Level level)
     {
-        _switchingLevel = false;
+        //_switchingLevel = false;
         _playerMoved = false;
         _shouldRetractTrap = false;
         _canInteract = false;
@@ -56,6 +58,8 @@ public class GameManager
         if (_level.Enemies != null) _enemies = _level.Enemies;
         else _enemies = new Enemy[0];
         
+        _switchingLevel = false;
+        
         Thread t = new Thread(PlayerMovement);
         Thread t2 = new Thread(EnemiesMovement);
         Thread t3 = new Thread(GameManagement);
@@ -69,6 +73,9 @@ public class GameManager
 
     public void SwitchLevel(Level level)
     {
+        if (_level != null) _level.UpdateWorldArr();
+        level.UpdateWorldArr();
+        
         _switchingLevel = true;
         
         Thread.Sleep(500);
@@ -76,7 +83,7 @@ public class GameManager
         Console.Clear();
         Console.BackgroundColor = ConsoleColor.Black;
         
-        _player.Transform.SetPosition(0, 0);
+        if (_player != null) _player.Transform.SetPosition(0, 0);
         
         Thread.Sleep(10);
         
@@ -178,7 +185,7 @@ public class GameManager
         while (!_switchingLevel && !_player.IsDead)
         {
             TrapsDetector();
-            InteractionsManager();
+            InteractionsManager(); 
             LevelSwitcher();
         }
     }
@@ -213,9 +220,13 @@ public class GameManager
 
     void LevelSwitcher()
     {
-        if (_level.IsPlayerStandingOnDoor(out Actor actor) && actor is Teleporter teleporter && teleporter.Destination != null) 
+        standingOnDoor = _level.IsPlayerStandingOnDoor(out Actor actor) && actor is Teleporter teleporter && teleporter.Destination != null && !standingOnDoor;
+        
+        if (standingOnDoor)
         {
-            SwitchLevel(teleporter.Destination);
+            _switchingLevel = true;
+            if (actor is Teleporter a) SwitchLevel(a.Destination);
+            _switchingLevel = false;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace DungeonCrawler;
+﻿using System.Diagnostics;
+
+namespace DungeonCrawler;
 
 public class Level
 {
@@ -40,6 +42,7 @@ public class Level
     {
         if (WhereIsStanding(Player) is Teleporter t)
         {
+            Debug.WriteLine("AAAAAAAAAAAAAAAAAAAA");   
             actor = t;
             return true;
         }
