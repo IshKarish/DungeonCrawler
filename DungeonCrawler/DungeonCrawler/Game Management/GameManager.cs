@@ -11,17 +11,14 @@ public class GameManager
     private World _world;
 
     private bool _switchingLevel;
-    private bool _playerMoved;
+    private bool _canInteract;
+    private bool _standingOnDoor;
 
     private bool _shouldRetractTrap;
     private Trap _trap;
-
-    private bool _canInteract;
-
+    
     private ConsoleKeyInfo _input;
-
-    private bool standingOnDoor;
-
+    
     public void StartGame(Level firstLevel)
     {
         StartLevel(firstLevel);
@@ -30,7 +27,6 @@ public class GameManager
     public void StartLevel(Level level)
     {
         //_switchingLevel = false;
-        _playerMoved = false;
         _shouldRetractTrap = false;
         _canInteract = false;
         _trap = null!;
@@ -92,11 +88,10 @@ public class GameManager
     
     void PlayerMovement()
     {
-        _playerMoved = false;
+        _player.Moved = false;
         while (!_switchingLevel && !_player.IsDead)
         {
             _input = Console.ReadKey(true);
-            if (!_playerMoved) _playerMoved = true;
             if (_player.IsDead) break;
             
             switch (_input.Key)
@@ -161,7 +156,7 @@ public class GameManager
             
             Console.BackgroundColor = ConsoleColor.Black;
             
-            if (_playerMoved) Renderer.ClearPosition(_player.Transform.LastTransform.Position);
+            if (_player.Moved) Renderer.ClearPosition(_player.Transform.LastTransform.Position);
             Renderer.PrintPawnPosition(_player);
 
             if (_shouldRetractTrap)
@@ -220,9 +215,9 @@ public class GameManager
 
     void LevelSwitcher()
     {
-        standingOnDoor = _level.IsPlayerStandingOnDoor(out Actor actor) && actor is Teleporter teleporter && teleporter.Destination != null && !standingOnDoor;
+        _standingOnDoor = _level.IsPlayerStandingOnDoor(out Actor actor) && actor is Teleporter teleporter && teleporter.Destination != null && !_standingOnDoor;
         
-        if (standingOnDoor)
+        if (_standingOnDoor)
         {
             _switchingLevel = true;
             if (actor is Teleporter a) SwitchLevel(a.Destination);

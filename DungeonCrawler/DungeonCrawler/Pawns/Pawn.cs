@@ -5,6 +5,7 @@ public class Pawn : Actor
     public int Speed { get; init; }
     public PawnMovement PawnMovement { get; init; }
     public bool IsDead { get; private set; }
+    public bool Moved { get; set; }
     
     public Pawn()
     {

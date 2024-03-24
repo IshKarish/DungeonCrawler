@@ -14,6 +14,8 @@ public class PawnMovement
     // Movement
     public void MoveUp(int axis, World world)
     {
+        if (!_pawn.Moved) _pawn.Moved = true;
+        
         axis *= -1;
         
         int xPos = _transform.Position.X;
@@ -37,6 +39,8 @@ public class PawnMovement
 
     public void MoveRight(int axis, World world)
     {
+        if (!_pawn.Moved) _pawn.Moved = true;
+        
         int xPos = _transform.Position.X;
         int yPos = _transform.Position.Y;
         
