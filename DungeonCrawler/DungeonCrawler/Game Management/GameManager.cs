@@ -39,8 +39,6 @@ public class GameManager
         
         Renderer.PrintMap(_map);
         
-        Thread.Sleep(1000);
-        
         _player = _level.Player;
         foreach (Actor a in _map.Actors)
         {
@@ -55,6 +53,8 @@ public class GameManager
         else _enemies = new Enemy[0];
         
         _switchingLevel = false;
+        
+        Debug.WriteLine(_enemies.Length);
         
         Thread t = new Thread(PlayerMovement);
         Thread t2 = new Thread(EnemiesMovement);
@@ -120,15 +120,19 @@ public class GameManager
     {
         while (!_switchingLevel)
         {
-            foreach (Enemy enemy in _enemies)
+            foreach (Enemy e in _enemies)
             {
-                if (enemy.PawnSensing.CanSee(_player.Transform.Position))
-                {
-                    Debug.WriteLine("I see you");
-                }
-                else
-                {
-                    enemy.BehaviorTree.Patrol(_world);
+                if (!e.IsDead)
+                { 
+                    e.BehaviorTree.Patrol(_world, _enemies);
+                    if (e.PawnSensing.CanSee(_player.Transform.Position))
+                    {
+                    
+                    }
+                    else
+                    {
+                    
+                    }
                 }
             }
         }
@@ -140,7 +144,7 @@ public class GameManager
 
         foreach (Actor a in _world.WorldArr)
         {
-            if (a is Door d && d.IsEntrance) Renderer.OpenDoor(d);
+            if (a is Door d && (d.IsEntrance || d.IsOpened)) Renderer.OpenDoor(d);
         }
         
         while (!_switchingLevel)
@@ -158,6 +162,15 @@ public class GameManager
             
             if (_player.Moved) Renderer.ClearPosition(_player.Transform.LastTransform.Position);
             Renderer.PrintPawnPosition(_player);
+            
+            if (_enemies.Length > 0)
+            {
+                foreach (Enemy e in _enemies)
+                {
+                    if (e.Moved) Renderer.ClearPosition(e.Transform.LastTransform.Position);
+                    Renderer.PrintPawnPosition(e);
+                }
+            }
 
             if (_shouldRetractTrap)
             {
@@ -170,7 +183,7 @@ public class GameManager
                 if (_player.Ineractor.Interactable is Door d) Renderer.OpenDoor(d);
                 _player.Ineractor.OpenDoor = false;
             }
-
+            
             Console.BackgroundColor = ConsoleColor.Black;
         }
     }
@@ -191,9 +204,21 @@ public class GameManager
         {
             if (a is Trap t && t.Activate(_player))
             {
+                _player.Kill();
                 _shouldRetractTrap = true;
                 _trap = t;
                 _world.UpdateActor(t);
+            }
+
+            foreach (Enemy e in _enemies)
+            {
+                if (a is Trap tr && tr.Activate(e))
+                {
+                    e.Kill();;
+                    _shouldRetractTrap = true;
+                    _trap = tr;
+                    _world.UpdateActor(tr);
+                }
             }
         }
     }

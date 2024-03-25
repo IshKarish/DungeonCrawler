@@ -72,22 +72,22 @@ public static class Physics
                     hasHit = pawn.Transform.Position.Y == start.Y + 1 && pawn.Transform.Position.X == start.X;
                     break;
                 case Direction.Left:
-                    hasHit = pawn.Transform.Position.Y == start.Y && pawn.Transform.Position.X == start.X - i;
-                    break;
-                case Direction.Right:
                     hasHit = pawn.Transform.Position.Y == start.Y && pawn.Transform.Position.X == start.X + i;
                     break;
-                case Direction.UpLeft:
-                    hasHit = pawn.Transform.Position.Y == start.Y - i && pawn.Transform.Position.X == start.X - i;
+                case Direction.Right:
+                    hasHit = pawn.Transform.Position.Y == start.Y && pawn.Transform.Position.X == start.X - i;
                     break;
-                case Direction.UpRight:
+                case Direction.UpLeft:
                     hasHit = pawn.Transform.Position.Y == start.Y - i && pawn.Transform.Position.X == start.X + i;
                     break;
+                case Direction.UpRight:
+                    hasHit = pawn.Transform.Position.Y == start.Y - i && pawn.Transform.Position.X == start.X - i;
+                    break;
                 case Direction.DownLeft:
-                    hasHit = pawn.Transform.Position.Y == start.Y + i && pawn.Transform.Position.X == start.X - i;
+                    hasHit = pawn.Transform.Position.Y == start.Y + i && pawn.Transform.Position.X == start.X + i;
                     break;
                 case Direction.DownRight:
-                    hasHit = pawn.Transform.Position.Y == start.Y + i && pawn.Transform.Position.X == start.X + i;
+                    hasHit = pawn.Transform.Position.Y == start.Y + i && pawn.Transform.Position.X == start.X - i;
                     break;
             }
             

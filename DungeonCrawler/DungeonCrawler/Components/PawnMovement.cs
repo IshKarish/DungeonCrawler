@@ -80,4 +80,25 @@ public class PawnMovement
     {
         return Physics.LineTrace(_transform.Position, world, 1, Direction.Down, out HitResult hitResult) && !hitResult.HitActor.Trigger;
     }
+
+    // Pawn colliders
+    public bool IsCollidingFromRight(Pawn pawn)
+    {
+        return Physics.LineTrace(_transform.Position, pawn, 1, Direction.Right, out HitResult hitResult);
+    }
+
+    public bool IsCollidingFromLeft(Pawn pawn)
+    {
+        return Physics.LineTrace(_transform.Position, pawn, 1, Direction.Left, out HitResult hitResult);
+    }
+
+    public bool IsCollidingFromTop(Pawn pawn)
+    {
+        return Physics.LineTrace(_transform.Position, pawn, 1, Direction.Up, out HitResult hitResult);
+    }
+
+    public bool IsCollidingFromBottom(Pawn pawn)
+    {
+        return Physics.LineTrace(_transform.Position, pawn, 1, Direction.Down, out HitResult hitResult);
+    }
 }

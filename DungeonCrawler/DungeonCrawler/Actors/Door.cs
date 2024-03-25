@@ -6,6 +6,7 @@ public class Door : Actor
     public Vector2 Entry { get; private set; }
     public Vector2 PlayerSpawnPoint { get; private set; }
     public bool IsEntrance { get; private set; }
+    public bool IsOpened { get; private set; }
     public Level Destination { get; private set; }
     public Teleporter Teleporter { get; private set; }
 
@@ -223,6 +224,8 @@ public class Door : Actor
 
     public void Open()
     {
+        IsOpened = true;
+        Interactable = false;
         Teleporter.Trigger = true;
     }
 

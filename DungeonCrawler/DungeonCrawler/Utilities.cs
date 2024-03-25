@@ -73,6 +73,7 @@ public static class Utilities
             takenPositions.Add(pos);
 
             Enemy enemy = new Enemy(pos.X, pos.Y);
+            enemy.Transform.SetLastTransform(new Transform(new Vector2(pos.X, pos.Y)));
             enemies[i] = enemy;
         }
         return enemies;
