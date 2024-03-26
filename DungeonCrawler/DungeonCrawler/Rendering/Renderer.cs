@@ -80,6 +80,8 @@ public static class Renderer
         Console.SetCursorPosition(pawn.Transform.Position.X + 1, pawn.Transform.Position.Y + 1);
         Console.BackgroundColor = pawn.Graphics.Color;
         Console.Write(pawn.Graphics.Symbol);
+        
+        Console.SetCursorPosition(0, 0);
     }
 
     public static void RetractTrap(Trap trap)

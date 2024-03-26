@@ -1,10 +1,9 @@
-﻿using System.Diagnostics;
-
-namespace DungeonCrawler;
+﻿namespace DungeonCrawler;
 
 public class World
 {
     public Actor[,] WorldArr { get; private set; }
+    public Vector2[] Positions { get; private set; }
 
     public World(Map map)
     {
@@ -33,6 +32,28 @@ public class World
                 }
             }
         }
+        
+        UpdatePositionsArr();
+    }
+
+    public void RemoveActor(Actor a)
+    {
+        int startPosX = a.Transform.Position.X;
+        int scaleX = a.Transform.Scale.X + 1;
+
+        int startPosY = a.Transform.Position.Y;
+        int scaleY = a.Transform.Scale.Y + 1;
+        
+        for (int i = startPosX; i < startPosX + scaleX; i++)
+        {
+            for (int j = startPosY; j < startPosY + scaleY; j++)
+            {
+                if (j >= WorldArr.GetLength(0)) break;
+                WorldArr[j, i] = null!;
+            }
+        }
+        
+        UpdatePositionsArr();
     }
 
     public void UpdateActor(Actor a)
@@ -52,7 +73,7 @@ public class World
             }
         }
         
-        Debug.WriteLine(a.Trigger);
+        UpdatePositionsArr();
     }
 
     public void AddDoors(Map map)
@@ -71,5 +92,20 @@ public class World
                 }
             }
         }
+        
+        UpdatePositionsArr();
+    }
+
+    public void UpdatePositionsArr()
+    {
+        List<Vector2> blocked = new List<Vector2>();
+
+        foreach (Actor a in WorldArr)
+        {
+            if (a == null) continue;
+            blocked.Add(a.Transform.Position);
+        }
+
+        Positions = blocked.ToArray();
     }
 }

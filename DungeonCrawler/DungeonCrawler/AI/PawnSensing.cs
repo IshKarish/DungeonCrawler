@@ -57,6 +57,17 @@ public class PawnSensing
         EndY = Center.Y + yHalf;
     }
 
+    public bool CanSee(Pawn[] pawns, Pawn pawn)
+    {
+        foreach (Pawn p in pawns)
+        {
+            if (p == pawn) continue;
+            if (CanSee(p.Transform.Position)) return true;
+        }
+
+        return false;
+    }
+
     public bool CanSee(Vector2 point)
     {
         bool inXBounds = point.X > StartX && point.X < EndX;

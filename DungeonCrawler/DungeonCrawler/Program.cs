@@ -39,17 +39,12 @@ class Program
         #endregion
         
         Level level = Utilities.CreateLevel(new Vector2(20, 100), player, objects);
-        Door d3 = new Door(12, 6, DoorDirection.Down, level);
-        //level.Map.AddActor(d3);
-        //level.Map.AddActor(trap);
-        //level.Map.AddActor(trap2);
-        //level.UpdateWorldArr();
 
         Door gay = new Door(26, 4, DoorDirection.Left, level, true);
         level2.Map.AddActor(gay);
         level2.UpdateWorldArr();
         
-        Enemy[] enemies = Utilities.GenerateEnemies(1, level);
+        Enemy[] enemies = Utilities.GenerateEnemies(50, level);
         level.SetEnemies(enemies);
         
         gameManager.StartGame(level);

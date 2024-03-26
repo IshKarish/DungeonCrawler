@@ -63,17 +63,22 @@ public static class Utilities
         
         Enemy[] enemies = new Enemy[enemyCount];
         List<Vector2> takenPositions = new List<Vector2>();
+        foreach (Vector2 b in level.NavMesh.Blocked)
+        {
+            takenPositions.Add(b);
+        }
         
         for (int i = 0; i < enemyCount; i++)
         {
             Vector2 pos = GetRandomVector(mapSize);
             
-            while (IsBlocked(level.NavMesh.Blocked, pos) || IsBlocked(takenPositions.ToArray(), pos)) pos = GetRandomVector(mapSize);
+            while (IsBlocked(takenPositions.ToArray(), pos)) pos = GetRandomVector(mapSize);
 
             takenPositions.Add(pos);
 
             Enemy enemy = new Enemy(pos.X, pos.Y);
             enemy.Transform.SetLastTransform(new Transform(new Vector2(pos.X, pos.Y)));
+            
             enemies[i] = enemy;
         }
         return enemies;
@@ -95,6 +100,21 @@ public static class Utilities
         foreach (Vector2 b in blocked)
         {
             if (current.X == b.X && current.Y == b.Y) return true;
+        }
+
+        return false;
+    }
+    
+    static bool IsBlocked(Actor[,] blocked, Vector2 current)
+    {
+        foreach (Actor b in blocked)
+        {
+            if (b == null) continue;
+            
+            int x = b.Transform.Position.X;
+            int y = b.Transform.Position.Y;
+            
+            if (current.X == x && current.Y == y) return true;
         }
 
         return false;

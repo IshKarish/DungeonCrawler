@@ -124,14 +124,15 @@ public class GameManager
             {
                 if (!e.IsDead)
                 { 
-                    e.BehaviorTree.Patrol(_world, _enemies);
                     if (e.PawnSensing.CanSee(_player.Transform.Position))
                     {
                     
                     }
                     else
                     {
-                    
+                        _world.RemoveActor(e);
+                        e.BehaviorTree.Patrol(_world, _enemies);
+                        _world.UpdateActor(e);
                     }
                 }
             }
@@ -140,8 +141,6 @@ public class GameManager
 
     void Render()
     {
-        string emptyLine = "                                                                     ";
-
         foreach (Actor a in _world.WorldArr)
         {
             if (a is Door d && (d.IsEntrance || d.IsOpened)) Renderer.OpenDoor(d);
@@ -149,43 +148,60 @@ public class GameManager
         
         while (!_switchingLevel)
         {
-            Console.SetCursorPosition(0, _world.WorldArr.GetLength(0) + 2);
-            Console.WriteLine("Lol");
-            
-            if (_canInteract) Console.WriteLine("Press E to interact.");
-            else Console.WriteLine(emptyLine);
-            
-            if (_player.IsDead) Console.WriteLine("You ded lol");
-            else Console.WriteLine(emptyLine);
-            
-            Console.BackgroundColor = ConsoleColor.Black;
-            
-            if (_player.Moved) Renderer.ClearPosition(_player.Transform.LastTransform.Position);
-            Renderer.PrintPawnPosition(_player);
-            
-            if (_enemies.Length > 0)
-            {
-                foreach (Enemy e in _enemies)
-                {
-                    if (e.Moved) Renderer.ClearPosition(e.Transform.LastTransform.Position);
-                    Renderer.PrintPawnPosition(e);
-                }
-            }
-
-            if (_shouldRetractTrap)
-            {
-                _shouldRetractTrap = false;
-                Renderer.RetractTrap(_trap);
-            }
-
-            if (_player.Ineractor.OpenDoor)
-            {
-                if (_player.Ineractor.Interactable is Door d) Renderer.OpenDoor(d);
-                _player.Ineractor.OpenDoor = false;
-            }
+            PlayerRender();
+            EnemiesRender();
             
             Console.BackgroundColor = ConsoleColor.Black;
         }
+    }
+
+    void PlayerRender()
+    {
+        if (_player.Moved) Renderer.ClearPosition(_player.Transform.LastTransform.Position);
+        Renderer.PrintPawnPosition(_player);
+    }
+
+    void EnemiesRender()
+    {
+        if (_enemies.Length > 0)
+        {
+            foreach (Enemy e in _enemies)
+            {
+                if (e.Moved) Renderer.ClearPosition(e.Transform.LastTransform.Position);
+                Renderer.PrintPawnPosition(e);
+            }
+        }
+    }
+
+    void InteractionsRender()
+    {
+        if (_shouldRetractTrap)
+        {
+            _shouldRetractTrap = false;
+            Renderer.RetractTrap(_trap);
+        }
+
+        if (_player.Ineractor.OpenDoor)
+        {
+            if (_player.Ineractor.Interactable is Door d) Renderer.OpenDoor(d);
+            _player.Ineractor.OpenDoor = false;
+        }
+    }
+
+    void TextRendering()
+    {
+        string emptyLine = "                                                                     ";
+        
+        Console.SetCursorPosition(0, _world.WorldArr.GetLength(0) + 2);
+        Console.WriteLine("Lol");
+            
+        if (_canInteract) Console.WriteLine("Press E to interact.");
+        else Console.WriteLine(emptyLine);
+            
+        if (_player.IsDead) Console.WriteLine("You ded lol");
+        else Console.WriteLine(emptyLine);
+            
+        Console.BackgroundColor = ConsoleColor.Black;
     }
     
     void GameManagement()
