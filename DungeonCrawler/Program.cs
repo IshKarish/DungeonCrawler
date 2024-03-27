@@ -11,9 +11,6 @@ class Program
         Player player = new Player(0, 0, new Graphics('*', ConsoleColor.White));
         
         Level level2 = Utilities.CreateLevel(new Vector2(10, 50), player);
-        Level level3 = Utilities.CreateLevel(new Vector2(15, 25), player);
-        Door lol = new Door(4, 4, DoorDirection.Left, true);
-        //level3.Map.AddActor(lol);
         
         #region Actors creation
         Graphics objGraphics = new Graphics('/', ConsoleColor.Blue);
@@ -28,13 +25,14 @@ class Program
         Trap trap2 = new Trap(TrapDirection.Right, 1, obj4);
                 
         Door doorBenDoor = new Door(97, 0, DoorDirection.Down, level2);
+        Door dorBenDor = new Door(34, 13, DoorDirection.Left, level2);
         Door door2 = new Door(47, 3, DoorDirection.Left, true);
 
-        Chest chest = new Chest(new RickRoll());
+        Chest chest = new Chest(new Item("Key"));
                 
         Actor[] objects =
         {
-            obj, obj2, obj3, obj4, door2, chest, doorBenDoor, trap, trap2
+            obj, obj2, obj3, obj4, door2, chest, doorBenDoor, trap, trap2, dorBenDor
         };
         #endregion
         
@@ -45,7 +43,7 @@ class Program
         level2.UpdateWorldArr();
         
         Enemy[] enemies = Utilities.GenerateEnemies(50, level);
-        level.SetEnemies(enemies);
+        //level.SetEnemies(enemies);
         
         gameManager.StartGame(level);
     }

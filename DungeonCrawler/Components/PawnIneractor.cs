@@ -5,6 +5,7 @@ namespace DungeonCrawler;
 public class PawnIneractor
 {
     private Transform _transform;
+    private Pawn _pawn;
     
     public bool IsIteracting { get; private set; }
     public bool OpenDoor { get; set; }
@@ -12,6 +13,7 @@ public class PawnIneractor
     
     public PawnIneractor(Pawn pawn)
     {
+        _pawn = pawn;
         _transform = pawn.Transform;
     }
 
@@ -46,20 +48,23 @@ public class PawnIneractor
     {
         Interactable = interactable;
         IsIteracting = true;
-            
+
+        bool isPawn = IsPlayer(out Player p);
+        
         if (_input.Key == ConsoleKey.E)
         {
             switch (interactable)
             {
                 case Chest chest:
-                {
-                    Debug.WriteLine("chest.Item.Name"); 
+                    if (isPawn) p.Inventory.AddItem(chest.Item);
                     if (chest.Item is RickRoll rickRoll) rickRoll.OpenRickRoll();
                     break;
-                }
                 case Door:
-                    Debug.WriteLine(((Door)Interactable).Destination); 
-                    OpenDoor = true;
+                    if (isPawn && p.Inventory.HasItem("Key"))
+                    {
+                        OpenDoor = true;
+                        p.Inventory.RemoveItem("Key");
+                    }
                     break;
             }
 
@@ -70,5 +75,17 @@ public class PawnIneractor
     public void Release()
     {
         IsIteracting = false;
+    }
+
+    bool IsPlayer(out Player player)
+    {
+        if (_pawn is Player p)
+        {
+            player = p;
+            return true;
+        }
+
+        player = null!;
+        return false;
     }
 }

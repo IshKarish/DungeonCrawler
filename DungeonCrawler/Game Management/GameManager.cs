@@ -26,7 +26,6 @@ public class GameManager
     
     public void StartLevel(Level level)
     {
-        //_switchingLevel = false;
         _shouldRetractTrap = false;
         _canInteract = false;
         _trap = null!;
@@ -148,8 +147,10 @@ public class GameManager
         
         while (!_switchingLevel)
         {
+            TextRendering();
             PlayerRender();
             EnemiesRender();
+            InteractionsRender();
             
             Console.BackgroundColor = ConsoleColor.Black;
         }
