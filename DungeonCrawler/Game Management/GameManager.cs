@@ -140,6 +140,8 @@ public class GameManager
 
     void Render()
     {
+        RenderInventory(2);
+        
         foreach (Actor a in _world.WorldArr)
         {
             if (a is Door d && (d.IsEntrance || d.IsOpened)) Renderer.OpenDoor(d);
@@ -191,18 +193,31 @@ public class GameManager
 
     void TextRendering()
     {
+        int top = _world.WorldArr.GetLength(0) + 2;
         string emptyLine = "                                                                     ";
         
-        Console.SetCursorPosition(0, _world.WorldArr.GetLength(0) + 2);
-        Console.WriteLine("Lol");
+        Console.SetCursorPosition(0, top);
             
         if (_canInteract) Console.WriteLine("Press E to interact.");
         else Console.WriteLine(emptyLine);
-            
+        
         if (_player.IsDead) Console.WriteLine("You ded lol");
         else Console.WriteLine(emptyLine);
-            
+
+        if (_player.Inventory.HasChanged) RenderInventory();
+        
         Console.BackgroundColor = ConsoleColor.Black;
+    }
+
+    void RenderInventory(int line = 0)
+    {
+        string emptyLine = "                                                                     ";
+        
+        if (line == 0) Console.Write(emptyLine);
+        
+        Console.SetCursorPosition(0, Console.GetCursorPosition().Top + line);
+        Console.WriteLine(_player.Inventory.ToString());
+        _player.Inventory.HasChanged = false;
     }
     
     void GameManagement()

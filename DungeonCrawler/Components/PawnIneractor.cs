@@ -56,15 +56,15 @@ public class PawnIneractor
             switch (interactable)
             {
                 case Chest chest:
-                    if (isPawn) p.Inventory.AddItem(chest.Item);
+                    if (isPawn)
+                    {
+                        p.Inventory.AddItem(chest.Item);
+                        chest.Interactable = false;
+                    }
                     if (chest.Item is RickRoll rickRoll) rickRoll.OpenRickRoll();
                     break;
                 case Door:
-                    if (isPawn && p.Inventory.HasItem("Key"))
-                    {
-                        OpenDoor = true;
-                        p.Inventory.RemoveItem("Key");
-                    }
+                    if (isPawn && p.Inventory.HasItem("Key", true)) OpenDoor = true;
                     break;
             }
 

@@ -29,10 +29,14 @@ class Program
         Door door2 = new Door(47, 3, DoorDirection.Left, true);
 
         Chest chest = new Chest(new Item("Key"));
+        Chest chest2 = new Chest(new Item("Armor"), 34, 5);
+        Chest chest3 = new Chest(new Item("Sword"), 63, 1);
+        Chest chest4 = new Chest(new Item("Itoranei Karish"), 75, 14);
+        Chest chest5 = new Chest(new Item("Key"), 64, 5);
                 
         Actor[] objects =
         {
-            obj, obj2, obj3, obj4, door2, chest, doorBenDoor, trap, trap2, dorBenDor
+            obj, obj2, obj3, obj4, door2, chest, doorBenDoor, trap, trap2, dorBenDor, chest2, chest3, chest4, chest5
         };
         #endregion
         
