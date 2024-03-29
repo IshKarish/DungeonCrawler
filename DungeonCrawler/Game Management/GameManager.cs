@@ -95,20 +95,16 @@ public class GameManager
             
             switch (_input.Key)
             {
-                case ConsoleKey.UpArrow:
-                case ConsoleKey.W:
+                case Keybindings.Forward:
                     _player.PawnMovement.MoveUp(1, _world);
                     break;
-                case ConsoleKey.DownArrow:
-                case ConsoleKey.S:
+                case Keybindings.Backwards:
                     _player.PawnMovement.MoveUp(-1, _world);
                     break;
-                case ConsoleKey.RightArrow:
-                case ConsoleKey.D:
+                case Keybindings.Right:
                     _player.PawnMovement.MoveRight(1, _world);
                     break;
-                case ConsoleKey.LeftArrow:
-                case ConsoleKey.A:
+                case Keybindings.Left:
                     _player.PawnMovement.MoveRight(-1, _world);
                     break;
             }
@@ -258,7 +254,7 @@ public class GameManager
     void InteractionsManager()
     {
         _canInteract = _player.Ineractor.CanInteract(_world, out Actor interactable, out _);
-        bool isInteractButtonPressed = _input.Key == ConsoleKey.E;
+        bool isInteractButtonPressed = _input.Key == Keybindings.Use;
         
         if (isInteractButtonPressed && !_player.Ineractor.IsIteracting)
         {
