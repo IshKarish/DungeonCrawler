@@ -17,7 +17,7 @@ public class Enemy : Pawn
         Transform.SetPosition(x, y);
         Graphics = new Graphics('!', ConsoleColor.DarkRed);
         BehaviorTree = new BehaviorTree(this);
-        PawnSensing = new PawnSensing(this);
+        PawnSensing = new PawnSensing(5, this);
     }
     
     public Enemy(int x, int y, PawnSensing pawnSensing)

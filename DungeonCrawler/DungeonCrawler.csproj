@@ -9,6 +9,7 @@
 
     <ItemGroup>
       <PackageReference Include="Sanford.Multimedia.Midi" Version="6.6.2" />
+      <PackageReference Include="System.Speech" Version="8.0.0" />
     </ItemGroup>
 
 </Project>

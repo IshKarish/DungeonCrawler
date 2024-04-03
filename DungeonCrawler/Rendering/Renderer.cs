@@ -6,8 +6,6 @@ public static class Renderer
 {
     public static void PrintMap(Map map)
     {
-        Debug.WriteLine("Printing map");
-        
         Console.SetCursorPosition(0, 0);
         Console.Clear();
         

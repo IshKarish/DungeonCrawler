@@ -4,6 +4,7 @@ public class Player : Pawn
 {
     public PawnIneractor Ineractor { get; private set; }
     public Inventory Inventory { get; private set; }
+    public bool IsInventoryOpened { get; set; }
     
     public Player()
     {

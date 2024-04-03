@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace DungeonCrawler;
+﻿namespace DungeonCrawler;
 
 public static class Physics
 {
@@ -138,6 +136,24 @@ public static class Physics
             hitResult = new HitResult(hitActor, 0);
             return true;
         }
+        return false;
+    }
+    
+    public static bool LineTrace(Vector2 point, Pawn[] pawns, out HitResult hitResult)
+    {
+        foreach (Pawn p in pawns)
+        {
+            bool sameX = point.X == p.Transform.Position.X;
+            bool sameY = point.Y == p.Transform.Position.Y;
+
+            if (sameX && sameY)
+            {
+                hitResult = new HitResult(p, 0);
+                return true;
+            }
+        }
+
+        hitResult = new HitResult();
         return false;
     }
 }

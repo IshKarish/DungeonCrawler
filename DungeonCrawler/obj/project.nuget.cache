@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "SOTpLkDGlkSSp1Zmdbv3i1kfEVBHNU44DttqH7y5iO8Ig/04QnD08rFjPukHrapxWiiv0nmUWRJe6s4AiPvOGw==",
+  "dgSpecHash": "+Crhxo7vSZfLNhtjVjY0FEOBW9LNFNILvLPgu+JEBVU31PpCMSLvsIsU3iqdeFBBgyA4dzz0RVJZrNJqCeUeAg==",
   "success": true,
   "projectFilePath": "F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\DungeonCrawler.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\danie\\.nuget\\packages\\sanford.multimedia.midi\\6.6.2\\sanford.multimedia.midi.6.6.2.nupkg.sha512"
+    "C:\\Users\\danie\\.nuget\\packages\\sanford.multimedia.midi\\6.6.2\\sanford.multimedia.midi.6.6.2.nupkg.sha512",
+    "C:\\Users\\danie\\.nuget\\packages\\system.speech\\8.0.0\\system.speech.8.0.0.nupkg.sha512"
   ],
   "logs": [
     {

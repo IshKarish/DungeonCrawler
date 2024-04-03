@@ -14,6 +14,24 @@
             "related": ".pdb;.XML"
           }
         }
+      },
+      "System.Speech/8.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net7.0/System.Speech.dll": {}
+        },
+        "runtime": {
+          "lib/net7.0/System.Speech.dll": {}
+        },
+        "build": {
+          "buildTransitive/net6.0/_._": {}
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net7.0/System.Speech.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
       }
     }
   },
@@ -31,11 +49,38 @@
         "sanford.multimedia.midi.6.6.2.nupkg.sha512",
         "sanford.multimedia.midi.nuspec"
       ]
+    },
+    "System.Speech/8.0.0": {
+      "sha512": "CNuiA6vb95Oe5PRjClZEBiaju31vwB8OIeCgeSBXyZL6+MS4RVVB2X/C11z0xCkooHE3Vy91nM2z76emIzR+sg==",
+      "type": "package",
+      "path": "system.speech/8.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "PACKAGE.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/net6.0/_._",
+        "buildTransitive/netcoreapp2.0/System.Speech.targets",
+        "lib/net462/_._",
+        "lib/net6.0/System.Speech.dll",
+        "lib/net7.0/System.Speech.dll",
+        "lib/net8.0/System.Speech.dll",
+        "lib/netstandard2.0/System.Speech.dll",
+        "runtimes/win/lib/net6.0/System.Speech.dll",
+        "runtimes/win/lib/net7.0/System.Speech.dll",
+        "runtimes/win/lib/net8.0/System.Speech.dll",
+        "system.speech.8.0.0.nupkg.sha512",
+        "system.speech.nuspec",
+        "useSharedDesignerContext.txt"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
-      "Sanford.Multimedia.Midi >= 6.6.2"
+      "Sanford.Multimedia.Midi >= 6.6.2",
+      "System.Speech >= 8.0.0"
     ]
   },
   "packageFolders": {
@@ -80,6 +125,10 @@
           "Sanford.Multimedia.Midi": {
             "target": "Package",
             "version": "[6.6.2, )"
+          },
+          "System.Speech": {
+            "target": "Package",
+            "version": "[8.0.0, )"
           }
         },
         "imports": [

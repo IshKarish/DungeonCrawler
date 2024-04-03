@@ -43,6 +43,10 @@
             "Sanford.Multimedia.Midi": {
               "target": "Package",
               "version": "[6.6.2, )"
+            },
+            "System.Speech": {
+              "target": "Package",
+              "version": "[8.0.0, )"
             }
           },
           "imports": [

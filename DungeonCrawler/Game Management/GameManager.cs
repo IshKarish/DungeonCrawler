@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace DungeonCrawler;
+﻿namespace DungeonCrawler;
 
 public class GameManager
 {
@@ -10,6 +8,8 @@ public class GameManager
     private Level _level;
     private World _world;
 
+    private bool _isPaused;
+
     private bool _switchingLevel;
     private bool _canInteract;
     private bool _standingOnDoor;
@@ -18,10 +18,16 @@ public class GameManager
     private Trap _trap;
     
     private ConsoleKeyInfo _input;
-    
+
+    #region Managment
+
     public void StartGame(Level firstLevel)
     {
         StartLevel(firstLevel);
+        new Thread(PauseManager).Start();
+        TextToSpeech.Speak("Rise and shine, Mr. Ben Dor, Rise and shine. Not that I wish to imply you have been sleeping on the class. No one is more deserving of a rest. And all the effort in the world would have gone to waste until... well, let's just say tiltan has come again. The right teacher in the wrong class can make all the difference in the world. So, wake up, Mr. Ben Dor, Wake up and grade the project.");
+
+        //TextToSpeech.Speak("Time, Dor Ben Dor? Is it really that time again? It seems as if you only just arrived. You've done a great deal in a small time span. You've done so well, in fact, that I've received some interesting grades for your class. Ordinarily I will get an F, but these are extra ordinary times. Rather than offer you the illusion of free choice, I will take the liberty of choosing for you, if and when the time comes round again. I do apologize for what must seem to you an arbitrary imposition, Dor Ben Dor. I trust it will all make sense to you in the course of… well, I'm really not at liberty to say. In the meantime, this is where I get off.");
     }
     
     public void StartLevel(Level level)
@@ -53,8 +59,11 @@ public class GameManager
         
         _switchingLevel = false;
         
-        Debug.WriteLine(_enemies.Length);
-        
+        StartThreads();
+    }
+
+    void StartThreads()
+    {
         Thread t = new Thread(PlayerMovement);
         Thread t2 = new Thread(EnemiesMovement);
         Thread t3 = new Thread(GameManagement);
@@ -84,11 +93,51 @@ public class GameManager
         
         StartLevel(level);
     }
+
+    public void Pause()
+    {
+        _input = new ConsoleKeyInfo();
+        
+        _isPaused = true;
+        Thread.Sleep(10);
+        Console.Clear();
+    }
+
+    public void Resume()
+    {
+        _input = new ConsoleKeyInfo();
+        
+        Renderer.PrintMap(_map);
+        _isPaused = false;
+        
+        StartThreads();
+    }
     
+    void PauseManager()
+    {
+        while (true)
+        {
+            bool pause = _input.Key == Keybindings.Pause;
+            switch (pause)
+            {
+                case true when !_isPaused:
+                    Pause();
+                    break;
+                case true when _isPaused:
+                    Resume();
+                    break;
+            }
+        }
+    }
+
+    #endregion
+
+    #region Movement
+
     void PlayerMovement()
     {
         _player.Moved = false;
-        while (!_switchingLevel && !_player.IsDead)
+        while (!_switchingLevel && !_player.IsDead && !_isPaused)
         {
             _input = Console.ReadKey(true);
             if (_player.IsDead) break;
@@ -113,39 +162,53 @@ public class GameManager
 
     void EnemiesMovement()
     {
-        while (!_switchingLevel)
+        while (!_switchingLevel && !_isPaused)
         {
             foreach (Enemy e in _enemies)
             {
                 if (!e.IsDead)
-                { 
-                    if (e.PawnSensing.CanSee(_player.Transform.Position))
+                {
+                    if (e.PawnSensing.CanSee(_player.Transform.Position) || e.BehaviorTree.IsChasing) 
                     {
-                    
+                        if (!e.BehaviorTree.IsChasing) e.BehaviorTree.IsChasing = true;
+                        e.BehaviorTree.Chase(_world, _player);
                     }
                     else
                     {
-                        _world.RemoveActor(e);
+                        //_world.RemoveActor(e);
                         e.BehaviorTree.Patrol(_world, _enemies);
-                        _world.UpdateActor(e);
+                        //_world.UpdateActor(e);
                     }
                 }
             }
         }
     }
 
+    #endregion
+
+    #region Rendering
+
     void Render()
     {
-        RenderInventory(2);
-        
         foreach (Actor a in _world.WorldArr)
         {
             if (a is Door d && (d.IsEntrance || d.IsOpened)) Renderer.OpenDoor(d);
         }
         
-        while (!_switchingLevel)
+        while (!_isPaused && !_switchingLevel)
         {
             TextRendering();
+            
+            bool openInventory = _input.Key == Keybindings.Inventory;
+            if (openInventory && !_player.IsInventoryOpened) RenderInventory();
+            else if (openInventory && _player.IsInventoryOpened) RenderInventory(false);
+            else if (_player.IsInventoryOpened && _player.Inventory.HasChanged)
+            {
+                RenderInventory(false);
+                Console.SetCursorPosition(0, Console.GetCursorPosition().Top - 1);
+                RenderInventory();
+            }
+
             PlayerRender();
             EnemiesRender();
             InteractionsRender();
@@ -153,13 +216,13 @@ public class GameManager
             Console.BackgroundColor = ConsoleColor.Black;
         }
     }
-
+    
     void PlayerRender()
     {
         if (_player.Moved) Renderer.ClearPosition(_player.Transform.LastTransform.Position);
         Renderer.PrintPawnPosition(_player);
     }
-
+    
     void EnemiesRender()
     {
         if (_enemies.Length > 0)
@@ -171,7 +234,7 @@ public class GameManager
             }
         }
     }
-
+    
     void InteractionsRender()
     {
         if (_shouldRetractTrap)
@@ -179,14 +242,14 @@ public class GameManager
             _shouldRetractTrap = false;
             Renderer.RetractTrap(_trap);
         }
-
+    
         if (_player.Ineractor.OpenDoor)
         {
             if (_player.Ineractor.Interactable is Door d) Renderer.OpenDoor(d);
             _player.Ineractor.OpenDoor = false;
         }
     }
-
+    
     void TextRendering()
     {
         int top = _world.WorldArr.GetLength(0) + 2;
@@ -194,32 +257,49 @@ public class GameManager
         
         Console.SetCursorPosition(0, top);
             
-        if (_canInteract) Console.WriteLine("Press E to interact.");
+        if (_canInteract) Console.WriteLine($"Press {Keybindings.Use} to interact.");
         else Console.WriteLine(emptyLine);
         
         if (_player.IsDead) Console.WriteLine("You ded lol");
         else Console.WriteLine(emptyLine);
 
-        if (_player.Inventory.HasChanged) RenderInventory();
+        if (_player.Inventory.Equipped)
+        {
+            Console.WriteLine($"You equipped {_player.Inventory.Items[^1].Name}!");
+            new Thread(Cooldown).Start();
+        }
+        else Console.WriteLine(emptyLine);
         
         Console.BackgroundColor = ConsoleColor.Black;
     }
 
-    void RenderInventory(int line = 0)
+    void Cooldown()
     {
-        string emptyLine = "                                                                     ";
-        
-        if (line == 0) Console.Write(emptyLine);
-        
-        Console.SetCursorPosition(0, Console.GetCursorPosition().Top + line);
-        Console.WriteLine(_player.Inventory.ToString());
-        _player.Inventory.HasChanged = false;
+        Thread.Sleep(2000);
+        _player.Inventory.Equipped = false;
     }
     
+    void RenderInventory(bool render = true, int line = 0)
+    {
+        _player.IsInventoryOpened = render;
+        Console.SetCursorPosition(0, Console.GetCursorPosition().Top + line);
+        
+        if (!render) Console.WriteLine("                                                                 ");
+        else Console.WriteLine(_player.Inventory.ToString());
+        _player.Inventory.HasChanged = false;
+
+        _input = new ConsoleKeyInfo();
+    }
+    
+    #endregion
+
+    #region Gameplay
+
     void GameManagement()
     {
-        while (!_switchingLevel && !_player.IsDead)
+        while (!_switchingLevel && !_player.IsDead && !_isPaused)
         {
+            OverlapCheck();
             TrapsDetector();
             InteractionsManager(); 
             LevelSwitcher();
@@ -242,7 +322,7 @@ public class GameManager
             {
                 if (a is Trap tr && tr.Activate(e))
                 {
-                    e.Kill();;
+                    e.Kill();
                     _shouldRetractTrap = true;
                     _trap = tr;
                     _world.UpdateActor(tr);
@@ -277,4 +357,11 @@ public class GameManager
             _switchingLevel = false;
         }
     }
+
+    void OverlapCheck()
+    {
+        _player.PawnMovement.IsOverlapped(_enemies);
+    }
+
+    #endregion
 }

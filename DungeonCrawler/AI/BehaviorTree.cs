@@ -3,6 +3,7 @@
 public class BehaviorTree
 {
     private readonly Pawn _pawn;
+    public bool IsChasing { get; set; }
 
     public BehaviorTree(Pawn pawn)
     {
@@ -16,7 +17,7 @@ public class BehaviorTree
         Vector2 dir = GetRandomDirection();
         int axis = dir.Y;
         
-        if (inRagne(pawns)) axis *= -1;
+        if (InRange(pawns)) axis *= -1;
         
         if (dir.X == 1) _pawn.PawnMovement.MoveRight(axis, world);
         else _pawn.PawnMovement.MoveUp(axis, world);
@@ -37,7 +38,7 @@ public class BehaviorTree
         return new Vector2(axis, dir);
     }
 
-    bool inRagne(Pawn[] pawns)
+    bool InRange(Pawn[] pawns)
     {
         PawnSensing sensor = new PawnSensing(1, _pawn);
 
@@ -50,8 +51,17 @@ public class BehaviorTree
         return false;
     }
 
-    public void Chase()
+    public void Chase(World world, Pawn pawn)
     {
+        int xDistance = pawn.Transform.Position.X - _pawn.Transform.Position.X;
+        int yDistance = pawn.Transform.Position.Y - _pawn.Transform.Position.Y;
+
+        if (xDistance > 0) _pawn.PawnMovement.MoveRight(1, world);
+        else if (xDistance < 0) _pawn.PawnMovement.MoveRight(-1, world);
         
+        Thread.Sleep(1);
+
+        if (yDistance > 0) _pawn.PawnMovement.MoveUp(-1, world);
+        else if (yDistance < 0) _pawn.PawnMovement.MoveUp(1, world);
     }
 }

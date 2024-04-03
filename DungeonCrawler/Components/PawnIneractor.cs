@@ -51,25 +51,22 @@ public class PawnIneractor
 
         bool isPawn = IsPlayer(out Player p);
         
-        if (_input.Key == ConsoleKey.E)
+        switch (interactable)
         {
-            switch (interactable)
-            {
-                case Chest chest:
-                    if (isPawn)
-                    {
-                        p.Inventory.AddItem(chest.Item);
-                        chest.Interactable = false;
-                    }
-                    if (chest.Item is RickRoll rickRoll) rickRoll.OpenRickRoll();
-                    break;
-                case Door:
-                    if (isPawn && p.Inventory.HasItem("Key", true)) OpenDoor = true;
-                    break;
-            }
-
-            IsIteracting = true;
+            case Chest chest:
+                if (isPawn)
+                {
+                    p.Inventory.AddItem(chest.Item);
+                    chest.Interactable = false;
+                }
+                if (chest.Item is RickRoll rickRoll) rickRoll.OpenRickRoll();
+                break;
+            case Door:
+                if (isPawn && p.Inventory.HasItem("Key", true)) OpenDoor = true;
+                break;
         }
+
+        IsIteracting = true;
     }
 
     public void Release()

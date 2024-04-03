@@ -83,6 +83,37 @@ public static class Utilities
         }
         return enemies;
     }
+    
+    public static Enemy[] GenerateEnemies(int enemyPercentage, Level level, int sensingRange)
+    {
+        Vector2 mapSize = new Vector2(level.Map.MapArr.GetLength(0), level.Map.MapArr.GetLength(1));
+        
+        int enemyCount = ((mapSize.X * mapSize.Y) * enemyPercentage / 100) / 20;
+        if (enemyCount == 0) enemyCount = 1;
+        
+        Enemy[] enemies = new Enemy[enemyCount];
+        List<Vector2> takenPositions = new List<Vector2>();
+        foreach (Vector2 b in level.NavMesh.Blocked)
+        {
+            takenPositions.Add(b);
+        }
+        
+        for (int i = 0; i < enemyCount; i++)
+        {
+            Vector2 pos = GetRandomVector(mapSize);
+            
+            while (IsBlocked(takenPositions.ToArray(), pos)) pos = GetRandomVector(mapSize);
+
+            takenPositions.Add(pos);
+
+            Enemy enemy = new Enemy(pos.X, pos.Y);
+            enemy = new Enemy(pos.X, pos.Y, new PawnSensing(sensingRange, enemy));
+            enemy.Transform.SetLastTransform(new Transform(new Vector2(pos.X, pos.Y)));
+            
+            enemies[i] = enemy;
+        }
+        return enemies;
+    }
 
     // Other stuff
     static Vector2 GetRandomVector(Vector2 limit)

@@ -9,5 +9,9 @@ public struct Keybindings
     public const ConsoleKey Left = ConsoleKey.A;
 
     // Interactions
-    public const ConsoleKey Use = ConsoleKey.E;
+    public const ConsoleKey Use = ConsoleKey.F;
+    
+    // UI
+    public const ConsoleKey Inventory = ConsoleKey.Tab;
+    public const ConsoleKey Pause = ConsoleKey.Escape;
 }

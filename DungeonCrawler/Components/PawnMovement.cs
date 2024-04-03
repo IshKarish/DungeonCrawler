@@ -1,4 +1,6 @@
-﻿namespace DungeonCrawler;
+﻿using System.Diagnostics;
+
+namespace DungeonCrawler;
 
 public class PawnMovement
 {
@@ -45,7 +47,7 @@ public class PawnMovement
         int yPos = _transform.Position.Y;
         
         int lastPos = world.WorldArr.GetLength(1) - 1;
-
+        
         bool isTryingToExitMap = (xPos == 0 && axis < 0) || (xPos == lastPos && axis > 0);
         bool isCollidingFromRight = IsCollidingFromRight(world) && axis > 0;
         bool isCollidingFromLeft = IsCollidingFromLeft(world) && axis < 0;
@@ -61,23 +63,46 @@ public class PawnMovement
     }
     
     // Colliding
-    public bool IsCollidingFromRight(World world)
+    void OnActorBeginOverlap(Actor hitActor)
     {
-        return Physics.LineTrace(_transform.Position, world, 1, Direction.Right, out HitResult hitResult) && !hitResult.HitActor.Trigger;
+        Debug.WriteLine($"Overlapping {hitActor.Graphics.Symbol}");
+    }
+    
+    bool IsCollidingFromRight(World world)
+    {
+        bool isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Right, out HitResult hitResult) && !hitResult.HitActor.Trigger;
+        return isColliding;
     }
 
-    public bool IsCollidingFromLeft(World world)
+    bool IsCollidingFromLeft(World world)
     {
-        return Physics.LineTrace(_transform.Position, world, 1, Direction.Left, out HitResult hitResult) && !hitResult.HitActor.Trigger;
+        bool isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Left, out HitResult hitResult) && !hitResult.HitActor.Trigger;
+        return isColliding;
     }
 
-    public bool IsCollidingFromTop(World world)
+    bool IsCollidingFromTop(World world)
     {
-        return Physics.LineTrace(_transform.Position, world, 1, Direction.Up, out HitResult hitResult) && !hitResult.HitActor.Trigger;
+        bool isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Up, out HitResult hitResult) && !hitResult.HitActor.Trigger;
+        return isColliding;
     }
 
-    public bool IsCollidingFromBottom(World world)
+    bool IsCollidingFromBottom(World world)
     {
-        return Physics.LineTrace(_transform.Position, world, 1, Direction.Down, out HitResult hitResult) && !hitResult.HitActor.Trigger;
+        bool isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Down, out HitResult hitResult) && !hitResult.HitActor.Trigger;
+        return isColliding;
+    }
+
+    public bool IsOverlapped(World world)
+    {
+        bool isOverlapping = Physics.LineTrace(_transform.Position, world, out HitResult hitResult);
+        if (isOverlapping) OnActorBeginOverlap(hitResult.HitActor);
+        return isOverlapping;
+    }
+    
+    public bool IsOverlapped(Pawn[] pawns)
+    {
+        bool isOverlapping = Physics.LineTrace(_transform.Position, pawns, out HitResult hitResult);
+        if (isOverlapping) OnActorBeginOverlap(hitResult.HitActor);
+        return isOverlapping;
     }
 }

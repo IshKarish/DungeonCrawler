@@ -4,7 +4,7 @@ public class World
 {
     public Actor[,] WorldArr { get; private set; }
     public Vector2[] Positions { get; private set; }
-
+    
     public World(Map map)
     {
         WorldArr = new Actor[map.MapArr.GetLength(0), map.MapArr.GetLength(1)];

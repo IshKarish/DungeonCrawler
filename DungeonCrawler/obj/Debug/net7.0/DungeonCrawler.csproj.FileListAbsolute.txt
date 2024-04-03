@@ -50,3 +50,5 @@ F:\Tiltan\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\refint\DungeonCrawler.d
 F:\Tiltan\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.pdb
 F:\Tiltan\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.genruntimeconfig.cache
 F:\Tiltan\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\ref\DungeonCrawler.dll
+F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\System.Speech.dll
+F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Speech.dll

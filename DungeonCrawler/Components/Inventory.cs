@@ -4,6 +4,7 @@ public class Inventory
 {
     public List<Item> Items { get; private set; }
     public bool HasChanged { get; set; }
+    public bool Equipped { get; set; }
 
     public Inventory()
     {
@@ -14,6 +15,7 @@ public class Inventory
     {
         Items.Add(item);
         HasChanged = true;
+        Equipped = true;
     }
 
     public void RemoveItem(string name)
