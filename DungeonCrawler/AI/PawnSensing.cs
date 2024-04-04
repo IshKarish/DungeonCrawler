@@ -62,17 +62,53 @@ public class PawnSensing
         foreach (Pawn p in pawns)
         {
             if (p == pawn) continue;
-            if (CanSee(p.Transform.Position)) return true;
+            //if (CanSee(p.Transform.Position, out Direction direction)) return true;
         }
 
         return false;
     }
 
-    public bool CanSee(Vector2 point)
+    public bool CanSee(Vector2 point, out Direction direction, World world)
     {
-        bool inXBounds = point.X > StartX && point.X < EndX;
-        bool inYBounds = point.Y > StartY && point.Y < EndY;
+        // Default direction
+        direction = Direction.None;
+        
+        // X
+        bool xPositive = (point.X < EndX) && (point.X > Center.X);
+        bool xNegative = (point.X > StartX) && (point.X < Center.X);
+        bool xSame = point.X == Center.X;
+        
+        // Y
+        bool yPositive = (point.Y > StartY) && (point.Y < Center.Y);
+        bool yNegative = (point.Y < EndY) && (point.Y > Center.Y);
+        bool ySame = point.Y == Center.Y;
+        
+        // Bounds
+        bool inXBounds = xPositive || xNegative || xSame;
+        bool inYBounds = yPositive || yNegative || ySame;
+        bool canSee = inXBounds && inYBounds;
 
-        return inXBounds && inYBounds;
+        // Set direction
+        if (canSee) direction = LookDirection(xPositive, xNegative, xSame, yPositive, yNegative, ySame);
+        
+        // Wall = No
+        bool isSightBlocked = Physics.LineTrace(Center, world, Size.X, direction, out _);
+        return canSee && !isSightBlocked;
+    }
+
+    Direction LookDirection(bool xPositive, bool xNegative, bool xSame, bool yPositive, bool yNegative, bool ySame)
+    {
+        Direction direction = Direction.None;
+        
+        if (xPositive && yPositive) direction = Direction.UpRight;
+        else if (xPositive && yNegative) direction = Direction.DownRight;
+        else if (xNegative && yPositive) direction = Direction.UpLeft;
+        else if (xNegative && yNegative) direction = Direction.DownLeft;
+        else if (xPositive && ySame) direction = Direction.Right;
+        else if (xNegative && ySame) direction = Direction.Left;
+        else if (xSame && yPositive) direction = Direction.Up;
+        else if (xSame && yNegative) direction = Direction.Down;
+
+        return direction;
     }
 }

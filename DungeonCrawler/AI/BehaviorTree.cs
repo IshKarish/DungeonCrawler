@@ -17,7 +17,7 @@ public class BehaviorTree
         Vector2 dir = GetRandomDirection();
         int axis = dir.Y;
         
-        if (InRange(pawns)) axis *= -1;
+        //if (InRange(pawns)) axis *= -1;
         
         if (dir.X == 1) _pawn.PawnMovement.MoveRight(axis, world);
         else _pawn.PawnMovement.MoveUp(axis, world);
@@ -36,19 +36,6 @@ public class BehaviorTree
         }
 
         return new Vector2(axis, dir);
-    }
-
-    bool InRange(Pawn[] pawns)
-    {
-        PawnSensing sensor = new PawnSensing(1, _pawn);
-
-        foreach (Pawn p in pawns)
-        {
-            if (p == _pawn) continue;
-            if (sensor.CanSee(p.Transform.Position)) return true;
-        }
-
-        return false;
     }
 
     public void Chase(World world, Pawn pawn)
