@@ -1,4 +1,6 @@
-﻿namespace DungeonCrawler;
+﻿using System.Speech.Synthesis;
+
+namespace DungeonCrawler;
 
 public static class Utilities
 {
@@ -149,5 +151,15 @@ public static class Utilities
         }
 
         return false;
+    }
+    
+    public static void Speak(string str)
+    { 
+        SpeechSynthesizer _synthesizer = new SpeechSynthesizer();
+    
+        _synthesizer.Volume = 100;
+        _synthesizer.Rate = 2;
+        
+        _synthesizer.Speak(str);
     }
 }

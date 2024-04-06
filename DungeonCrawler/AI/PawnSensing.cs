@@ -99,23 +99,6 @@ public class PawnSensing
         return canSee && !isSightBlocked;
     }
 
-    public Vector2[] GetActorsInRange(World world)
-    {
-        List<Vector2> positions = new List<Vector2>();
-        
-        for (int i = 0; i < world.WorldArr.GetLength(0); i++)
-        {
-            for (int j = 0; j < world.WorldArr.GetLength(1); j++)
-            {
-                Actor current = world.WorldArr[i, j];
-                
-                if (current != null && CanSee(current.Transform.Position, world)) positions.Add(new Vector2(i, j));
-            }
-        }
-
-        return positions.ToArray();
-    }
-
     Direction LookDirection(bool xPositive, bool xNegative, bool xSame, bool yPositive, bool yNegative, bool ySame)
     {
         Direction direction = Direction.None;
@@ -126,24 +109,5 @@ public class PawnSensing
         else if (xSame && yNegative) direction = Direction.Down;
 
         return direction;
-    }
-
-    public bool IsSightBlocked(Pawn player, World world)
-    {
-        Vector2 normalizedPlayerDistance = Center.Normalize(player.Transform.Position, new Pawn(), out float dPlayer);
-        //Debug.WriteLine($"dPlayer = {dPlayer}");
-
-        Vector2[] walls = GetActorsInRange(world);
-        foreach (Vector2 v in walls)
-        {
-            Vector2 normalizedWallDistance = Center.Normalize(v, new Actor(), out float dWall);
-
-            bool sameNormal = Math.Abs(normalizedPlayerDistance.fX - normalizedWallDistance.fX) < 0.5 && Math.Abs(normalizedPlayerDistance.fY - normalizedWallDistance.fY) < 0.5;
-            bool isSightBlocked = dPlayer > dWall;
-
-            if (isSightBlocked && sameNormal) return true;
-        }
-
-        return false;
     }
 }
