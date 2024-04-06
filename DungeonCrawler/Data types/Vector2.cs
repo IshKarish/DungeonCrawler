@@ -4,9 +4,6 @@ public class Vector2
 {
     public int X { get; private set; }
     public int Y { get; private set; }
-    
-    public float fX { get; private set; }
-    public float fY { get; private set; }
 
     public Vector2()
     {
@@ -19,10 +16,9 @@ public class Vector2
         X = x;
         Y = y;
     }
-    
-    public Vector2(float x, float y)
+
+    public override string ToString()
     {
-        fX = x;
-        fY = y;
+        return $"{X}, {Y}";
     }
 }

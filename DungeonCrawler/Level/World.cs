@@ -100,10 +100,12 @@ public class World
     {
         List<Vector2> blocked = new List<Vector2>();
 
-        foreach (Actor a in WorldArr)
+        for (int i = 0; i < WorldArr.GetLength(0); i++)
         {
-            if (a == null) continue;
-            blocked.Add(a.Transform.Position);
+            for (int j = 0; j < WorldArr.GetLength(1); j++)
+            {
+                if (WorldArr[i, j] != null) blocked.Add(new Vector2(i, j));
+            }
         }
 
         Positions = blocked.ToArray();

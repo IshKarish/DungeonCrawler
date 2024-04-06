@@ -27,7 +27,7 @@ public class GameManager
     {
         StartLevel(firstLevel);
         new Thread(PauseManager).Start(); 
-        //Utilities.Speak("Rise and shine, Mr. Ben Dor, Rise and shine. Not that I wish to imply you have been sleeping on the class. No one is more deserving of a rest. And all the effort in the world would have gone to waste until... well, let's just say tiltan has come again. The right teacher in the wrong class can make all the difference in the world. So, wake up, Mr. Ben Dor, Wake up and grade the project.");
+        Utilities.Speak("Rise and shine, Mr. Ben Dor, Rise and shine. Not that I wish to imply you have been sleeping on the class. No one is more deserving of a rest. And all the effort in the world would have gone to waste until... well, let's just say tiltan has come again. The right teacher in the wrong class can make all the difference in the world. So, wake up, Mr. Ben Dor, Wake up and grade the project.");
 
         //Utilities.Speak("Time, Dor Ben Dor? Is it really that time again? It seems as if you only just arrived. You've done a great deal in a small time span. You've done so well, in fact, that I've received some interesting grade for the project. Ordinarily I will get an F, but these are extra ordinary times. Rather than offer you the illusion of free choice, I will take the liberty of choosing for you, if and when the time comes round again. I do apologize for what must seem to you an arbitrary imposition, Dor Ben Dor. I trust it will all make sense to you in the course of… well, I'm really not at liberty to say. In the meantime, this is where I get off.");
     }

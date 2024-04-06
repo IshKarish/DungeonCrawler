@@ -89,7 +89,7 @@ public class PawnSensing
         bool inXBounds = xPositive || xNegative || xSame;
         bool inYBounds = yPositive || yNegative || ySame;
         bool canSee = inXBounds && inYBounds;
-
+        
         if (canSee) direction = LookDirection(xPositive, xNegative, xSame, yPositive, yNegative, ySame);
         
         // Wall = No

@@ -46,7 +46,7 @@ class Program
         level2.Map.AddActor(gay);
         level2.UpdateWorldArr();
         
-        Enemy[] enemies = Utilities.GenerateEnemies(1, level, 10);
+        Enemy[] enemies = Utilities.GenerateEnemies(10, level, 10);
         level.SetEnemies(enemies);
         
         gameManager.StartGame(level);
