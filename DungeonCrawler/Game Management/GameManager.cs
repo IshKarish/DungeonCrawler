@@ -170,11 +170,9 @@ public class GameManager
             {
                 if (!e.IsDead)
                 {
-                    if (e.PawnSensing.CanSee(_player.Transform.Position, out Direction direction, _world) || e.BehaviorTree.IsChasing) 
+                    if (e.PawnSensing.CanSee(_player.Transform.Position, _world))
                     {
-                        //if (!e.BehaviorTree.IsChasing) e.BehaviorTree.IsChasing = true;
-                        //e.BehaviorTree.Chase(_world, _player);
-                        Debug.WriteLine($"Can see from {direction}");
+                        Debug.WriteLine(e.PawnSensing.CanSee(_player.Transform.Position, _world));
                     }
                     else
                     {

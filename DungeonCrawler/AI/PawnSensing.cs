@@ -1,4 +1,6 @@
-﻿namespace DungeonCrawler;
+﻿using System.Diagnostics;
+
+namespace DungeonCrawler;
 
 public class PawnSensing
 {
@@ -68,10 +70,10 @@ public class PawnSensing
         return false;
     }
 
-    public bool CanSee(Vector2 point, out Direction direction, World world)
+    public bool CanSee(Vector2 point, World world)
     {
         // Default direction
-        direction = Direction.None;
+        Direction direction = Direction.None;
         
         // X
         bool xPositive = (point.X < EndX) && (point.X > Center.X);
@@ -88,27 +90,60 @@ public class PawnSensing
         bool inYBounds = yPositive || yNegative || ySame;
         bool canSee = inXBounds && inYBounds;
 
-        // Set direction
         if (canSee) direction = LookDirection(xPositive, xNegative, xSame, yPositive, yNegative, ySame);
         
         // Wall = No
-        bool isSightBlocked = Physics.LineTrace(Center, world, Size.X, direction, out _);
+        bool isSightBlocked = true;
+        if (direction != Direction.None) isSightBlocked = Physics.LineTrace(Center, world, Size.X, direction, out _);
+        
         return canSee && !isSightBlocked;
+    }
+
+    public Vector2[] GetActorsInRange(World world)
+    {
+        List<Vector2> positions = new List<Vector2>();
+        
+        for (int i = 0; i < world.WorldArr.GetLength(0); i++)
+        {
+            for (int j = 0; j < world.WorldArr.GetLength(1); j++)
+            {
+                Actor current = world.WorldArr[i, j];
+                
+                if (current != null && CanSee(current.Transform.Position, world)) positions.Add(new Vector2(i, j));
+            }
+        }
+
+        return positions.ToArray();
     }
 
     Direction LookDirection(bool xPositive, bool xNegative, bool xSame, bool yPositive, bool yNegative, bool ySame)
     {
         Direction direction = Direction.None;
         
-        if (xPositive && yPositive) direction = Direction.UpRight;
-        else if (xPositive && yNegative) direction = Direction.DownRight;
-        else if (xNegative && yPositive) direction = Direction.UpLeft;
-        else if (xNegative && yNegative) direction = Direction.DownLeft;
-        else if (xPositive && ySame) direction = Direction.Right;
+        if (xPositive && ySame) direction = Direction.Right;
         else if (xNegative && ySame) direction = Direction.Left;
         else if (xSame && yPositive) direction = Direction.Up;
         else if (xSame && yNegative) direction = Direction.Down;
 
         return direction;
+    }
+
+    public bool IsSightBlocked(Pawn player, World world)
+    {
+        Vector2 normalizedPlayerDistance = Center.Normalize(player.Transform.Position, new Pawn(), out float dPlayer);
+        //Debug.WriteLine($"dPlayer = {dPlayer}");
+
+        Vector2[] walls = GetActorsInRange(world);
+        foreach (Vector2 v in walls)
+        {
+            Vector2 normalizedWallDistance = Center.Normalize(v, new Actor(), out float dWall);
+
+            bool sameNormal = Math.Abs(normalizedPlayerDistance.fX - normalizedWallDistance.fX) < 0.5 && Math.Abs(normalizedPlayerDistance.fY - normalizedWallDistance.fY) < 0.5;
+            bool isSightBlocked = dPlayer > dWall;
+
+            if (isSightBlocked && sameNormal) return true;
+        }
+
+        return false;
     }
 }

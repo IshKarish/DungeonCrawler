@@ -53,6 +53,16 @@ public static class Physics
         
         return false;
     }
+
+    static bool DownLeftColliding(Vector2 start, World world, int length)
+    {
+        for (int i = 0; i <= length; i++)
+        {
+            
+        }
+        
+        return false;
+    }
     
     public static bool LineTrace(Vector2 start, Pawn pawn, int length, Direction direction, out HitResult hitResult)
     {
