@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace DungeonCrawler;
+﻿namespace DungeonCrawler;
 
 public class GameManager
 {
@@ -21,14 +19,19 @@ public class GameManager
     
     private ConsoleKeyInfo _input;
 
+    private Encounter _currentEncounter;
+    private bool _inCombat;
+
     #region Managment
 
     public void StartGame(Level firstLevel)
     {
         StartLevel(firstLevel);
         new Thread(PauseManager).Start(); 
-        Utilities.Speak("Rise and shine, Mr. Ben Dor, Rise and shine. Not that I wish to imply you have been sleeping on the class. No one is more deserving of a rest. And all the effort in the world would have gone to waste until... well, let's just say tiltan has come again. The right teacher in the wrong class can make all the difference in the world. So, wake up, Mr. Ben Dor, Wake up and grade the project.");
+        //Utilities.Speak("Rise and shine, Mr. Ben Dor, Rise and shine. Not that I wish to imply you have been sleeping on the class. No one is more deserving of a rest. And all the effort in the world would have gone to waste until... well, let's just say tiltan has come again. The right teacher in the wrong class can make all the difference in the world. So, wake up, Mr. Ben Dor, Wake up and grade the project.");
 
+        //Utilities.Speak("Hello. Dor Ben Dor. This is your friend, Ish Karish. I need you to come to dizingof center in 1 am. goodbye.");
+        
         //Utilities.Speak("Time, Dor Ben Dor? Is it really that time again? It seems as if you only just arrived. You've done a great deal in a small time span. You've done so well, in fact, that I've received some interesting grade for the project. Ordinarily I will get an F, but these are extra ordinary times. Rather than offer you the illusion of free choice, I will take the liberty of choosing for you, if and when the time comes round again. I do apologize for what must seem to you an arbitrary imposition, Dor Ben Dor. I trust it will all make sense to you in the course of… well, I'm really not at liberty to say. In the meantime, this is where I get off.");
     }
     
@@ -44,7 +47,7 @@ public class GameManager
         _map = _level.Map;
         _world = _level.World;
         
-        Renderer.PrintMap(_map);
+        Renderer.RenderMap(_map);
         
         _player = _level.Player;
         foreach (Actor a in _map.Actors)
@@ -109,7 +112,7 @@ public class GameManager
     {
         _input = new ConsoleKeyInfo();
         
-        Renderer.PrintMap(_map);
+        Renderer.RenderMap(_map);
         _isPaused = false;
         
         StartThreads();
@@ -175,12 +178,7 @@ public class GameManager
                         if (!e.BehaviorTree.IsChasing) e.BehaviorTree.IsChasing = true;
                         e.BehaviorTree.Chase(_world, _player);
                     }
-                    else
-                    {
-                        //_world.RemoveActor(e);
-                        //e.BehaviorTree.Patrol(_world, _enemies);
-                        //_world.UpdateActor(e);
-                    }
+                    else e.BehaviorTree.Patrol(_world, _enemies);
                 }
             }
         }
@@ -305,6 +303,8 @@ public class GameManager
             TrapsDetector();
             InteractionsManager(); 
             LevelSwitcher();
+
+            if (_inCombat) EnterEncounter(_currentEncounter);
         }
     }
 
@@ -362,8 +362,34 @@ public class GameManager
 
     void OverlapCheck()
     {
-        _player.PawnMovement.IsOverlapped(_enemies);
+        if (_player.PawnMovement.IsOverlapped(_enemies, out Actor hitActor))
+        {
+            if (hitActor is Enemy e)
+            {
+                _currentEncounter = new Encounter(e, _player);
+                _inCombat = true;
+            }
+        }
+        else if (_player.PawnMovement.IsOverlapped(_world, out hitActor))
+        {
+            Utilities.Speak("Trigger");
+            _world.RemoveActor(hitActor);
+        }
     }
 
     #endregion
+
+    void EnterEncounter(Encounter encounter)
+    {
+        Pause();
+        Renderer.RenderEncounter(encounter, out int hpLeft, out int hpTop, out int optionsLeft, out int optionsTop);
+        
+        Renderer.RenderFightOptions(_player, optionsLeft, optionsTop);
+        Renderer.RenderHP(_player, encounter.Enemy, hpLeft, hpTop);
+
+        while (true)
+        {
+            encounter.Act(Console.ReadKey(true).Key, optionsLeft, optionsTop, hpLeft, hpTop);
+        }
+    }
 }

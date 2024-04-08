@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using System.Net;
 using System.Speech.Synthesis;
 
 namespace DungeonCrawler;
@@ -51,7 +51,7 @@ public static class Utilities
     }
     
     // Enemies stuff
-    public static Enemy[] GenerateEnemies(int enemyPercentage, Level level)
+    public static Enemy[] GenerateEnemies(int enemyPercentage, Level level, string name = "Bob")
     {
         level.UpdateWorldArr();
         
@@ -74,7 +74,7 @@ public static class Utilities
             
             takenPositions.Add(pos);
 
-            Enemy enemy = new Enemy(pos.X, pos.Y);
+            Enemy enemy = new Enemy(pos.X, pos.Y, name);
             enemy.Transform.SetLastTransform(new Transform(new Vector2(pos.X, pos.Y)));
             
             enemies[i] = enemy;
@@ -82,7 +82,7 @@ public static class Utilities
         return enemies;
     }
     
-    public static Enemy[] GenerateEnemies(int enemyPercentage, Level level, int sensingRange)
+    public static Enemy[] GenerateEnemies(int enemyPercentage, Level level, int sensingRange, string name = "Bob")
     {
         level.UpdateWorldArr();
         
@@ -106,12 +106,22 @@ public static class Utilities
             takenPositions.Add(pos);
 
             Enemy enemy = new Enemy(pos.X, pos.Y);
-            enemy = new Enemy(pos.X, pos.Y, new PawnSensing(sensingRange, enemy));
+            enemy = new Enemy(pos.X, pos.Y, new PawnSensing(sensingRange, enemy), name);
             enemy.Transform.SetLastTransform(new Transform(new Vector2(pos.X, pos.Y)));
             
             enemies[i] = enemy;
         }
         return enemies;
+    }
+
+    public static Enemy GenerateEnemy(Level level, int sensingRange, string name = "Bob")
+    {
+        return GenerateEnemies(1, level, sensingRange, name)[0];
+    }
+    
+    public static Enemy GenerateEnemy(Level level, string name = "Bob")
+    {
+        return GenerateEnemies(1, level, name)[0];
     }
 
     // Other stuff

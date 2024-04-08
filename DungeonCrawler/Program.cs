@@ -36,7 +36,7 @@ class Program
                 
         Actor[] objects =
         {
-            obj, obj2, obj3, obj4, door2, chest, doorBenDoor, trap, trap2, dorBenDor, chest2, chest3, chest4, chest5
+            obj, obj2, obj3, obj4, door2, doorBenDoor, trap, trap2, dorBenDor, chest2, chest3, chest4, chest5, new TriggerBox(2, 0, 4, 4)
         };
         #endregion
         
@@ -46,7 +46,7 @@ class Program
         level2.Map.AddActor(gay);
         level2.UpdateWorldArr();
         
-        Enemy[] enemies = Utilities.GenerateEnemies(10, level, 10);
+        Enemy[] enemies = Utilities.GenerateEnemies(1, level, 10);
         level.SetEnemies(enemies);
         
         gameManager.StartGame(level);

@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace DungeonCrawler;
+﻿namespace DungeonCrawler;
 
 public class PawnSensing
 {
@@ -58,18 +56,7 @@ public class PawnSensing
         StartY = Center.Y - yHalf;
         EndY = Center.Y + yHalf;
     }
-
-    public bool CanSee(Pawn[] pawns, Pawn pawn)
-    {
-        foreach (Pawn p in pawns)
-        {
-            if (p == pawn) continue;
-            //if (CanSee(p.Transform.Position, out Direction direction)) return true;
-        }
-
-        return false;
-    }
-
+    
     public bool CanSee(Vector2 point, World world)
     {
         // Default direction
@@ -91,10 +78,24 @@ public class PawnSensing
         bool canSee = inXBounds && inYBounds;
         
         if (canSee) direction = LookDirection(xPositive, xNegative, xSame, yPositive, yNegative, ySame);
+        Vector2 Distance = Center.Distance(point, new Pawn());
         
         // Wall = No
-        bool isSightBlocked = true;
-        if (direction != Direction.None) isSightBlocked = Physics.LineTrace(Center, world, Size.X, direction, out _);
+        bool isSightBlocked;
+        switch (direction)
+        {
+            case Direction.Left:
+            case Direction.Right:
+                isSightBlocked = Physics.LineTrace(Center, world, Distance.X, direction, out _);
+                break;
+            case Direction.Up:
+            case Direction.Down:
+                isSightBlocked = Physics.LineTrace(Center, world, Distance.Y, direction, out _);
+                break;
+            default:
+                isSightBlocked = true;
+                break;
+        }
         
         return canSee && !isSightBlocked;
     }

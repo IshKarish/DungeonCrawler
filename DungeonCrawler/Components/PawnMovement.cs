@@ -18,6 +18,8 @@ public class PawnMovement
     {
         if (!_pawn.Moved) _pawn.Moved = true;
         
+        Thread.Sleep(10);
+        
         axis *= -1;
         
         int xPos = _transform.Position.X;
@@ -43,6 +45,8 @@ public class PawnMovement
     {
         if (!_pawn.Moved) _pawn.Moved = true;
         
+        Thread.Sleep(11);
+        
         int xPos = _transform.Position.X;
         int yPos = _transform.Position.Y;
         
@@ -65,7 +69,7 @@ public class PawnMovement
     // Colliding
     void OnActorBeginOverlap(Actor hitActor)
     {
-        Debug.WriteLine($"Overlapping {hitActor.Graphics.Symbol}");
+        
     }
     
     bool IsCollidingFromRight(World world)
@@ -92,17 +96,21 @@ public class PawnMovement
         return isColliding;
     }
 
-    public bool IsOverlapped(World world)
+    public bool IsOverlapped(World world, out Actor hitActor)
     {
         bool isOverlapping = Physics.LineTrace(_transform.Position, world, out HitResult hitResult);
-        if (isOverlapping) OnActorBeginOverlap(hitResult.HitActor);
+        hitActor = hitResult.HitActor;
+        
+        if (isOverlapping) OnActorBeginOverlap(hitActor);
         return isOverlapping;
     }
     
-    public bool IsOverlapped(Pawn[] pawns)
+    public bool IsOverlapped(Pawn[] pawns, out Actor hitActor)
     {
         bool isOverlapping = Physics.LineTrace(_transform.Position, pawns, out HitResult hitResult);
-        if (isOverlapping) OnActorBeginOverlap(hitResult.HitActor);
+        hitActor = hitResult.HitActor;
+        
+        if (isOverlapping) OnActorBeginOverlap(hitActor);
         return isOverlapping;
     }
 }

@@ -52,21 +52,14 @@ public class Inventory
 
     public override string ToString()
     {
+        if (Items.Count == 0) return "You have nothing lol";
+        
         string inventory = "";
         for (int i = 0; i < Items.ToArray().Length; i++)
         {
             Item item = Items.ToArray()[i];
-
-            int itemCount = 1;
-            for (int j = i + 1; j < Items.ToArray().Length; j++)
-            {
-                Item jItem = Items.ToArray()[j];
-                if (jItem.Name == item.Name) itemCount++;
-            }
-            
-            
-            inventory += item.Name;
-            if (i != Items.ToArray().Length - 1) inventory += ", ";
+            inventory += $"{i + 1}. {item.Name}";
+            if (i != Items.ToArray().Length - 1) inventory += "\n";
         }
 
         return inventory;

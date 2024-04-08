@@ -2,34 +2,25 @@
 
 public class Actor
 {
-    public Transform Transform { get; init; }
-    public Graphics Graphics { get; init; }
+    public Transform Transform { get; init; } = new Transform();
+    public Graphics Graphics { get; init; } = new Graphics('&', ConsoleColor.Red);
     public bool Trigger { get; set; }
     public bool Interactable { get; set; }
 
     public Actor()
     {
-        Transform = new Transform();
-        Graphics = new Graphics('&', ConsoleColor.Red);
-        Trigger = false;
         Interactable = false;
     }
     
     public Actor(Graphics graphics)
     {
-        Transform = new Transform();
         Graphics = graphics;
-        Trigger = false;
-        Interactable = false;
     }
 
     public Actor(int scaleX, int scaleY, Graphics graphics)
     {
-        Transform = new Transform();
         Transform.SetScale(scaleX, scaleY);
         Graphics = graphics;
-        Trigger = false;
-        Interactable = false;
     }
 
     public Actor(int xPosition, int yPosition, int scaleX, int scaleY, Graphics graphics)
@@ -39,40 +30,28 @@ public class Actor
         Transform = new Transform(position, scale);
         
         Graphics = graphics;
-        Trigger = false;
-        Interactable = false;
     }
 
     public Actor(Vector2 scale, Graphics graphics)
     {
-        Transform = new Transform();
         Transform.SetScale(scale.X, scale.Y);
         Graphics = graphics;
-        Trigger = false;
-        Interactable = false;
     }
 
     public Actor(Vector2 position, Vector2 scale, Graphics graphics)
     {
         Graphics = graphics;
         Transform = new Transform(position, scale);
-        Trigger = false;
-        Interactable = false;
     }
 
     public Actor(Transform transform, Graphics graphics)
     {
         Transform = transform;
         Graphics = graphics;
-        Trigger = false;
-        Interactable = false;
     }
     
     public Actor(Transform transform)
     {
         Transform = transform;
-        Graphics = new Graphics('&', ConsoleColor.Red);
-        Trigger = false;
-        Interactable = false;
     }
 }

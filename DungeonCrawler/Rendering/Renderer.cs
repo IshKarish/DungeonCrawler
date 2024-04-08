@@ -1,10 +1,87 @@
-﻿using System.Diagnostics;
-
-namespace DungeonCrawler;
+﻿namespace DungeonCrawler;
 
 public static class Renderer
 {
-    public static void PrintMap(Map map)
+    public static void RenderEncounter(Encounter encounter, out int hpLeft, out int hpTop, out int optionsLeft, out int optionsTop)
+    {
+        // Set variables
+        Player player = encounter.Player;
+        Enemy enemy = encounter.Enemy;
+        
+        string ascii = enemy.Graphics.SymbolAscii;
+        ConsoleColor color = enemy.Graphics.Color;
+
+        // Draw Enemy
+        Console.WriteLine($"You encountered {enemy.Name}!\n");
+        
+        hpTop = Console.GetCursorPosition().Top;
+        Console.BackgroundColor = color;
+
+        bool addToLeft = true;
+        hpLeft = 1;
+        
+        foreach (char c in ascii)
+        {
+            Console.Write(c);
+            
+            if (c == '\n')
+            {
+                addToLeft = false;
+                hpTop++;
+            }
+            
+            if (addToLeft) hpLeft++;
+        }
+
+        hpTop /= 2;
+        
+        Console.BackgroundColor = ConsoleColor.Black;
+        Console.WriteLine("\n");
+
+        (optionsLeft, optionsTop) = Console.GetCursorPosition();
+    }
+
+    public static void RenderFightOptions(Player player, int cursorLeft, int cursorTop, bool renderInventory = false)
+    {
+        Console.SetCursorPosition(cursorLeft, cursorTop);
+
+        if (renderInventory)
+        {
+            Console.WriteLine("0. Back");
+            Console.WriteLine(player.Inventory);
+        }
+        else Console.WriteLine(player.CombatOptions);
+    }
+
+    public static void ClearFightOptions(int cursorLeft, int cursorTop)
+    {
+        Console.SetCursorPosition(cursorLeft, cursorTop);
+
+        for (int i = 0; i < 10; i++)
+        {
+            Console.WriteLine("                                                           ");
+        }
+    }
+    
+    public static void RenderHP(Player player, Enemy enemy, int cursorLeft, int cursorTop)
+    {
+        Console.SetCursorPosition(cursorLeft, cursorTop);
+        Console.Write($"Player HP: {player.HP}");
+        
+        Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+        Console.Write($"{enemy.Name}'s HP: {enemy.HP}");
+    }
+
+    public static void ClearHP(int cursorLeft, int cursorTop)
+    {
+        Console.SetCursorPosition(cursorLeft, cursorTop);
+        Console.Write("                             ");
+        
+        Console.SetCursorPosition(cursorLeft, cursorTop + 1);
+        Console.Write("                             ");
+    }
+    
+    public static void RenderMap(Map map)
     {
         Console.SetCursorPosition(0, 0);
         Console.Clear();
