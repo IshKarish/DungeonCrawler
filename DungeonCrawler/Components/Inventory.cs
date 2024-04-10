@@ -36,6 +36,11 @@ public class Inventory
         HasChanged = true;
     }
 
+    public Item Item(int number)
+    {
+        return Items.ToArray()[number - 1];
+    }
+
     public bool HasItem(string name, bool remove = false)
     {
         foreach (Item i in Items.ToArray())

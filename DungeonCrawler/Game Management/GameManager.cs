@@ -1,4 +1,6 @@
-﻿namespace DungeonCrawler;
+﻿using System.Diagnostics;
+
+namespace DungeonCrawler;
 
 public class GameManager
 {
@@ -110,6 +112,8 @@ public class GameManager
 
     public void Resume()
     {
+        if (_inCombat) _inCombat = false;
+        
         _input = new ConsoleKeyInfo();
         
         Renderer.RenderMap(_map);
@@ -364,7 +368,7 @@ public class GameManager
     {
         if (_player.PawnMovement.IsOverlapped(_enemies, out Actor hitActor))
         {
-            if (hitActor is Enemy e)
+            if (hitActor is Enemy e && !e.IsDead)
             {
                 _currentEncounter = new Encounter(e, _player);
                 _inCombat = true;
@@ -382,14 +386,30 @@ public class GameManager
     void EnterEncounter(Encounter encounter)
     {
         Pause();
+        
         Renderer.RenderEncounter(encounter, out int hpLeft, out int hpTop, out int optionsLeft, out int optionsTop);
+        encounter.SetScreenValues(optionsLeft, optionsTop, hpLeft, hpTop);
         
         Renderer.RenderFightOptions(_player, optionsLeft, optionsTop);
         Renderer.RenderHP(_player, encounter.Enemy, hpLeft, hpTop);
 
-        while (true)
+        do
         {
-            encounter.Act(Console.ReadKey(true).Key, optionsLeft, optionsTop, hpLeft, hpTop);
+            ConsoleKey input = Console.ReadKey(true).Key;
+
+            if (!encounter.IsUsing) encounter.Act(input);
+            else encounter.Use(input);
+        } while (!_player.IsDead && !encounter.Enemy.IsDead);
+
+        if (encounter.Enemy.IsDead)
+        {
+            List<Enemy> e = _enemies.ToList();
+            e.Remove(encounter.Enemy);
+            _enemies = e.ToArray();
         }
-    }
+        
+        Debug.WriteLine(_enemies.Length);
+        
+        Resume();
+    } 
 }

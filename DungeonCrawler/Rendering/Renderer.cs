@@ -66,10 +66,10 @@ public static class Renderer
     public static void RenderHP(Player player, Enemy enemy, int cursorLeft, int cursorTop)
     {
         Console.SetCursorPosition(cursorLeft, cursorTop);
-        Console.Write($"Player HP: {player.HP}");
+        Console.Write($"Player HP: {player.HP:0.00}");
         
         Console.SetCursorPosition(cursorLeft, cursorTop + 1);
-        Console.Write($"{enemy.Name}'s HP: {enemy.HP}");
+        Console.Write($"{enemy.Name}'s HP: {enemy.HP:0.00}");
     }
 
     public static void ClearHP(int cursorLeft, int cursorTop)

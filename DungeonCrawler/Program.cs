@@ -28,7 +28,7 @@ class Program
         Door dorBenDor = new Door(34, 13, DoorDirection.Left, level2);
         Door door2 = new Door(47, 3, DoorDirection.Left, true);
 
-        Chest chest = new Chest(new Item("Key"));
+        Chest chest = new Chest(new Weapon("Anime", 23.67f));
         Chest chest2 = new Chest(new Item("Armor"), 34, 5);
         Chest chest3 = new Chest(new Item("Sword"), 63, 1);
         Chest chest4 = new Chest(new Item("Itoranei Karish"), 75, 14);
@@ -36,7 +36,7 @@ class Program
                 
         Actor[] objects =
         {
-            obj, obj2, obj3, obj4, door2, doorBenDoor, trap, trap2, dorBenDor, chest2, chest3, chest4, chest5, new TriggerBox(2, 0, 4, 4)
+            obj, obj2, obj3, obj4, door2, doorBenDoor, trap, trap2, dorBenDor, chest2, chest3, chest4, chest5, new TriggerBox(2, 0, 4, 4), chest
         };
         #endregion
         

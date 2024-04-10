@@ -56,12 +56,20 @@ public class Pawn : Actor
         Name = name;
     }
 
-    public void Heal(float amount)
+    public bool Slap(Pawn pawn, out int damage)
     {
-        HP += amount;
+        damage = 7;
+        
+        pawn.Damage(damage);
+        return true;
     }
 
-    public void Damage(int amount)
+    public void Heal(float amount)
+    {
+        if (HP < 100) HP += amount;
+    }
+
+    public void Damage(float amount)
     {
         if (HP - amount <= 0) Kill();
         else if (HP > 0) HP -= amount;
