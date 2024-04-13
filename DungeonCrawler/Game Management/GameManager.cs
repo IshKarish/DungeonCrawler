@@ -307,8 +307,6 @@ public class GameManager
             TrapsDetector();
             InteractionsManager(); 
             LevelSwitcher();
-
-            if (_inCombat) EnterEncounter(_currentEncounter);
         }
     }
 
@@ -370,8 +368,9 @@ public class GameManager
         {
             if (hitActor is Enemy e && !e.IsDead)
             {
-                _currentEncounter = new Encounter(e, _player);
                 _inCombat = true;
+                EnterEncounter(new Encounter(e, _player));
+                _inCombat = false;
             }
         }
         else if (_player.PawnMovement.IsOverlapped(_world, out hitActor))
@@ -396,10 +395,11 @@ public class GameManager
         do
         {
             ConsoleKey input = Console.ReadKey(true).Key;
-
-            if (!encounter.IsUsing) encounter.Act(input);
-            else encounter.Use(input);
-        } while (!_player.IsDead && !encounter.Enemy.IsDead);
+                
+            if (encounter.IsUsing) encounter.Use(input);
+            else encounter.Act(input);
+        } 
+        while (!_player.IsDead && !encounter.Enemy.IsDead);
 
         if (encounter.Enemy.IsDead)
         {

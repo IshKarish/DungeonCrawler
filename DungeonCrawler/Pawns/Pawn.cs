@@ -56,9 +56,11 @@ public class Pawn : Actor
         Name = name;
     }
 
-    public bool Slap(Pawn pawn, out int damage)
+    public bool Slap(Pawn pawn, out float damage)
     {
-        damage = 7;
+        damage = Random.Shared.Next(3, 20) + Random.Shared.NextSingle();
+        string damageStr = damage.ToString("0.00");
+        damage = float.Parse(damageStr);
         
         pawn.Damage(damage);
         return true;

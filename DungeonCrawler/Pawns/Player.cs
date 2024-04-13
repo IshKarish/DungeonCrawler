@@ -15,7 +15,7 @@ public class Player : Pawn
         Speed = 1;
         Ineractor = new PawnIneractor(this);
         Inventory = new Inventory();
-        CombatOptions = new CombatOptions(this);
+        CombatOptions = new CombatOptions();
     }
     
     public Player(int x, int y)
@@ -25,21 +25,21 @@ public class Player : Pawn
         Graphics = new Graphics('*', ConsoleColor.White);
         Speed = 1;
         Inventory = new Inventory();
-        CombatOptions = new CombatOptions(this);
+        CombatOptions = new CombatOptions();
     }
 
     public Player(Vector2 position, Graphics graphics) : base(position, graphics)
     {
         Ineractor = new PawnIneractor(this);
         Inventory = new Inventory();
-        CombatOptions = new CombatOptions(this);
+        CombatOptions = new CombatOptions();
     }
 
     public Player(int x, int y, Graphics graphics) : base(x, y, graphics)
     {
         Ineractor = new PawnIneractor(this);
         Inventory = new Inventory();
-        CombatOptions = new CombatOptions(this);
+        CombatOptions = new CombatOptions();
     }
     
     public Player(Vector2 position)
@@ -49,13 +49,13 @@ public class Player : Pawn
         Graphics = new Graphics('*', ConsoleColor.White);
         Speed = 1;
         Inventory = new Inventory();
-        CombatOptions = new CombatOptions(this);
+        CombatOptions = new CombatOptions();
     }
 
     public Player(Graphics graphics) : base(graphics)
     {
         Ineractor = new PawnIneractor(this);
         Inventory = new Inventory();
-        CombatOptions = new CombatOptions(this);
+        CombatOptions = new CombatOptions();
     }
 }

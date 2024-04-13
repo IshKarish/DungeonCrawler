@@ -4,11 +4,14 @@ namespace DungeonCrawler;
 
 public class Encounter
 {
+    // Players
     public Enemy Enemy { get; private set; }
     public Player Player { get; private set; }
     
+    // States
     public bool IsUsing { get; private set; }
 
+    // Cursor positions
     private int _optionsLeft;
     private int _optionsTop;
     private int _hpLeft;
@@ -33,28 +36,37 @@ public class Encounter
         switch (input)
         {
             case ConsoleKey.D1:
-                Player.Slap(Enemy, out int damage);
+                Player.Slap(Enemy, out float damage);
                 
-                ClearInfo();
-                DisplayInfo("slapped", Player, damage);
-                DisplayInfo("", Enemy);
+                Renderer.RenderMessage(_optionsLeft, _optionsTop, $"You punched {Enemy.Name} and dealt him {damage} damage");
+                RenderHP();
                 
                 break;
             case ConsoleKey.D2:
-                break;
+                Talk();
+                
+                return;
             case ConsoleKey.D3:
                 IsUsing = true;
-                
-                Renderer.ClearFightOptions(_optionsLeft, _optionsTop);
-                Renderer.RenderFightOptions(Player, _optionsLeft, _optionsTop, true);
+                Renderer.RenderInventory(Player, _optionsLeft, _optionsTop);
                 
                 return;
             case ConsoleKey.D4:
                 break;
             default:
-                Debug.WriteLine($"{Enemy.Name} hit you");
-                break;
+                Debug.WriteLine("NO");
+                return;
         }
+        
+        Console.ReadKey(true);
+
+        Enemy.Slap(Player, out float d);
+        Renderer.RenderHP(Player, Enemy, _hpLeft, _hpTop);
+        Renderer.RenderMessage(_optionsLeft, _optionsTop, $"{Enemy.Name} punched you and dealt {d} damage.");
+
+        Console.ReadKey(true);
+
+        Renderer.RenderFightOptions(Player, _optionsLeft, _optionsTop);
     }
 
     public void Use(ConsoleKey input)
@@ -67,16 +79,17 @@ public class Encounter
             switch (c)
             {
                 case 0:
-                    IsUsing = false;
-
-                    Renderer.ClearFightOptions(_optionsLeft, _optionsTop);
+                    Debug.WriteLine("Back");
+                    
                     Renderer.RenderFightOptions(Player, _optionsLeft, _optionsTop);
-
+                    
                     break;
                 default:
                     Use(c);
                     break;
             }
+            
+            IsUsing = false;
         }
         catch (Exception e)
         {
@@ -88,67 +101,50 @@ public class Encounter
     {
         Item item = Player.Inventory.Item(number);
         Debug.WriteLine($"Used {item.Name}");
-
-        ClearInfo();
+        
         if (item is Weapon w)
         {
             Enemy.Damage(w.Damage);
             Player.Inventory.RemoveItem(item);
-            
-            DisplayInfo(item, Player);
-            DisplayInfo("", Enemy);
+            RenderMessage($"You used {item.Name} and dealt {w.Damage} to {Enemy.Name}");
         }
-        DisplayInfo(item, Player);
-        DisplayInfo("", Enemy);
+        else RenderMessage($"You used {item.Name} but it didn't do anything");
         
-        DisplayHP();
+        RenderHP();
+    }
+
+    void Talk()
+    {
+        bool shouldSpare = FightDialogues.RandomDialogue(out string line, out string answer, out string outcome);
+        outcome = outcome.Replace("Enemy", Enemy.Name);
         
-        Use(ConsoleKey.D0);
+        RenderMessage($"You: {line}");
+        Console.ReadKey(true);
+        RenderMessage($"{Enemy.Name}: {answer}");
+        Console.ReadKey(true);
+        RenderMessage(outcome);
+        Console.ReadKey(true);
+        RenderMessage("                                                                                                                                                                    ");
+
+        if (shouldSpare)
+        {
+            Enemy.Slap(Player, out float damage);
+            RenderMessage($"{Enemy.Name} punched you and dealt {damage} damage");
+            RenderHP();
+            Console.ReadKey(true);
+        }
+        
+        Renderer.RenderFightOptions(Player, _optionsLeft, _optionsTop);
     }
     
-    void DisplayHP()
+    void RenderHP()
     {
         Renderer.ClearHP(_hpLeft, _hpTop);
         Renderer.RenderHP(Player, Enemy, _hpLeft, _hpTop);
     }
 
-    void DisplayInfo(string action, Pawn pawn, float damage = 0)
+    void RenderMessage(string str)
     {
-        Console.SetCursorPosition(_hpLeft, _hpTop + 3);
-
-        if (pawn is Player)
-        {
-            if (action != "") Console.WriteLine($"You {action} {Enemy.Name}! You dealt him {damage} damage");
-            else Console.WriteLine($"You missed {Enemy.Name}..");
-        }
-        else
-        {
-            Console.SetCursorPosition(_hpLeft, _hpTop + 4);
-            
-            if (action != "") Console.WriteLine($"But {Enemy.Name} {action} you! He dealt him {damage} damage");
-            else Console.WriteLine($"And {Enemy.Name} missed you");
-        }
-        
-        DisplayHP();
-    }
-    
-    void DisplayInfo(Item item, Pawn pawn)
-    {
-        Console.SetCursorPosition(_hpLeft, _hpTop + 3);
-
-        if (pawn is Player)
-        {
-            if (item is Weapon w) Console.WriteLine($"You used {item.Name} and it dealt {w.Damage} to {Enemy.Name}!");
-            else Console.WriteLine($"You used {item.Name} but it didn't do anything");
-        }
-
-        DisplayHP();
-    }
-
-    void ClearInfo()
-    {
-        Console.SetCursorPosition(_hpLeft, _hpTop + 3);
-
-        Console.WriteLine("                                                                                              ");
+        Renderer.RenderMessage(_optionsLeft, _optionsTop, str);
     }
 }

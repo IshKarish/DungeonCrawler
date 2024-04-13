@@ -8,7 +8,7 @@ class Program
         
         GameManager gameManager = new GameManager();
         
-        Player player = new Player(0, 0, new Graphics('*', ConsoleColor.White));
+        Player player = new Player(new Graphics('*', ConsoleColor.White));
         
         Level level2 = Utilities.CreateLevel(new Vector2(10, 50), player);
         

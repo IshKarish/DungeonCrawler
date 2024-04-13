@@ -2,20 +2,13 @@
 
 public class CombatOptions
 {
-    public List<string> Options { get; private set; }
-
-    public CombatOptions(Pawn pawn)
+    public List<string> Options { get; private set; } = new List<string>
     {
-        Options = new List<string>
-        {
-            "Slap",
-            "Shield",
-            "Use"
-        };
-        
-        if (pawn is Player) Options.Add("Run");
-    }
-
+        "Fight",
+        "Talk",
+        "Use",
+    };
+    
     public override string ToString()
     {
         string options = "";

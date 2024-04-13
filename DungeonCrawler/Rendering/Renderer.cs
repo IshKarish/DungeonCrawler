@@ -5,7 +5,6 @@ public static class Renderer
     public static void RenderEncounter(Encounter encounter, out int hpLeft, out int hpTop, out int optionsLeft, out int optionsTop)
     {
         // Set variables
-        Player player = encounter.Player;
         Enemy enemy = encounter.Enemy;
         
         string ascii = enemy.Graphics.SymbolAscii;
@@ -41,16 +40,39 @@ public static class Renderer
         (optionsLeft, optionsTop) = Console.GetCursorPosition();
     }
 
-    public static void RenderFightOptions(Player player, int cursorLeft, int cursorTop, bool renderInventory = false)
+    public static void RenderFightOptions(Player player, int cursorLeft, int cursorTop)
     {
+        ClearFightOptions(cursorLeft, cursorTop);
         Console.SetCursorPosition(cursorLeft, cursorTop);
 
-        if (renderInventory)
-        {
-            Console.WriteLine("0. Back");
-            Console.WriteLine(player.Inventory);
-        }
-        else Console.WriteLine(player.CombatOptions);
+        Console.WriteLine(player.CombatOptions);
+    }
+
+    public static void RenderInventory(Player player, int cursorLeft, int cursorTop)
+    {
+        ClearFightOptions(cursorLeft, cursorTop);
+        Console.SetCursorPosition(cursorLeft, cursorTop);
+        
+        Console.WriteLine("0. Back");
+        Console.WriteLine(player.Inventory);
+    }
+    
+    public static void RenderActions(int cursorLeft, int cursorTop)
+    {
+        ClearFightOptions(cursorLeft, cursorTop);
+        Console.SetCursorPosition(cursorLeft, cursorTop);
+
+        Console.WriteLine("0. Back");
+        Console.WriteLine("1. Talk");
+        Console.WriteLine("2. Check");
+    }
+    
+    public static void RenderMessage(int cursorLeft, int cursorTop, string line)
+    {
+        ClearFightOptions(cursorLeft, cursorTop);
+        Console.SetCursorPosition(cursorLeft, cursorTop);
+        
+        Console.WriteLine(line);
     }
 
     public static void ClearFightOptions(int cursorLeft, int cursorTop)
@@ -59,7 +81,7 @@ public static class Renderer
 
         for (int i = 0; i < 10; i++)
         {
-            Console.WriteLine("                                                           ");
+            Console.WriteLine("                                                                                                                                                             ");
         }
     }
     

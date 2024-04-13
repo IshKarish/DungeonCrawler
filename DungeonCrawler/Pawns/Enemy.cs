@@ -4,7 +4,6 @@ public class Enemy : Pawn
 {
     public BehaviorTree BehaviorTree { get; set; }
     public PawnSensing PawnSensing { get; set; }
-    public CombatOptions CombatOptions { get; private set; }
     
     // Default graphics
     private char _symbol = '!';
@@ -16,7 +15,6 @@ public class Enemy : Pawn
         Graphics = new Graphics(_symbol, _color, _ascii);
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = new PawnSensing(this);
-        CombatOptions = new CombatOptions(this);
         Name = name;
     }
 
@@ -26,7 +24,6 @@ public class Enemy : Pawn
         Graphics = new Graphics(_symbol, _color, _ascii);
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = new PawnSensing(5, this);
-        CombatOptions = new CombatOptions(this);
         Name = name;
     }
     
@@ -36,7 +33,6 @@ public class Enemy : Pawn
         Graphics = new Graphics(_symbol, _color, _ascii);
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = pawnSensing;
-        CombatOptions = new CombatOptions(this);
         Name = name;
     }
 
@@ -46,7 +42,6 @@ public class Enemy : Pawn
         Graphics = graphics;
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = new PawnSensing(this);
-        CombatOptions = new CombatOptions(this);
         Name = name;
     }
     
@@ -56,7 +51,6 @@ public class Enemy : Pawn
         Graphics = graphics;
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = pawnSensing;
-        CombatOptions = new CombatOptions(this);
         Name = name;
     }
     
@@ -66,7 +60,6 @@ public class Enemy : Pawn
         Graphics = graphics;
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = new PawnSensing(this);
-        CombatOptions = new CombatOptions(this);
         Name = name;
     }
     
@@ -76,7 +69,6 @@ public class Enemy : Pawn
         Graphics = graphics;
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = pawnSensing;
-        CombatOptions = new CombatOptions(this);
         Name = name;
     }
     
@@ -86,7 +78,6 @@ public class Enemy : Pawn
         Graphics = new Graphics(_symbol, _color, _ascii);
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = new PawnSensing(this);
-        CombatOptions = new CombatOptions(this);
         Name = name;
     }
     
@@ -96,7 +87,6 @@ public class Enemy : Pawn
         Graphics = new Graphics(_symbol, _color, _ascii);
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = pawnSensing;
-        CombatOptions = new CombatOptions(this);
         Name = name;
     }
     
@@ -105,7 +95,6 @@ public class Enemy : Pawn
         Graphics = graphics;
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = new PawnSensing(this);
-        CombatOptions = new CombatOptions(this);
         Name = name;
     }
     
@@ -114,7 +103,6 @@ public class Enemy : Pawn
         Graphics = graphics;
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = pawnSensing;
-        CombatOptions = new CombatOptions(this);
         Name = name;
     }
 }
