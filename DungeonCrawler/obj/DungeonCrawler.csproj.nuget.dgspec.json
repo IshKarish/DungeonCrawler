@@ -40,13 +40,17 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
-            "Sanford.Multimedia.Midi": {
+            "Melanchall.DryWetMidi": {
               "target": "Package",
-              "version": "[6.6.2, )"
+              "version": "[7.0.3-prerelease2, )"
+            },
+            "NAudio": {
+              "target": "Package",
+              "version": "[2.2.1, )"
             },
             "System.Speech": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[7.0.0, )"
             }
           },
           "imports": [

@@ -1,4 +1,6 @@
-﻿namespace DungeonCrawler;
+﻿using System.Diagnostics;
+
+namespace DungeonCrawler;
 
 public class Pawn : Actor
 {
@@ -9,6 +11,7 @@ public class Pawn : Actor
     public string Name { get; init; }
 
     public float HP { get; private set; } = 100;
+    private bool _hpChanged = true;
     
     public Pawn(string name = "Bob")
     {
@@ -58,23 +61,44 @@ public class Pawn : Actor
 
     public bool Slap(Pawn pawn, out float damage)
     {
-        damage = Random.Shared.Next(3, 20) + Random.Shared.NextSingle();
+        damage = Random.Shared.Next(10, 20) + Random.Shared.NextSingle();
         string damageStr = damage.ToString("0.00");
         damage = float.Parse(damageStr);
-        
-        pawn.Damage(damage);
-        return true;
+
+        double roll = Random.Shared.NextDouble();
+        Debug.WriteLine(roll);
+        if (roll > 0.5)
+        {
+            pawn.Damage(damage);
+            return true;
+        }
+        return false;
     }
 
     public void Heal(float amount)
     {
         if (HP < 100) HP += amount;
+
+        _hpChanged = true;
     }
 
     public void Damage(float amount)
     {
         if (HP - amount <= 0) Kill();
         else if (HP > 0) HP -= amount;
+
+        _hpChanged = true;
+    }
+
+    public bool HpChanged()
+    {
+        if (_hpChanged)
+        {
+            _hpChanged = false;
+            return true;
+        }
+
+        return false;
     }
 
     public void Kill()

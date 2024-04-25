@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace DungeonCrawler;
+﻿namespace DungeonCrawler;
 
 public class Level
 {
@@ -9,10 +7,23 @@ public class Level
     public Enemy[] Enemies { get; private set; } = null!;
     public World World { get; private set; }
 
+    public Vector2 StartPosition { get; private set; }
+    
+    public Level() {}
+
     public Level(Map map, Player player)
     {
         Map = map;
         Player = player;
+
+        World = new World(map);
+    }
+    
+    public Level(Map map, Player player, Vector2 startPosition)
+    {
+        Map = map;
+        Player = player;
+        StartPosition = startPosition;
 
         World = new World(map);
     }
@@ -28,11 +39,21 @@ public class Level
         World.AddDoors(Map);
     }
 
+    public void SetEntrance(Level previousLevel)
+    {
+        foreach (Actor a in Map.Actors)
+        {
+            if (a is Door d && d.IsEntrance)
+            {
+                d.SetDestination(previousLevel);
+            }
+        }
+    }
+
     public bool IsPlayerStandingOnDoor(out Actor actor)
     {
         if (WhereIsStanding(Player) is Teleporter t)
         {
-            Debug.WriteLine("AAAAAAAAAAAAAAAAAAAA");   
             actor = t;
             return true;
         }

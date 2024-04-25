@@ -7,9 +7,11 @@ public class Trap : Actor
     public TrapDirection Direction { get; private set; }
     public bool Retracted { get; set; }
     private int _range = 5;
+    public float Damage { get; private set; }
     
-    public Trap(TrapDirection direction, int y, int range, Map map)
+    public Trap(TrapDirection direction, int y, int range, Map map, float damage = 30)
     {
+        Damage = damage;
         Direction = direction;
         
         int x = 0;
@@ -26,8 +28,9 @@ public class Trap : Actor
         Interactable = false;
     }
     
-    public Trap(TrapDirection direction, int y, Map map)
+    public Trap(TrapDirection direction, int y, Map map, float damage = 30)
     {
+        Damage = damage;
         Direction = direction;
         
         int x = 0;
@@ -44,8 +47,9 @@ public class Trap : Actor
         Interactable = false;
     }
     
-    public Trap(TrapDirection direction, int y, Actor attachedActor)
+    public Trap(TrapDirection direction, int y, Actor attachedActor, float damage = 30)
     {
+        Damage = damage;
         Direction = direction;
         
         int x = attachedActor.Transform.Position.X + attachedActor.Transform.Scale.X + 1;

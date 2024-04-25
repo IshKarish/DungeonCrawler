@@ -7,6 +7,8 @@ public class CombatOptions
         "Fight",
         "Talk",
         "Use",
+        "Kill yourself",
+        "Kill enemy (auto win)"
     };
     
     public override string ToString()

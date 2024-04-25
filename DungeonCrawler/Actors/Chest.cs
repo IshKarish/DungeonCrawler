@@ -3,6 +3,7 @@
 public class Chest : Actor
 {
     public Item Item { get; private set; }
+    public Cutscene Cutscene { get; private set; }
     
     public Chest(Item item)
     {
@@ -54,5 +55,10 @@ public class Chest : Actor
         Interactable = true;
         Item = new Item(item);
         Transform.SetPosition(new Vector2(x, y));
+    }
+
+    public void AddCutscene(Cutscene cutscene)
+    {
+        Cutscene = cutscene;
     }
 }

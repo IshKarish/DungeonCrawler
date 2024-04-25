@@ -54,4 +54,10 @@ public class Actor
     {
         Transform = transform;
     }
+
+    public Actor(int x, int y, Vector2 scale, Graphics graphics)
+    {
+        Graphics = graphics;
+        Transform = new Transform(new Vector2(x, y), scale);
+    }
 }

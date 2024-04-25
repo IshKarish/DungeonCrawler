@@ -8,8 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Sanford.Multimedia.Midi" Version="6.6.2" />
-      <PackageReference Include="System.Speech" Version="8.0.0" />
+      <PackageReference Include="Melanchall.DryWetMidi" Version="7.0.3-prerelease2" />
+      <PackageReference Include="NAudio" Version="2.2.1" />
+      <PackageReference Include="System.Speech" Version="7.0.0" />
     </ItemGroup>
 
 </Project>

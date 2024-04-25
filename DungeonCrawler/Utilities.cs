@@ -1,50 +1,95 @@
-﻿using System.Net;
-using System.Speech.Synthesis;
+﻿using System.Speech.Synthesis;
+using Melanchall.DryWetMidi.Core;
+using Melanchall.DryWetMidi.Multimedia;
 
 namespace DungeonCrawler;
 
 public static class Utilities
 {
     // Game creation
-    public static Level CreateLevel(int mapSize, Player player, Actor[] objects)
+    public static Level CreateLevel(string name, int mapSize, Player player, Actor[] objects)
     {
-        Map map = new Map(mapSize, objects);
+        Map map = new Map(name, mapSize, objects);
         Level level = new Level(map, player);
 
         return level;
     }
-    public static Level CreateLevel(Vector2 mapSize, Player player, Actor[] objects)
+    public static Level CreateLevel(string name, Vector2 mapSize, Player player, Actor[] objects)
     {
-        Map map = new Map(mapSize, objects);
+        Map map = new Map(name, new Vector2(mapSize.Y, mapSize.X), objects);
         Level level = new Level(map, player);
 
         return level;
     }
-    public static Level CreateLevel(int mapSizeX, int mapSizeY, Player player, Actor[] objects)
+    public static Level CreateLevel(string name, int mapSizeX, int mapSizeY, Player player, Actor[] objects)
     {
-        Map map = new Map(new Vector2(mapSizeX, mapSizeY), objects);
+        Map map = new Map(name, new Vector2(mapSizeY, mapSizeX), objects);
         Level level = new Level(map, player);
 
         return level;
     }
     
-    public static Level CreateLevel(int mapSize, Player player)
+    public static Level CreateLevel(string name, int mapSize, Player player, Vector2 startPosition)
     {
-        Map map = new Map(mapSize);
+        Map map = new Map(name, mapSize);
+        Level level = new Level(map, player, startPosition);
+
+        return level;
+    }
+    public static Level CreateLevel(string name, Vector2 mapSize, Player player, Vector2 startPosition)
+    {
+        Map map = new Map(name, new Vector2(mapSize.Y, mapSize.X));
+        Level level = new Level(map, player, startPosition);
+
+        return level;
+    }
+    public static Level CreateLevel(string name, int mapSizeX, int mapSizeY, Player player, Vector2 startPosition)
+    {
+        Map map = new Map(name, new Vector2(mapSizeY, mapSizeX));
+        Level level = new Level(map, player, startPosition);
+
+        return level;
+    }
+    
+    public static Level CreateLevel(string name, int mapSize, Player player, Actor[] objects, Vector2 startPosition)
+    {
+        Map map = new Map(name, mapSize, objects);
+        Level level = new Level(map, player, startPosition);
+
+        return level;
+    }
+    public static Level CreateLevel(string name, Vector2 mapSize, Player player, Actor[] objects, Vector2 startPosition)
+    {
+        Map map = new Map(name, new Vector2(mapSize.Y, mapSize.X), objects);
+        Level level = new Level(map, player, startPosition);
+
+        return level;
+    }
+    public static Level CreateLevel(string name, int mapSizeX, int mapSizeY, Player player, Actor[] objects, Vector2 startPosition)
+    {
+        Map map = new Map(name, new Vector2(mapSizeY, mapSizeX), objects);
+        Level level = new Level(map, player, startPosition);
+
+        return level;
+    }
+    
+    public static Level CreateLevel(string name, int mapSize, Player player)
+    {
+        Map map = new Map(name, mapSize);
         Level level = new Level(map, player);
 
         return level;
     }
-    public static Level CreateLevel(Vector2 mapSize, Player player)
+    public static Level CreateLevel(string name, Vector2 mapSize, Player player)
     {
-        Map map = new Map(mapSize);
+        Map map = new Map(name, new Vector2(mapSize.Y, mapSize.X));
         Level level = new Level(map, player);
 
         return level;
     }
-    public static Level CreateLevel(int mapSizeX, int mapSizeY, Player player)
+    public static Level CreateLevel(string name, int mapSizeX, int mapSizeY, Player player)
     {
-        Map map = new Map(new Vector2(mapSizeX, mapSizeY));
+        Map map = new Map(name, new Vector2(mapSizeY, mapSizeX));
         Level level = new Level(map, player);
 
         return level;
@@ -145,13 +190,25 @@ public static class Utilities
         return false;
     }
     
-    public static void Speak(string str)
+    public static void Speak(string str, string voice = "Microsoft David Desktop", int volume = 100)
     { 
         SpeechSynthesizer _synthesizer = new SpeechSynthesizer();
     
-        _synthesizer.Volume = 100;
-        _synthesizer.Rate = 2;
+        _synthesizer.Volume = volume;
+        _synthesizer.Rate = 0;
+        if (voice == "Microsoft David Desktop") _synthesizer.Rate = 2;
+        _synthesizer.SelectVoice(voice);
         
         _synthesizer.Speak(str);
+    }
+
+    public static Playback PlayMidi(string path)
+    {
+        var midiFile = MidiFile.Read(path);
+
+        OutputDevice outputDevice = OutputDevice.GetByIndex(0);
+        Playback playback = midiFile.GetPlayback(outputDevice);
+        
+        return playback;
     }
 }

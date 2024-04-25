@@ -1,7 +1,27 @@
-﻿namespace DungeonCrawler;
+﻿using System.Diagnostics;
+
+namespace DungeonCrawler;
 
 public static class Renderer
 {
+    public static void RenderDeathScreen()
+    {
+        Console.WriteLine("YOU DIED");
+
+        string line = DeathScreen.RandomLine();
+        Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#S%SS%%%%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@S%S%?****?%#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@S%S%*+;:,:+%%#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#%%S%?*?++*?%%S@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@S?%*;;**+;;*?#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@S%??**++**?S@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#????**??S@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@???*;;*?@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#?*+?%*++*S@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@#SS%+;;;;;;++*SS#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@###SS%%%%?****??**?%%%SSS###@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@%%@@@@@@%#@@@@@@@#S%%%%%S%%%%?*+++*%*+*%%%%SSSSSS#@@@@@@@@@#@@@@#S@@@@@@@@@@@@@@@@\n@@@@@@%?S*%@@@@@*+#@@@@@#S%%%%%%%%%%%?;++;;+**?%%%%%%%%SSS#@@@@@@@S?#@@#S@@@@@@@@@@@@@@@@@\n@@@@@@@???*?S@@@%+?@@@@#S%%%%%%%%?%%SS+;;:;+??%%%%%S%SSSSS#@@@@@@#%%@@#S@@@@@@@@@@@@@@@@@@\n@@@@@@@#??**???%%?*%S##SS%%%%%%%%???***;;;++??%%SSSSSSSSSS#@@#SSSSSSS%#@@@@@@@@@@@@@@@@@@@\n@@@@@@@@#%*????%??**%%+SS%%%%#S?%***+*?**+++??%SSSSSS#SSSS#@@S%SS%%S#@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@%???????*?%%?%S%%%S@@SSS*??%%*++++*?SSSSSS@@####S#@#SSSS##@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@#S%??**+?%?S%%%%SS###%S%%%%%?*++*%%%%SSSS##SS##SS#@#######@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@SSS%S%S%%%%%S@##@SSS%SS%%****??%SSSS#@########@@@@@##@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@#SSS%%%S#@@@@###SSSSS%++*SSS####@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@@@@@@@@@@@@@@@@@@@@##SSSSS@@@@@@###SSSS%???S#####@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        Utilities.Speak(line);
+        Debug.WriteLine(line);
+        
+        //Environment.Exit(0);
+    }
+
+    public static void RenderCutscene()
+    {
+        
+    }
+    
+    // Encounters
     public static void RenderEncounter(Encounter encounter, out int hpLeft, out int hpTop, out int optionsLeft, out int optionsTop)
     {
         // Set variables
@@ -57,16 +77,6 @@ public static class Renderer
         Console.WriteLine(player.Inventory);
     }
     
-    public static void RenderActions(int cursorLeft, int cursorTop)
-    {
-        ClearFightOptions(cursorLeft, cursorTop);
-        Console.SetCursorPosition(cursorLeft, cursorTop);
-
-        Console.WriteLine("0. Back");
-        Console.WriteLine("1. Talk");
-        Console.WriteLine("2. Check");
-    }
-    
     public static void RenderMessage(int cursorLeft, int cursorTop, string line)
     {
         ClearFightOptions(cursorLeft, cursorTop);
@@ -83,6 +93,8 @@ public static class Renderer
         {
             Console.WriteLine("                                                                                                                                                             ");
         }
+        
+        Console.SetCursorPosition(0, 0);
     }
     
     public static void RenderHP(Player player, Enemy enemy, int cursorLeft, int cursorTop)
@@ -103,6 +115,7 @@ public static class Renderer
         Console.Write("                             ");
     }
     
+    // Map
     public static void RenderMap(Map map)
     {
         Console.SetCursorPosition(0, 0);
@@ -120,8 +133,23 @@ public static class Renderer
             PrintColumn(map, i);
             if (drawHasEnded) PrintHorizontalBorder(map);
         }
+        PrintMapName(map);
+        
+        int top = rows + 2;
+        Console.SetCursorPosition(0, top);
+    }
 
-        Console.WriteLine();
+    static void PrintMapName(Map map)
+    {
+        int halfNameLength = map.Name.Length / 2;
+        if (map.Name.Length % 2 == 0) halfNameLength -= 1;
+        
+        int left = map.MapArr.GetLength(1) / 2;
+        if (left % 2 == 0) left += 1;
+        
+        Console.SetCursorPosition(left - halfNameLength, 0);
+        
+        Console.Write(map.Name);
     }
 
     static void PrintColumn(Map map, int i)

@@ -38,7 +38,6 @@ F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\DungeonCrawler.deps.jso
 F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\DungeonCrawler.runtimeconfig.json
 F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\DungeonCrawler.dll
 F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\DungeonCrawler.pdb
-F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\Sanford.Multimedia.Midi.dll
 F:\Tiltan\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.csproj.AssemblyReference.cache
 F:\Tiltan\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.GeneratedMSBuildEditorConfig.editorconfig
 F:\Tiltan\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.AssemblyInfoInputs.cache
@@ -52,3 +51,13 @@ F:\Tiltan\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\DungeonCrawler.genrunti
 F:\Tiltan\DungeonCrawler\DungeonCrawler\obj\Debug\net7.0\ref\DungeonCrawler.dll
 F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\System.Speech.dll
 F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Speech.dll
+F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\NAudio.dll
+F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\NAudio.Asio.dll
+F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\NAudio.Core.dll
+F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\NAudio.Midi.dll
+F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\NAudio.Wasapi.dll
+F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\NAudio.WinMM.dll
+F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\Melanchall_DryWetMidi_Native32.dll
+F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\Melanchall_DryWetMidi_Native64.dll
+F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\Melanchall_DryWetMidi_Native64.dylib
+F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\Melanchall.DryWetMidi.dll

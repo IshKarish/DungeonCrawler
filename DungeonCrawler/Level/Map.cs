@@ -4,34 +4,44 @@ namespace DungeonCrawler;
 
 public class Map
 {
+    public string Name { get; private set; }
+    
     public char[,] MapArr { get; private set; }
     public Actor[] Actors { get; private set; }
     private static int _rows;
     private static int _cols;
     
-    public Map(int size, Actor[] actors)
+    public Map(string name, int size, Actor[] actors)
     {
+        Name = name;
+        
         MapArr = new char[size, size * 2];
         Actors = new Actor[0];
         CreateMap(actors);
     }
     
-    public Map(Vector2 size, Actor[] actors)
+    public Map(string name, Vector2 size, Actor[] actors)
     {
+        Name = name;
+        
         MapArr = new char[size.X, size.Y];
         Actors = new Actor[0];
         CreateMap(actors);
     }
     
-    public Map(int size)
+    public Map(string name, int size)
     {
+        Name = name;
+        
         MapArr = new char[size, size * 2];
         Actors = new Actor[0];
         CreateMap();
     }
     
-    public Map(Vector2 size)
+    public Map(string name, Vector2 size)
     {
+        Name = name;
+        
         MapArr = new char[size.X, size.Y];
         Actors = new Actor[0];
         CreateMap();

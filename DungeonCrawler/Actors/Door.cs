@@ -10,10 +10,12 @@ public class Door : Actor
     public Level Destination { get; private set; }
     public Teleporter Teleporter { get; private set; }
 
-    public Door(int x, int y, Level destination, bool isEntrance = false)
+    public Door(int x, int y, Level destination, bool isEntrance = false, bool isOpened = false)
     {
         Destination = destination;
         IsEntrance = isEntrance;
+        IsOpened = isOpened;
+        
         Transform.SetScale(4, 2);
         Transform.SetPosition(x, y);
         Graphics.Color = ConsoleColor.Red;
@@ -24,8 +26,9 @@ public class Door : Actor
         if (IsEntrance) Renderer.OpenDoor(this);
     }
 
-    public Door(int x, int y, DoorDirection direction, Level destination, bool isEntrance = false)
+    public Door(int x, int y, DoorDirection direction, Level destination, bool isEntrance = false, bool isOpened = false)
     {
+        IsOpened = isOpened;
         Graphics.Color = ConsoleColor.Red;
         Direction = direction;
         Destination = destination;
@@ -43,8 +46,9 @@ public class Door : Actor
         if (IsEntrance) Renderer.OpenDoor(this);
     }
     
-    public Door(int x, int y, DoorDirection direction, ConsoleColor color, Level destination, bool isEntrance = false)
+    public Door(int x, int y, DoorDirection direction, ConsoleColor color, Level destination, bool isEntrance = false, bool isOpened = false)
     {
+        IsOpened = isOpened;
         Graphics.Color = color;
         Direction = direction;
         Destination = destination;
@@ -62,8 +66,9 @@ public class Door : Actor
         if (IsEntrance) Renderer.OpenDoor(this);
     }
 
-    public Door(Vector2 position, DoorDirection direction, ConsoleColor color, Level destination, bool isEntrance = false)
+    public Door(Vector2 position, DoorDirection direction, ConsoleColor color, Level destination, bool isEntrance = false, bool isOpened = false)
     {
+        IsOpened = isOpened;
         Graphics.Color = color;
         Direction = direction;
         Destination = destination;
@@ -81,8 +86,9 @@ public class Door : Actor
         if (IsEntrance) Renderer.OpenDoor(this);
     }
     
-    public Door(Vector2 position, DoorDirection direction, Level destination, bool isEntrance = false)
+    public Door(Vector2 position, DoorDirection direction, Level destination, bool isEntrance = false, bool isOpened = false)
     {
+        IsOpened = isOpened;
         Graphics.Color = ConsoleColor.Red;
         Direction = direction;
         Destination = destination;
@@ -100,8 +106,9 @@ public class Door : Actor
         if (IsEntrance) Renderer.OpenDoor(this);
     }
     
-    public Door(int x, int y, bool isEntrance = false)
+    public Door(int x, int y, bool isEntrance = false, bool isOpened = false)
     {
+        IsOpened = isOpened;
         IsEntrance = isEntrance;
         Transform.SetScale(4, 2);
         Transform.SetPosition(x, y);
@@ -114,8 +121,9 @@ public class Door : Actor
         if (IsEntrance) Renderer.OpenDoor(this);
     }
 
-    public Door(int x, int y, DoorDirection direction, bool isEntrance = false)
+    public Door(int x, int y, DoorDirection direction, bool isEntrance = false, bool isOpened = false)
     {
+        IsOpened = isOpened;
         Graphics.Color = ConsoleColor.Red;
         Direction = direction;
         IsEntrance = isEntrance;
@@ -132,8 +140,9 @@ public class Door : Actor
         if (IsEntrance) Renderer.OpenDoor(this);
     }
     
-    public Door(int x, int y, DoorDirection direction, ConsoleColor color, bool isEntrance = false)
+    public Door(int x, int y, DoorDirection direction, ConsoleColor color, bool isEntrance = false, bool isOpened = false)
     {
+        IsOpened = isOpened;
         Graphics.Color = color;
         Direction = direction;
         IsEntrance = isEntrance;
@@ -150,8 +159,9 @@ public class Door : Actor
         if (IsEntrance) Renderer.OpenDoor(this);
     }
 
-    public Door(Vector2 position, DoorDirection direction, ConsoleColor color, bool isEntrance = false)
+    public Door(Vector2 position, DoorDirection direction, ConsoleColor color, bool isEntrance = false, bool isOpened = false)
     {
+        IsOpened = isOpened;
         Graphics.Color = color;
         Direction = direction;
         IsEntrance = isEntrance;
@@ -168,8 +178,9 @@ public class Door : Actor
         if (IsEntrance) Renderer.OpenDoor(this);
     }
     
-    public Door(Vector2 position, DoorDirection direction, bool isEntrance = false)
+    public Door(Vector2 position, DoorDirection direction, bool isEntrance = false, bool isOpened = false)
     {
+        IsOpened = isOpened;
         Graphics.Color = ConsoleColor.Red;
         Direction = direction;
         IsEntrance = isEntrance;
@@ -222,6 +233,16 @@ public class Door : Actor
         Entry = new Vector2(xEntry, yEntry);
     }
 
+    public void SetAsEntrance(Actor[] actors)
+    {
+        foreach (Actor a in actors)
+        {
+            if (a is Door d) d.IsEntrance = false;
+        }
+
+        IsEntrance = true;
+    }
+
     public void Open()
     {
         IsOpened = true;
@@ -232,6 +253,6 @@ public class Door : Actor
     public void SetDestination(Level destination)
     {
         Destination = destination;
-        Teleporter= new Teleporter(this);
+        Teleporter.ChangeDestination(destination);
     }
 }
