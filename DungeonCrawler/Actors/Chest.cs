@@ -3,7 +3,7 @@
 public class Chest : Actor
 {
     public Item Item { get; private set; }
-    public Cutscene Cutscene { get; private set; }
+    public Sequence Sequence { get; private set; }
     
     public Chest(Item item)
     {
@@ -57,8 +57,8 @@ public class Chest : Actor
         Transform.SetPosition(new Vector2(x, y));
     }
 
-    public void AddCutscene(Cutscene cutscene)
+    public void AddCutscene(Sequence sequence)
     {
-        Cutscene = cutscene;
+        Sequence = sequence;
     }
 }

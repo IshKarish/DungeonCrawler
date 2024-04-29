@@ -1,46 +1,59 @@
-﻿using System.Collections.ObjectModel;
-using System.Speech.Synthesis;
-
-namespace DungeonCrawler;
+﻿namespace DungeonCrawler;
 
 class Program
 {
-    private static Player _player = new Player(9, 1, new Graphics('*', ConsoleColor.White));
-    private static SkeletalMesh _dorBenDor = new SkeletalMesh("Dor Ben Dor", "tfjnygvh", "Microsoft George");
-    private static SkeletalMesh _ofirKatz = new SkeletalMesh("Ofir Katz", "tfjnygvh", "Microsoft David Desktop", 80);
+    private static Player _player = new Player(new Graphics('*', ConsoleColor.White));
+    //private static SkeletalMesh _dorBenDor = new SkeletalMesh("Dor Ben Dor", "tfjnygvh", "Microsoft George");
+    //private static SkeletalMesh _ofirKatz = new SkeletalMesh("Ofir Katz", "tfjnygvh", "Microsoft David Desktop", 80);
 
     private static GameManager _gameManager = new GameManager();
     
     public static void Main(string[] args)
     {
-        SpeechSynthesizer s = new SpeechSynthesizer();
+        //ConsoleHelperLibrary.Classes.WindowUtility.SetConsoleWindowPosition(ConsoleHelperLibrary.Classes.WindowUtility.AnchorWindow.Fill);
+        Console.CursorVisible = false;
+
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine("$$\\   $$\\  $$$$$$\\  $$\\       $$$$$$$$\\       $$\\       $$$$$$\\ $$$$$$$$\\ $$$$$$$$\\        $$$$$$\\  \n$$ |  $$ |$$  __$$\\ $$ |      $$  _____|      $$ |      \\_$$  _|$$  _____|$$  _____|      $$ ___$$\\ \n$$ |  $$ |$$ /  $$ |$$ |      $$ |            $$ |        $$ |  $$ |      $$ |            \\_/   $$ |\n$$$$$$$$ |$$$$$$$$ |$$ |      $$$$$\\          $$ |        $$ |  $$$$$\\    $$$$$\\            $$$$$ / \n$$  __$$ |$$  __$$ |$$ |      $$  __|         $$ |        $$ |  $$  __|   $$  __|           \\___$$\\ \n$$ |  $$ |$$ |  $$ |$$ |      $$ |            $$ |        $$ |  $$ |      $$ |            $$\\   $$ |\n$$ |  $$ |$$ |  $$ |$$$$$$$$\\ $$ |            $$$$$$$$\\ $$$$$$\\ $$ |      $$$$$$$$\\       \\$$$$$$  |\n\\__|  \\__|\\__|  \\__|\\________|\\__|            \\________|\\______|\\__|      \\________|       \\______/ ");
+        Console.WriteLine();
+        Console.WriteLine("A game by The Banana Project");
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine("Press Enter to start.");
         
-        ReadOnlyCollection<InstalledVoice> a = s.GetInstalledVoices();
-        //Console.WriteLine(s.GetInstalledVoices().Count);
+        Console.ReadLine();
         
-        foreach (var t in a)
-        {
-            Console.WriteLine($"{t.VoiceInfo.Name} = {t.Enabled}");
-            s.Rate = -2;
-            s.Volume = 100;
-            //s.SelectVoice(t.VoiceInfo.Name);
-            //s.Speak("Lol");
-        }
+        Console.Clear();
+        Console.WriteLine();
+        Console.WriteLine();
+        //Renderer.Write("     There once was a Dor... \n     His name was Ben Dor.");
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+        //Thread.Sleep(2000);
+        Console.WriteLine("     Press Enter to continue...");
 
         Console.ReadLine();
         
-        Console.CursorVisible = false;
-        Console.SetWindowSize(350, 40);
-        
-        _gameManager.StartGame(StudioClassroom2017());
+        _gameManager.StartGame(Tiltan());
     }
 
     static Level StudioClassroom()
     {
         TriggerBox ofirCallTrigger = new TriggerBox(9, 1);
-        Cutscene ofirCall = new Cutscene();
-        ofirCall.AddLine("Rise and shine Dor Ben Dor, Rise and shine. It is me, Your friend, Ofir Katz, calling you. Listen, Can you come to dizingof center in 1 am? tiltan is probably closed now so i left you the classroom key by your desk, in the green chest with the dollars. as for tiltan's key, i forgot where it is.. so you better find it", _ofirKatz); 
-        ofirCall.AddLine("On my way!", _dorBenDor);
+        Sequence ofirCall = new Sequence(true);
+        ofirCall.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom\\RiseAndShineDorBenDor.wav"); 
+        ofirCall.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom\\RiseAndShine.wav");
+        ofirCall.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom\\ItIsMeYourFriendOfirKatz.wav");
+        ofirCall.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom\\CanYouComeToDizingofCenter.wav");
+        ofirCall.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom\\TiltanIsProbablyClosedNowSoILeftYouTheClassroomKeyByYourDeskInTheGreenChestWithTheDollars.wav");
+        ofirCall.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom\\AsForTiltansKeyIForgotWhereItIs.wav");
+        ofirCall.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom\\SoYouBetterFindIt.wav");
+        ofirCall.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom\\OnMyWay.wav");
         ofirCallTrigger.AddCutscene(ofirCall);
         
         Graphics deskGraphics = new Graphics('.', ConsoleColor.Gray);
@@ -169,7 +182,7 @@ class Program
             chair23, chair24, chair25, chair26, chair27, chair28, chair29, chair30, chair31, chair32, chair33, chair34, chair35, chair36, chair37, exitDoor, keyChest, ofirCallTrigger
         };
 
-        Level level = Utilities.CreateLevel("Studio class - Tiltan", new Vector2(65, 17), _player, actors);
+        Level level = Utilities.CreateLevel("Studio class - Tiltan", new Vector2(65, 17), _player, actors, new Vector2(9, 1));
         return level;
     } // Level 1
 
@@ -198,7 +211,7 @@ class Program
         Graphics wallGraphics = new Graphics('|', ConsoleColor.Black);
         
         Door hallwayDoor = new Door(7, 6, DoorDirection.Up, true);
-        Door exitDoor = new Door(57, 0, DoorDirection.Down, Train());
+        Door exitDoor = new Door(57, 0, DoorDirection.Down, TrainStation());
         Actor lockedDoor = new Actor(0, 8, 3, 2, doorGraphics);
         Actor lockedDoor2 = new Actor(0, 0, 2, 3, doorGraphics);
         Actor lockedDoor3 = new Actor(12, 8, 3, 2, doorGraphics);
@@ -241,21 +254,27 @@ class Program
         return level;
     } //Level 3
 
-    static Level Train()
+    static Level TrainStation()
     {
         TriggerBox trainAnnouncementTrigger = new TriggerBox(38, 2);
-        Cutscene trainAnnouncement = new Cutscene();
-        trainAnnouncement.AddLine("The next train to Modiiiin Merkaz will enter right away", new SkeletalMesh("Train lady", "a", "Microsoft Zira"));
+        Sequence trainAnnouncement = new Sequence();
+        trainAnnouncement.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\TheNextTrainToModiiiinMerkazWillEnterRightAway.wav");
         trainAnnouncementTrigger.AddCutscene(trainAnnouncement);
 
         TriggerBox ravPassTrigger = new TriggerBox(5, 4, 10, 1);
-        Cutscene ravPass = new Cutscene();
-        ravPass.AddLine("Oh. I can't believe it. The gps is gone and saying im in beirut so i can't come in. I will call Ofir to ask what to do", _dorBenDor);
-        ravPass.AddLine("Ring Ring... Ring Ring... Ring Ring", new SkeletalMesh("a", "a", "Microsoft Susan"));
-        ravPass.AddLine("Hello", _ofirKatz);
-        ravPass.AddLine("Ofir, I can't enter the station. What should i do?", _dorBenDor);
-        ravPass.AddLine("Try to find a way without the guard seeing you. He looks like red question mark. If he sees you, you will enter a fight. Luckily, most people are dumb, and can only see you from a straight line. So if you are coming diagonally they will not see you. Almost like you are the only real person, and all of the others are just NPCs, Hahahaha, Just kidding.", _ofirKatz);
-        ravPass.AddLine("I will call you when i'm there", _dorBenDor);
+        Sequence ravPass = new Sequence();
+        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\OhICantBelieveItTheGpsIsGoneAndSayingImInBeirutSoICantComeInIWillCallOfirToAskWhatToDo.wav");
+        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\RingRingRingRingRingRing.wav");
+        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\Hello.wav");
+        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\OfirICantEnterTheStationWhatShouldIDo.wav");
+        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\TryToFindAWayWithoutTheGuardSeeingYou.wav");
+        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\HeLooksLikeRedQuestionMark.wav");
+        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\IfHeSeesYouYouWillEnterAFight.wav");
+        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\LuckilyMostPeopleAreDumbAndCanOnlySeeYouFromAStraightLine.wav");
+        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\SoIfYouAreComingDiagonallyTheyWillNotSeeYou.wav");
+        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\AlmostLikeYouAreTheOnlyRealPersonAndAllOfTheOthersAreJustNPCs.wav");
+        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\HahahahaJustKidding.wav");
+        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\IWillCallYouWhenImThere.wav");
         
         ravPassTrigger.AddCutscene(ravPass);
         
@@ -296,23 +315,28 @@ class Program
         };
         
         Level level = Utilities.CreateLevel("Train station Haifa merkaz hashmona", new Vector2(50, 20), _player, actors);
+
+        Enemy guard = Utilities.GenerateEnemy(level, "Security guard");
+        Enemy[] enemies = { guard };
+        level.SetEnemies(enemies);
+        
         return level;
     } //Level 4
 
     static Level Dizingof()
     {
         TriggerBox callTrigger = new TriggerBox(97, 1);
-        Cutscene call = new Cutscene();
-        call.AddLine("Ring Ring... Ring Ring... Ring Ring", new SkeletalMesh("a", "a", "Microsoft Susan"));
-        call.AddLine("Hello", _ofirKatz);
-        call.AddLine("Ofir, I got to dizingof center. Where are you?", _dorBenDor);
-        call.AddLine("I'm outside", _ofirKatz);
-        call.AddLine("Where is the exit?", _dorBenDor);
-        call.AddLine("I literally have no idea", _ofirKatz);
-        call.AddLine("I will try to find it", _dorBenDor);
-        call.AddLine("Watch out. There are a lot of Center kids there", _ofirKatz);
-        call.AddLine("Don't worry", _dorBenDor);
-        //callTrigger.AddCutscene(call);
+        Sequence call = new Sequence(true);
+        call.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Dizingof\\RingRingRingRingRingRing.wav");
+        call.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Dizingof\\Hello.wav");
+        call.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Dizingof\\OfirIGotToDizingofCenterWhereAreYou.wav");
+        call.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Dizingof\\ImOutside.wav");
+        call.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Dizingof\\WhereIsTheExit.wav");
+        call.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Dizingof\\ILiterallyHaveNoIdea.wav");
+        call.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Dizingof\\IWillTryToFindIt.wav");
+        call.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Dizingof\\WatchOutThereAreALotOfCenterKidsThere.wav");
+        call.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Dizingof\\DontWorry.wav");
+        callTrigger.AddCutscene(call);
         
         Graphics graphics = new Graphics('#', ConsoleColor.Blue);
         
@@ -347,32 +371,45 @@ class Program
         Door exitDoor = new Door(18, 18, DoorDirection.Up, AnimeStore(), false, true);
         Door door5 = new Door(23, 5, DoorDirection.Right, NintendoStore(), false, true);
         Door door6 = new Door(41, 6, DoorDirection.Left, DoctorBack(), false, true);
+        Door door7 = new Door(30, 18, DoorDirection.Up, DMC(), false, true);
         Door entrance = new Door(98, 0, DoorDirection.Left, true, true);
 
         Actor[] actors =
         {
             actor, actor2, actor3, actor4, actor5, actor6, actor7, actor8, actor9, actor10, actor11, actor12, actor13, actor14, actor15, actor16, actor17, actor18, actor19, actor20,
-            actor21, actor22, actor23, actor24, doorBenDoor, door2, door3, exitDoor, door5, door6, entrance, callTrigger
+            actor21, actor22, actor23, actor24, doorBenDoor, door2, door3, exitDoor, door5, door6, entrance, callTrigger, door7
         };
         
         Level level = Utilities.CreateLevel("Dizingof Center", new Vector2(100, 20), _player, actors);
+
+        string[] names =
+        {
+            "Center kid (They/Them)", "Center kid (Gay)", "Center kid (Furry)", "Center kid (Ze/Zem)", "Center kid (He/Her)", "Center kid (She/Him)", "Center kid (Transgender)",
+            "Center kid (Refrigerator)", "Center kid (Who/He/Remains)", "Center kid (Ori/Meir)"
+        };
+        
+        Enemy[] enemies = Utilities.GenerateEnemies(40, level, names);
+        level.SetEnemies(enemies);
+        
         return level;
     } // Level 5
 
     static Level TelAviv() // Level 6
     {
-        TriggerBox entranceTrigger = new TriggerBox(2, 1);
-        Cutscene ofir = new Cutscene();
-        ofir.AddLine("Dor Ben Dor! You Came! it is me, Ofir Katz! Look what i build! It's a time machine by the way", Program._ofirKatz);
-        ofir.AddLine("Wait a minute Ofir, Are you telling me you built a time machine out of a Delorean?", _dorBenDor);
-        ofir.AddLine("Well i figured if you gonna build a time machine into a car, Why not do it with some style?", Program._ofirKatz);
+        TriggerBox entranceTrigger = new TriggerBox(2, 2);
+        Sequence ofir = new Sequence();
+        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv\\DorBenDorYouCameItIsMeOfirKatzLookWhatIBuildItsATimeMachineByTheWay.wav");
+        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv\\WaitAMinuteOfirAreYouTellingMeYouBuiltATimeMachineOutOfADelorean.wav");
+        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv\\WellIFiguredIfYouGonnaBuildATimeMachineIntoACarWhyNotDoItWithSomeStyle.wav");
+        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv\\CanITry.wav");
+        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv\\OfCourseJustStepIntoTheCar.wav");
         entranceTrigger.AddCutscene(ofir);
         
-        Door entrance = new Door(0, 0, DoorDirection.Right, true);
+        Door entrance = new Door(0, 1, DoorDirection.Right, true);
         Door obanKobanDoor = new Door(5, 4, DoorDirection.Up, ObanKoban(), false, true);
 
         Mesh delorean = new Mesh("                                                                                          \n                                                                      .                   \n                                                                                          \n                                                                  =#*: =.     .::..       \n                                                            ..  .+##=---=    =#####*      \n                                                  ..--:....-:...:-=++=@%%:.-*#####%#-     \n                                             ...:::::---::----::==-*=-=*+--=**+**+%#*     \n                                       .:-====-----::::::::---::---===+-:-+*+******++:    \n                                   .:--:...::--===========-:--=+++**#+=++:=+=*+++**+==-   \n                             .++===-::::::---=====-----=++:=#######%%%#+*#=-+==-------=:  \n                            :=+=-==----============---=*+:=#####%%#*###+++*+---===+*#+:+. \n                        ...:-===++=+#===+++=-----===-=*=:+#####***++===+===+*+-+#%%#+#-:  \n                 . ..::::::::::::::-===+*##%%#+==+===*=:+##%%%%*=========-==*+*#**#%*%*   \n              .:::::::::::::::::::::::::::::--====++++-=+***+++========++=++%##++++#++:   \n        .:.:::::::::::::::::::::::::::::::::::::------============+++++====*#%*==+=#      \n     .=+===------::::::::::::::::::::::::::::--=--------+====++++========+##%%*=++*=      \n   .:*==*+*#*++=====----:::::::::::::::..:-+++=+*#*=--=++*++=--====++**#%%@@@%#****..     \n  .=-=+*++%%%%+*###**++===----:-::.... .==:.:+#%%####+=--=+===+**##%%#%%#**#@@%%#=..      \n   .::.:-+-+###*#%%%%@#++#+++-::.  ::*++.--*%%%#%%@%#=-==+*#%%%%#++==+++======-:...       \n     .*++=-..:--+-+*##*++#+=+::.-..=*%%%#*%%#*+*+*%@###%%%@@%*==+*++=--:::.........       \n     .+*%%%%#*+=-:...:-===+++===*#%%=#%%#@%#*-==+=%%%%%%%%%#**+=--::..........            \n         .:-+*#%@@%#*+=--...:..:%#%%-***@%%*+-+=++%%%%#*++==--::.........                 \n     .....:::-+*##%%%@@@%%#***##%%%%%##%@@%*+++++##*+==--:::.......                       \n    ......:::-==+++***###%%%%%@#**##%%@@@@%%####%*=--::........                           \n      ....::::---====+++++***#####%%%%%%%%%%%#*=-:.........                               \n        ......::::-----=================---::........                                     \n              .......:::::::::::::::::.......                                             \n");
-        Teleporter carDoor = new Teleporter(17, 4, 5, 1, new CutsceneLevel(delorean, "F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\MIDI\\BTTF.mid", TelAviv2017(), _gameManager), new Graphics('_', ConsoleColor.Black));
+        Teleporter carDoor = new Teleporter(17, 4, 5, 1, new CutsceneLevel(delorean, $"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\MIDI\\BTTF.mid", TelAviv2017(), _gameManager), new Graphics('_', ConsoleColor.Black));
 
         Actor ofirKatz = new Actor(13, 5, 1, 1, new Graphics('!', ConsoleColor.DarkRed));
 
@@ -387,15 +424,14 @@ class Program
 
     static Level TelAviv2017()
     {
-        SkeletalMesh randomManSM = new SkeletalMesh("Random Man", "a", "Microsoft Asaf");
-        
         TriggerBox entranceTrigger = new TriggerBox(15, 4);
-        Cutscene dialog = new Cutscene();
-        dialog.AddLine("Wow, I traveled back in time! Excuse me kind sir, what year is it?", _dorBenDor);
-        dialog.AddLine("2017", randomManSM);
-        dialog.AddLine("And what are those boxes?", _dorBenDor);
-        dialog.AddLine("In the left box, some bitcoins. In the right box, all of the stocks of E A, the gaming company.", randomManSM);
-        dialog.AddLine("Oh my god! I can buy bitcoins here in the past, and be reach when i go back to the future!", _dorBenDor);
+        Sequence dialog = new Sequence();
+        dialog.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\WowITraveledBackInTimeExcuseMeKindSirWhatYearIsIt.wav");
+        dialog.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\2017.wav");
+        dialog.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\AndWhatAreThoseBoxes.wav");
+        dialog.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\InTheLeftBoxSomeBitcoins.wav");
+        dialog.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\InTheRightBoxAllOfTheStocksOfEATheGamingCompany.wav");
+        dialog.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\OhMyGodICanBuyBitcoinsHereInThePastAndBeReachWhenIGoBackToTheFuture.wav");
         entranceTrigger.AddCutscene(dialog);
         
         Door door = new Door(5, 4, DoorDirection.Up, NotKoban(), false, true);
@@ -406,14 +442,17 @@ class Program
         Actor carWheel2 = new Actor(21, 5, 1, 1, new Graphics('@', ConsoleColor.Black));
         Actor carBase = new Actor(17, 4, 5, 1, new Graphics('_', ConsoleColor.Black));
 
-        Chest chest = new Chest(new Item("Bitcoin"), 3, 0);
-        Cutscene cutscene = new Cutscene();
-        cutscene.AddLine("haha i am rich now lol", _dorBenDor);
-        chest.AddCutscene(cutscene);
+        Chest chest = new Chest(new Item("EA stocks"), 3, 0);
+        Sequence sequence = new Sequence();
+        sequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\Box2\\WhatTheFuck.wav");
+        sequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\Box2\\ThatBoxHasNoBitcoins.wav");
+        sequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\Box2\\JustEAStocks.wav");
+        chest.AddCutscene(sequence);
         
         Chest chest2 = new Chest(new Item("EA stocks"), 10, 0);
-        Cutscene cutscene2 = new Cutscene();
-        cutscene2.AddLine("Oh no. I accidentally took all of the stocks of EA. I guess i am the CEO now", _dorBenDor);
+        Sequence cutscene2 = new Sequence();
+        cutscene2.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\Box1\\OhNoIAccidentallyTookAllOfTheStocksOfEA.wav");
+        cutscene2.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\Box1\\IGuessIAmTheCEONow.wav");
         chest2.AddCutscene(cutscene2);
         
         Actor[] actors = { door, randomMan, entranceTrigger, carWheel, carWheel2, carBase, chest, chest2 };
@@ -424,21 +463,19 @@ class Program
 
     static Level NotKoban() // Level 8
     {
-        SkeletalMesh managerSM = new SkeletalMesh("Master Koban", "a", "Microsoft Susan");
-        
         TriggerBox entranceTrigger = new TriggerBox(34, 4);
-        Cutscene entranceCutscene = new Cutscene();
-        entranceCutscene.AddLine("Hello!", managerSM);
-        entranceCutscene.AddLine("Hi, What happened here?", _dorBenDor);
-        entranceCutscene.AddLine("Oh, i am just building a new restaurant called Oban Koban", managerSM);
-        entranceCutscene.AddLine("Hey i know this restaurant. i ate there", _dorBenDor);
-        entranceCutscene.AddLine("What do you mean you ate there? It's brand new!", managerSM);
-        entranceCutscene.AddLine("Anyway, How can i arrive to tiltan?", _dorBenDor);
-        entranceCutscene.AddLine("What's tiltan?", managerSM);
-        entranceCutscene.AddLine("Sorry i meant mac and learn", _dorBenDor);
-        entranceCutscene.AddLine("Oh it's in haifa right pass the back door", managerSM);
-        entranceCutscene.AddLine("Thank you", _dorBenDor);
-        entranceTrigger.AddCutscene(entranceCutscene);
+        Sequence entranceSequence = new Sequence();
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\NotKoban\\Hello.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\NotKoban\\HiWhatHappenedHere.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\NotKoban\\OhIAmJustBuildingANewRestaurantCalledObanKoban.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\NotKoban\\HeyIKnowThisRestaurantIAteThere.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\NotKoban\\WhatDoYouMeanYouAteThereItsBrandNew.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\NotKoban\\AnywayHowCanIArriveToTiltan.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\NotKoban\\WhatsTiltan.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\NotKoban\\SorryIMeantMacAndLearn.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\NotKoban\\OhItsInHaifaRightPassTheBackDoor.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\NotKoban\\ThankYou.wav");
+        entranceTrigger.AddCutscene(entranceSequence);
         
         Graphics tableGraphics = new Graphics('#', ConsoleColor.Blue);
         
@@ -473,10 +510,10 @@ class Program
     static Level Tiltan2017()
     {
         TriggerBox entranceTrigger = new TriggerBox(58, 2);
-        Cutscene entranceCutscene = new Cutscene();
-        entranceCutscene.AddLine("Wow, how empty was this place in 2017", _dorBenDor);
-        entranceCutscene.AddLine("I'll go search Ofir Katz now, He is probably in the studio classroom", _dorBenDor);
-        entranceTrigger.AddCutscene(entranceCutscene);
+        Sequence entranceSequence = new Sequence();
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Tiltan2017\\WowHowEmptyWasThisPlaceIn2.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Tiltan2017\\IllGoSearchOfirKatzNowHeIsProbablyInTheStudioClassroom.wav");
+        entranceTrigger.AddCutscene(entranceSequence);
         
         Graphics doorGraphics = new Graphics('&', ConsoleColor.Red);
         Graphics wallGraphics = new Graphics('|', ConsoleColor.Black);
@@ -505,6 +542,7 @@ class Program
         };
         
         Level level = Utilities.CreateLevel("Mac and learn Campus (Floor 3)", new Vector2(60, 10), _player, actors);
+        
         return level;
     } // Level 9
     
@@ -528,25 +566,25 @@ class Program
     static Level StudioClassroom2017()
     {
         TriggerBox entranceTrigger = new TriggerBox(63, 2);
-        Cutscene entranceCutscene = new Cutscene();
-        entranceCutscene.AddLine("Hello Ofir", _dorBenDor);
-        entranceCutscene.AddLine("Who the hell are you?", _ofirKatz);
-        entranceCutscene.AddLine("Your friend, Dor Ben Dor. I'm from the future, and i came here in a time machine that you invented", _dorBenDor);
-        entranceCutscene.AddLine("Your lying", _ofirKatz);
-        entranceCutscene.AddLine("No i dont", _dorBenDor);
-        entranceCutscene.AddLine("Prove it", _ofirKatz);
-        entranceCutscene.AddLine("Grime is currently in development", _dorBenDor);
-        entranceCutscene.AddLine("Holy shit. I haven't told anyone about grime yet.", _ofirKatz);
-        entranceCutscene.AddLine("Do you know what that means?", _ofirKatz);
-        entranceCutscene.AddLine("What?", _dorBenDor);
-        entranceCutscene.AddLine("I finally invented something that works!", _ofirKatz);
-        entranceCutscene.AddLine("Yes here's a picture of mine from the future", _dorBenDor);
-        entranceCutscene.AddLine("Can you come and show me this?", _ofirKatz);
-        entranceCutscene.AddLine("Coming", _dorBenDor);
-        entranceTrigger.AddCutscene(entranceCutscene);
+        Sequence entranceSequence = new Sequence();
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\HelloOfir.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\WhoTheHellAreYou.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\YourFriendDorBenDorImFromTheFutureAndICameHereInATimeMachineThatYouInvented.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\YourLying.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\NoIDont.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\ProveIt.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\GrimeIsCurrentlyInDevelopment.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\HolyShitIHaventToldAnyoneAboutGrimeYet.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\DoYouKnowWhatThatMeans.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\What.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\IFinallyInventedSomethingThatWorks.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\YesHeresAPictureOfMineFromTheFuture.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\CanYouComeAndShowMeThis.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\Coming.wav");
+        entranceTrigger.AddCutscene(entranceSequence);
 
-        Mesh Dor = new Mesh("$$\\      $$\\  $$$$$$\\  $$$$$$$\\  $$$$$$$$\\       $$\\      $$\\ $$$$$$\\ $$$$$$$$\\ $$\\   $$\\        $$$$$$\\    $$\\ $$\\   \n$$$\\    $$$ |$$  __$$\\ $$  __$$\\ $$  _____|      $$ | $\\  $$ |\\_$$  _|\\__$$  __|$$ |  $$ |      $$  __$$\\   $$ \\$$ \\  \n$$$$\\  $$$$ |$$ /  $$ |$$ |  $$ |$$ |            $$ |$$$\\ $$ |  $$ |     $$ |   $$ |  $$ |      $$ /  \\__|$$$$$$$$$$\\ \n$$\\$$\\$$ $$ |$$$$$$$$ |$$ |  $$ |$$$$$\\          $$ $$ $$\\$$ |  $$ |     $$ |   $$$$$$$$ |      $$ |      \\_$$  $$   |\n$$ \\$$$  $$ |$$  __$$ |$$ |  $$ |$$  __|         $$$$  _$$$$ |  $$ |     $$ |   $$  __$$ |      $$ |      $$$$$$$$$$\\ \n$$ |\\$  /$$ |$$ |  $$ |$$ |  $$ |$$ |            $$$  / \\$$$ |  $$ |     $$ |   $$ |  $$ |      $$ |  $$\\ \\_$$  $$  _|\n$$ | \\_/ $$ |$$ |  $$ |$$$$$$$  |$$$$$$$$\\       $$  /   \\$$ |$$$$$$\\    $$ |   $$ |  $$ |      \\$$$$$$  |  $$ |$$ |  \n\\__|     \\__|\\__|  \\__|\\_______/ \\________|      \\__/     \\__|\\______|   \\__|   \\__|  \\__|       \\______/   \\__|\\__|  \n                                                                                                                     \n**************************************************\n**************************************************\n*****************##*******************************\n***************#%%%%%##%##************************\n**************%%%%@%%%%%%%%#**********************\n**************#%%++===+#%%%@%*********************\n*****************=+**++*%%#%%*********************\n****************+=##*+**%%#%%*********************\n***************==+#====#%%%**###******************\n***************##****##%@%*+*++**##***************\n***************#*=+*%%@%%+=++==+++**#*************\n***************#%%%%%%%*+++===+#+=+**#************\n***************+#%#**+++====++#%#++=+*#***********\n**************=-+*#*++++++***###%*+++=*#**********\n**************-=*#*#+===+++***###**=-=+#**********\n**************-+#****+=====+*###****++##**********\n**************-+##***%%+*+#%%%%%****++*#**********\n**************=+*#****#%###%###%#**=-==#**********\n********************##%%###**###%#**+##***********\n********************##%*******##%*****************\n********************#%%#*****####*****************\n***************#%#***##%%%%%%#***#%%#*************\n****************####################**************\n**************************************************\n**************************************************\n\n");
-        Teleporter pictureTrigger = new Teleporter(10, 0, new CutsceneLevel(Dor, StudioClassroom20172(), _gameManager));
+        Mesh dor = new Mesh("$$\\      $$\\  $$$$$$\\  $$$$$$$\\  $$$$$$$$\\       $$\\      $$\\ $$$$$$\\ $$$$$$$$\\ $$\\   $$\\        $$$$$$\\    $$\\ $$\\   \n$$$\\    $$$ |$$  __$$\\ $$  __$$\\ $$  _____|      $$ | $\\  $$ |\\_$$  _|\\__$$  __|$$ |  $$ |      $$  __$$\\   $$ \\$$ \\  \n$$$$\\  $$$$ |$$ /  $$ |$$ |  $$ |$$ |            $$ |$$$\\ $$ |  $$ |     $$ |   $$ |  $$ |      $$ /  \\__|$$$$$$$$$$\\ \n$$\\$$\\$$ $$ |$$$$$$$$ |$$ |  $$ |$$$$$\\          $$ $$ $$\\$$ |  $$ |     $$ |   $$$$$$$$ |      $$ |      \\_$$  $$   |\n$$ \\$$$  $$ |$$  __$$ |$$ |  $$ |$$  __|         $$$$  _$$$$ |  $$ |     $$ |   $$  __$$ |      $$ |      $$$$$$$$$$\\ \n$$ |\\$  /$$ |$$ |  $$ |$$ |  $$ |$$ |            $$$  / \\$$$ |  $$ |     $$ |   $$ |  $$ |      $$ |  $$\\ \\_$$  $$  _|\n$$ | \\_/ $$ |$$ |  $$ |$$$$$$$  |$$$$$$$$\\       $$  /   \\$$ |$$$$$$\\    $$ |   $$ |  $$ |      \\$$$$$$  |  $$ |$$ |  \n\\__|     \\__|\\__|  \\__|\\_______/ \\________|      \\__/     \\__|\\______|   \\__|   \\__|  \\__|       \\______/   \\__|\\__|  \n                                                                                                                     \n**************************************************\n**************************************************\n*****************##*******************************\n***************#%%%%%##%##************************\n**************%%%%@%%%%%%%%#**********************\n**************#%%++===+#%%%@%*********************\n*****************=+**++*%%#%%*********************\n****************+=##*+**%%#%%*********************\n***************==+#====#%%%**###******************\n***************##****##%@%*+*++**##***************\n***************#*=+*%%@%%+=++==+++**#*************\n***************#%%%%%%%*+++===+#+=+**#************\n***************+#%#**+++====++#%#++=+*#***********\n**************=-+*#*++++++***###%*+++=*#**********\n**************-=*#*#+===+++***###**=-=+#**********\n**************-+#****+=====+*###****++##**********\n**************-+##***%%+*+#%%%%%****++*#**********\n**************=+*#****#%###%###%#**=-==#**********\n********************##%%###**###%#**+##***********\n********************##%*******##%*****************\n********************#%%#*****####*****************\n***************#%#***##%%%%%%#***#%%#*************\n****************####################**************\n**************************************************\n**************************************************\n\n");
+        Teleporter pictureTrigger = new Teleporter(10, 0, 1, 2, new CutsceneLevel(dor, StudioClassroom20172(), _gameManager), new Graphics(' ', ConsoleColor.Black));
         
         Graphics deskGraphics = new Graphics('.', ConsoleColor.Gray);
         
@@ -681,16 +719,16 @@ class Program
     
     static Level StudioClassroom20172()
     {
-        TriggerBox entranceTrigger = new TriggerBox(63, 2);
-        Cutscene entranceCutscene = new Cutscene();
-        entranceCutscene.AddLine("Wow very cool", _ofirKatz);
-        entranceCutscene.AddLine("Anyway, We need to get you back to the future", _ofirKatz);
-        entranceCutscene.AddLine("Yes we just need 1.21 gigawatts", _dorBenDor);
-        entranceCutscene.AddLine("Ok never mind you stuck here", _ofirKatz);
-        entranceCutscene.AddLine("Next week Apple are introducing the Vision Pro with 1.21 gigawatts battery", _dorBenDor);
-        entranceCutscene.AddLine("Great so we will use that.", _ofirKatz);
-        entranceCutscene.AddLine("I'll wait for you at floor 0. Come when you ready", _ofirKatz);
-        entranceTrigger.AddCutscene(entranceCutscene);
+        TriggerBox entranceTrigger = new TriggerBox(10, 0, 1, 2);
+        Sequence entranceSequence = new Sequence();
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017(2)\\WowVeryCool.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017(2)\\AnywayWeNeedToGetYouBackToTheFuture.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017(2)\\YesWeJustNeed1Gigawatts.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017(2)\\OkNeverMindYouStuckHere.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017(2)\\NextWeekAppleAreIntroducingTheVisionProWith1GigawattsBattery.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017(2)\\GreatSoWeWillUseThat.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017(2)\\IllWaitForYouAtFloor0ComeWhenYouReady.wav");
+        entranceTrigger.AddCutscene(entranceSequence);
         
         Graphics deskGraphics = new Graphics('.', ConsoleColor.Gray);
         
@@ -819,33 +857,517 @@ class Program
             chair23, chair24, chair25, chair26, chair27, chair28, chair29, chair30, chair31, chair32, chair33, chair34, chair35, chair36, chair37, exitDoor, entranceTrigger, ofirKatz
         };
 
-        Level level = Utilities.CreateLevel("Studio class - Mac and learn", new Vector2(65, 17), _player, actors);
+        Level level = Utilities.CreateLevel("Studio class - Mac and learn", new Vector2(65, 17), _player, actors, new Vector2(10, 1));
         return level;
     } // Level 12
     
     static Level Floor0() // Level 13
     {
-        TriggerBox entranceTrigger = new TriggerBox(1, 3);
-        Cutscene ofir = new Cutscene();
-        ofir.AddLine("Dor Ben Dor! You Came! it is me, Ofir Katz! Look what i build! It's a time machine by the way", Program._ofirKatz);
-        ofir.AddLine("Wait a minute Ofir, Are you telling me you built a time machine out of a Delorean?", _dorBenDor);
-        ofir.AddLine("Well i figured if you gonna build a time machine into a car, Why not do it with some style?", Program._ofirKatz);
+        TriggerBox entranceTrigger = new TriggerBox(11, 3);
+        Sequence ofir = new Sequence();
+        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0\\ByTheWayHaveYouChangedAnythingWhileYouWereHere.wav");
+        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0\\IAccidentallyBoughtAllOfEAStocksSoIOwnTheCompanyNow.wav");
+        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0\\WhatShowMeYourPictureAgain.wav");
         entranceTrigger.AddCutscene(ofir);
         
-        Door entrance = new Door(0, 0, DoorDirection.Up, false, true);
-        Door exit = new Door(3, 4, DoorDirection.Left, true, true);
+        Door exit = new Door(1, 0, DoorDirection.Down, false, true);
+        Door elevator = new Door(12, 2, DoorDirection.Left, true, true);
 
-        Mesh delorean = new Mesh("                                                                                          \n                                                                      .                   \n                                                                                          \n                                                                  =#*: =.     .::..       \n                                                            ..  .+##=---=    =#####*      \n                                                  ..--:....-:...:-=++=@%%:.-*#####%#-     \n                                             ...:::::---::----::==-*=-=*+--=**+**+%#*     \n                                       .:-====-----::::::::---::---===+-:-+*+******++:    \n                                   .:--:...::--===========-:--=+++**#+=++:=+=*+++**+==-   \n                             .++===-::::::---=====-----=++:=#######%%%#+*#=-+==-------=:  \n                            :=+=-==----============---=*+:=#####%%#*###+++*+---===+*#+:+. \n                        ...:-===++=+#===+++=-----===-=*=:+#####***++===+===+*+-+#%%#+#-:  \n                 . ..::::::::::::::-===+*##%%#+==+===*=:+##%%%%*=========-==*+*#**#%*%*   \n              .:::::::::::::::::::::::::::::--====++++-=+***+++========++=++%##++++#++:   \n        .:.:::::::::::::::::::::::::::::::::::::------============+++++====*#%*==+=#      \n     .=+===------::::::::::::::::::::::::::::--=--------+====++++========+##%%*=++*=      \n   .:*==*+*#*++=====----:::::::::::::::..:-+++=+*#*=--=++*++=--====++**#%%@@@%#****..     \n  .=-=+*++%%%%+*###**++===----:-::.... .==:.:+#%%####+=--=+===+**##%%#%%#**#@@%%#=..      \n   .::.:-+-+###*#%%%%@#++#+++-::.  ::*++.--*%%%#%%@%#=-==+*#%%%%#++==+++======-:...       \n     .*++=-..:--+-+*##*++#+=+::.-..=*%%%#*%%#*+*+*%@###%%%@@%*==+*++=--:::.........       \n     .+*%%%%#*+=-:...:-===+++===*#%%=#%%#@%#*-==+=%%%%%%%%%#**+=--::..........            \n         .:-+*#%@@%#*+=--...:..:%#%%-***@%%*+-+=++%%%%#*++==--::.........                 \n     .....:::-+*##%%%@@@%%#***##%%%%%##%@@%*+++++##*+==--:::.......                       \n    ......:::-==+++***###%%%%%@#**##%%@@@@%%####%*=--::........                           \n      ....::::---====+++++***#####%%%%%%%%%%%#*=-:.........                               \n        ......::::-----=================---::........                                     \n              .......:::::::::::::::::.......                                             \n");
-        //Teleporter carDoor = new Teleporter(17, 4, 5, 1, new CutsceneLevel(delorean, "F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\MIDI\\BTTF.mid", TelAviv2017(), _gameManager), new Graphics('_', ConsoleColor.Black));
+        Mesh dor = new Mesh("$$\\      $$\\  $$$$$$\\  $$$$$$$\\  $$$$$$$$\\       $$\\      $$\\ $$$$$$\\ $$$$$$$$\\ $$\\   $$\\       $$\\   $$\\ $$\\   $$\\ $$$$$$\\ $$$$$$$$\\ $$\\     $$\\ \n$$$\\    $$$ |$$  __$$\\ $$  __$$\\ $$  _____|      $$ | $\\  $$ |\\_$$  _|\\__$$  __|$$ |  $$ |      $$ |  $$ |$$$\\  $$ |\\_$$  _|\\__$$  __|\\$$\\   $$  |\n$$$$\\  $$$$ |$$ /  $$ |$$ |  $$ |$$ |            $$ |$$$\\ $$ |  $$ |     $$ |   $$ |  $$ |      $$ |  $$ |$$$$\\ $$ |  $$ |     $$ |    \\$$\\ $$  / \n$$\\$$\\$$ $$ |$$$$$$$$ |$$ |  $$ |$$$$$\\          $$ $$ $$\\$$ |  $$ |     $$ |   $$$$$$$$ |      $$ |  $$ |$$ $$\\$$ |  $$ |     $$ |     \\$$$$  /  \n$$ \\$$$  $$ |$$  __$$ |$$ |  $$ |$$  __|         $$$$  _$$$$ |  $$ |     $$ |   $$  __$$ |      $$ |  $$ |$$ \\$$$$ |  $$ |     $$ |      \\$$  /   \n$$ |\\$  /$$ |$$ |  $$ |$$ |  $$ |$$ |            $$$  / \\$$$ |  $$ |     $$ |   $$ |  $$ |      $$ |  $$ |$$ |\\$$$ |  $$ |     $$ |       $$ |    \n$$ | \\_/ $$ |$$ |  $$ |$$$$$$$  |$$$$$$$$\\       $$  /   \\$$ |$$$$$$\\    $$ |   $$ |  $$ |      \\$$$$$$  |$$ | \\$$ |$$$$$$\\    $$ |       $$ |    \n\\__|     \\__|\\__|  \\__|\\_______/ \\________|      \\__/     \\__|\\______|   \\__|   \\__|  \\__|       \\______/ \\__|  \\__|\\______|   \\__|       \\__|    \n**************************************************\n**************************************************\n*****************##*******************************\n***************#%%%%%##%##************************\n**************%%%%@%%%%%%%%#**********************\n**************#%%++===+#%%%@%*********************\n*****************=+**++*%%#%%*********************\n****************+=##*+**%%#%%*********************\n***************==+#====#%%%**###******************\n***************##****##%@%*+*++**##***************\n***************#*=+*%%@%%+=++==+++**#*************\n***************#%%%%%%%*+++===+#+=+**#************\n***************+#%#**+++====++#%#++=+*#***********\n**************=-+*#*++++++***###%*+++=*#**********\n**************-=*#*#+===+++***###**=-=+#**********\n**************-+#****+=====+*###****++##**********\n**************-+##***%%+*+#%%%%%****++*#**********\n**************=+*#****#%###%###%#**=-==#**********\n********************##%%###**###%#**+##***********\n********************##%*******##%*****************\n********************#%%#*****####*****************\n***************#%#***##%%%%%%#***#%%#*************\n****************####################**************\n**************************************************\n**************************************************\n\n");
+        Teleporter pictureTrigger = new Teleporter(0, 3, 3, 3, new CutsceneLevel(dor, Floor02(), _gameManager), new Graphics(' ', ConsoleColor.Black));
+        
+        Actor ofirKatz = new Actor(1, 4, 1, 1, new Graphics('!', ConsoleColor.DarkRed));
+        
+        Actor[] actors = { exit, entranceTrigger, elevator, pictureTrigger, ofirKatz };
+        
+        Level level = Utilities.CreateLevel("Floor 0", 7, _player, actors);
+        return level;
+    }
+    
+    static Level Floor02() // Level 13
+    {
+        TriggerBox entranceTrigger = new TriggerBox(2, 4);
+        Sequence greatScott = new Sequence();
+        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\OhNo.wav");
+        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\WhatHappened.wav");
+        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\IsThereAChanceSomethingHappenedWithTheUnityEngineInTheFuture.wav");
+        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\YesTheyTook2CentsForEveryDownloadSoManyPeopleLeftTheEngine.wav");
+        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\WasThatRelatedToEASomehow.wav");
+        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\UnityCEOWasFormerEACeo.wav");
+        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\GreatScott.wav");
+        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\What.wav");
+        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\IGuessYourStocksExchangeCreatedAChainReaction.wav");
+        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\andYouEndedUpBeingCreatedInUnityInsteadOfPlainCConsoleApplication.wav");
+        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\AndYouAreGoingToBe.wav");
+        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\ErasedFromExistence.wav");
+        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\WowThisIsHeavy.wav");
+        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\TheresThatWordAgain.wav");
+        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\Heavy.wav");
+        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\WhyAreThingsSoHeavyInTheFuture.wav");
+        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\IsThereAProblemWithTheEarthsGravitationalPull.wav");
+        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\LetsGoOutAndFigureWhatToDo.wav");
+        entranceTrigger.AddCutscene(greatScott);
+        
+        Door exit = new Door(1, 0, DoorDirection.Down, Train2017(), false, true);
+        Door elevator = new Door(12, 2, DoorDirection.Left, false, true);
+        
+        Actor ofirKatz = new Actor(0, 4, 1, 1, new Graphics('!', ConsoleColor.DarkRed));
+        
+        Actor[] actors = { exit, ofirKatz, entranceTrigger, elevator };
+        
+        Level level = Utilities.CreateLevel("Floor 0", 7, _player, actors, new Vector2(2, 4));
+        return level;
+    }
+    
+    static Level Train2017()
+    {
+        TriggerBox trainAnnouncementTrigger = new TriggerBox(38, 2);
+        Sequence trainAnnouncement = new Sequence(true);
+        trainAnnouncement.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train2017\\TheNextTrainToTheUnitedStatesWillEnterRightAway.wav");
+        trainAnnouncementTrigger.AddCutscene(trainAnnouncement);
 
-        Actor ofirKatz = new Actor(1, 6, 1, 1, new Graphics('!', ConsoleColor.DarkRed));
+        TriggerBox ravPassTrigger = new TriggerBox(5, 4, 10, 1);
+        Sequence ravPass = new Sequence();
+        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train2017\\RavPass\\WaitYouAreFromTheFutureSoTheRavKavWillNotWork.wav");
+        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train2017\\RavPass\\DontWorryIKnowWhatToDo.wav");
+        ravPassTrigger.AddCutscene(ravPass);
         
-        Actor[] actors = { entrance, ofirKatz, entranceTrigger};
+        Graphics wallGraphics = new Graphics('|', ConsoleColor.Black);
         
-        Level level = Utilities.CreateLevel("Mac and learn (Floor 0)", 5, _player, actors);
+        Door entrance = new Door(37, 0, DoorDirection.Down, true);
+        Actor exit = new Actor(46, 0, 3, 2, new Graphics('&', ConsoleColor.Red));
+        
+        Actor train = new Actor(5, 12, 30, 3, new Graphics('-', ConsoleColor.Red));
+        Door trainDoor = new Door(7, 12, DoorDirection.Up, Train(), false, true);
+        Door trainDoor2 = new Door(17, 12, DoorDirection.Up, Train(), false, true);
+        Door trainDoor3 = new Door(27, 12, DoorDirection.Up, Train(), false, true);
+        
+        Actor train2 = new Actor(5, 17, 30, 3, new Graphics('-', ConsoleColor.Red));
+
+        Actor wall = new Actor(0, 15, 40, 2, wallGraphics);
+        Actor wall2 = new Actor(40, 4, 10, 2, wallGraphics);
+        Actor wall3 = new Actor(42, 0, 3, 4, wallGraphics);
+        Actor wall4 = new Actor(13, 5, 30, 1, wallGraphics);
+        Actor wall5 = new Actor(0, 0, 5, 8, wallGraphics);
+        Actor wall6 = new Actor(5, 7, 12, 1, wallGraphics);
+        Actor wall7 = new Actor(18, 5, 1, 3, wallGraphics);
+        Actor wall8 = new Actor(0, 11, 8, 1, wallGraphics);
+        Actor wall9 = new Actor(9, 11, 9, 1, wallGraphics);
+        Actor wall10 = new Actor(19, 11, 9, 1, wallGraphics);
+        Actor wall11 = new Actor(29, 11, 21, 1, wallGraphics);
+        Actor wall12 = new Actor(29, 7, 21, 1, wallGraphics);
+        Actor wall13 = new Actor(29, 8, 1, 1, wallGraphics);
+
+        Actor ofirKatz = new Actor(35, 4, 1, 1, new Graphics('!', ConsoleColor.DarkRed));
+        
+        Actor[] actors =
+        {
+            entrance, train, train2, trainDoor, trainDoor2, trainDoor3, wall, wall2, exit, wall3, wall4, wall5, wall6, wall7, wall8, wall9, wall10, wall11, 
+            wall12, wall13, trainAnnouncementTrigger, ravPassTrigger, ofirKatz
+        };
+        
+        Level level = Utilities.CreateLevel("Train station Haifa merkaz hashmona 2017", new Vector2(50, 20), _player, actors);
+        
+        Enemy guard = Utilities.GenerateEnemy(level, "Security guard");
+        Enemy[] enemies = { guard };
+        level.SetEnemies(enemies);
+        
+        return level;
+    } //Level 14
+
+    static Level Train()
+    {
+        TriggerBox entranceTrigger = new TriggerBox(30, 3);
+        Sequence sell = new Sequence();
+        sell.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\IHaveAnIdeaTheWholeThingHappenedBecauseIBoughtTheStocksRight.wav");
+        sell.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\Yes.wav");
+        sell.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\WhatIfIJustSellThemBack.wav");
+        sell.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\ThatWillWorkIThink.wav");
+        sell.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\WhereIsMyPhone.wav");
+        sell.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\HereComeAndIWillGiveYou.wav");
+        entranceTrigger.AddCutscene(sell);
+        
+        Graphics chairGraphics = new Graphics('#', ConsoleColor.Blue);
+        Graphics tableGraphics = new Graphics('-', ConsoleColor.Gray);
+        Graphics wallGraphics = new Graphics('|', ConsoleColor.Black);
+        
+        Door exit = new Door(0, 3, DoorDirection.Right);
+        
+        #region Seats
+
+        Actor chair = new Actor(1, 0, 1, 2, chairGraphics);
+        Actor chair2 = new Actor(5, 0, 1, 2, chairGraphics);
+        Actor table = new Actor(3, 0, 1, 1, tableGraphics);
+        
+        Actor chair3 = new Actor(1, 4, 1, 2, chairGraphics);
+        Actor chair4 = new Actor(5, 4, 1, 2, chairGraphics);
+        Actor table2 = new Actor(3, 5, 1, 1, tableGraphics);
+
+        Actor wall = new Actor(6, 0, 1, 2, wallGraphics);
+        Actor wall2 = new Actor(6, 4, 1, 2, wallGraphics);
+        
+        Actor chair5 = new Actor(7, 0, 1, 2, chairGraphics);
+        Actor chair6 = new Actor(11, 0, 1, 2, chairGraphics);
+        Actor table3 = new Actor(9, 0, 1, 1, tableGraphics);
+        
+        Actor chair7 = new Actor(7, 4, 1, 2, chairGraphics);
+        Actor chair8 = new Actor(11, 4, 1, 2, chairGraphics);
+        Actor table4 = new Actor(9, 5, 1, 1, tableGraphics);
+        
+        Actor wall3 = new Actor(12, 0, 1, 2, wallGraphics);
+        Actor wall4 = new Actor(12, 4, 1, 2, wallGraphics);
+        
+        Actor chair9 = new Actor(13, 0, 1, 2, chairGraphics);
+        Actor chair10 = new Actor(17, 0, 1, 2, chairGraphics);
+        Actor table5 = new Actor(15, 0, 1, 1, tableGraphics);
+        
+        Actor chair11 = new Actor(13, 4, 1, 2, chairGraphics);
+        Actor chair12 = new Actor(17, 4, 1, 2, chairGraphics);
+        Actor table6 = new Actor(15, 5, 1, 1, tableGraphics);
+        
+        Actor wall5 = new Actor(18, 0, 1, 2, wallGraphics);
+        Actor wall6 = new Actor(18, 4, 1, 2, wallGraphics);
+        
+        Actor chair13 = new Actor(19, 0, 1, 2, chairGraphics);
+        Actor chair14 = new Actor(23, 0, 1, 2, chairGraphics);
+        Actor table7 = new Actor(21, 0, 1, 1, tableGraphics);
+        
+        Actor chair15 = new Actor(19, 4, 1, 2, chairGraphics);
+        Actor chair16 = new Actor(23, 4, 1, 2, chairGraphics);
+        Actor table8 = new Actor(21, 5, 1, 1, tableGraphics);
+        
+        Actor wall7 = new Actor(24, 0, 1, 2, wallGraphics);
+        Actor wall8 = new Actor(24, 4, 1, 2, wallGraphics);
+        
+        Actor chair18 = new Actor(25, 0, 1, 2, chairGraphics);
+        Actor chair19 = new Actor(29, 0, 1, 2, chairGraphics);
+        Actor table9 = new Actor(27, 0, 1, 1, tableGraphics);
+        
+        Actor chair20 = new Actor(25, 4, 1, 2, chairGraphics);
+        Actor chair21 = new Actor(29, 4, 1, 2, chairGraphics);
+        Actor table10 = new Actor(27, 5, 1, 1, tableGraphics);
+
+        #endregion
+
+        Actor ofirKatz = new Actor(8, 3, 1, 1, new Graphics('!', ConsoleColor.DarkRed));
+
+        Mesh anyKey = new Mesh("$$$$$$$\\  $$$$$$$\\  $$$$$$$$\\  $$$$$$\\   $$$$$$\\         $$$$$$\\  $$\\   $$\\ $$\\     $$\\       $$\\   $$\\ $$$$$$$$\\ $$\\     $$\\                       \n$$  __$$\\ $$  __$$\\ $$  _____|$$  __$$\\ $$  __$$\\       $$  __$$\\ $$$\\  $$ |\\$$\\   $$  |      $$ | $$  |$$  _____|\\$$\\   $$  |                      \n$$ |  $$ |$$ |  $$ |$$ |      $$ /  \\__|$$ /  \\__|      $$ /  $$ |$$$$\\ $$ | \\$$\\ $$  /       $$ |$$  / $$ |       \\$$\\ $$  /                       \n$$$$$$$  |$$$$$$$  |$$$$$\\    \\$$$$$$\\  \\$$$$$$\\        $$$$$$$$ |$$ $$\\$$ |  \\$$$$  /        $$$$$  /  $$$$$\\      \\$$$$  /                        \n$$  ____/ $$  __$$< $$  __|    \\____$$\\  \\____$$\\       $$  __$$ |$$ \\$$$$ |   \\$$  /         $$  $$<   $$  __|      \\$$  /                         \n$$ |      $$ |  $$ |$$ |      $$\\   $$ |$$\\   $$ |      $$ |  $$ |$$ |\\$$$ |    $$ |          $$ |\\$$\\  $$ |          $$ |                          \n$$ |      $$ |  $$ |$$$$$$$$\\ \\$$$$$$  |\\$$$$$$  |      $$ |  $$ |$$ | \\$$ |    $$ |          $$ | \\$$\\ $$$$$$$$\\     $$ |                          \n\\__|      \\__|  \\__|\\________| \\______/  \\______/       \\__|  \\__|\\__|  \\__|    \\__|          \\__|  \\__|\\________|    \\__|                          \n                                                                                                                                                    \n                                                                                                                                                    \n                                                                                                                                                    \n$$$$$$$$\\  $$$$$$\\        $$$$$$$$\\ $$$$$$$\\   $$$$$$\\  $$\\   $$\\  $$$$$$\\  $$$$$$$$\\ $$$$$$$$\\ $$$$$$$\\        $$$$$$$$\\ $$\\   $$\\ $$$$$$$$\\       \n\\__$$  __|$$  __$$\\       \\__$$  __|$$  __$$\\ $$  __$$\\ $$$\\  $$ |$$  __$$\\ $$  _____|$$  _____|$$  __$$\\       \\__$$  __|$$ |  $$ |$$  _____|      \n   $$ |   $$ /  $$ |         $$ |   $$ |  $$ |$$ /  $$ |$$$$\\ $$ |$$ /  \\__|$$ |      $$ |      $$ |  $$ |         $$ |   $$ |  $$ |$$ |            \n   $$ |   $$ |  $$ |         $$ |   $$$$$$$  |$$$$$$$$ |$$ $$\\$$ |\\$$$$$$\\  $$$$$\\    $$$$$\\    $$$$$$$  |         $$ |   $$$$$$$$ |$$$$$\\          \n   $$ |   $$ |  $$ |         $$ |   $$  __$$< $$  __$$ |$$ \\$$$$ | \\____$$\\ $$  __|   $$  __|   $$  __$$<          $$ |   $$  __$$ |$$  __|         \n   $$ |   $$ |  $$ |         $$ |   $$ |  $$ |$$ |  $$ |$$ |\\$$$ |$$\\   $$ |$$ |      $$ |      $$ |  $$ |         $$ |   $$ |  $$ |$$ |            \n   $$ |    $$$$$$  |         $$ |   $$ |  $$ |$$ |  $$ |$$ | \\$$ |\\$$$$$$  |$$ |      $$$$$$$$\\ $$ |  $$ |         $$ |   $$ |  $$ |$$$$$$$$\\       \n   \\__|    \\______/          \\__|   \\__|  \\__|\\__|  \\__|\\__|  \\__| \\______/ \\__|      \\________|\\__|  \\__|         \\__|   \\__|  \\__|\\________|      \n                                                                                                                                                    \n                                                                                                                                                    \n                                                                                                                                                    \n $$$$$$\\ $$$$$$$$\\  $$$$$$\\   $$$$$$\\  $$\\   $$\\  $$$$$$\\        $$$$$$$$\\  $$$$$$\\        $$$$$$$$\\  $$$$$$\\                                       \n$$  __$$\\\\__$$  __|$$  __$$\\ $$  __$$\\ $$ | $$  |$$  __$$\\       \\__$$  __|$$  __$$\\       $$  _____|$$  __$$\\                                      \n$$ /  \\__|  $$ |   $$ /  $$ |$$ /  \\__|$$ |$$  / $$ /  \\__|         $$ |   $$ /  $$ |      $$ |      $$ /  $$ |                                     \n\\$$$$$$\\    $$ |   $$ |  $$ |$$ |      $$$$$  /  \\$$$$$$\\           $$ |   $$ |  $$ |      $$$$$\\    $$$$$$$$ |                                     \n \\____$$\\   $$ |   $$ |  $$ |$$ |      $$  $$<    \\____$$\\          $$ |   $$ |  $$ |      $$  __|   $$  __$$ |                                     \n$$\\   $$ |  $$ |   $$ |  $$ |$$ |  $$\\ $$ |\\$$\\  $$\\   $$ |         $$ |   $$ |  $$ |      $$ |      $$ |  $$ |                                     \n\\$$$$$$  |  $$ |    $$$$$$  |\\$$$$$$  |$$ | \\$$\\ \\$$$$$$  |         $$ |    $$$$$$  |      $$$$$$$$\\ $$ |  $$ |                                     \n \\______/   \\__|    \\______/  \\______/ \\__|  \\__| \\______/          \\__|    \\______/       \\________|\\__|  \\__|                                     \n                                                                                                                                                    \n                                                                                                                                   ");
+        Sequence anySequence = new Sequence();
+        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\DammitWhereIsThatAnyKeyButton.wav");
+        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\ItsNotByTheF.wav");
+        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\NotByTheF.wav");
+        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\EvenNotByTheF.wav");
+        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\WhatToDo.wav");
+        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\HelloCanSomebodyHereMeINeedHelp.wav");
+        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\Hello.wav");
+        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\MMMMMMMMMMMMSupportiveMan.wav");
+        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\HowCanIHelpYou.wav");
+        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\ASupportiveAndKindManMmmmm.wav");
+        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\IveAlwaysCountedOnTheKindnessOfStrangers.wav");
+        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\OHOHOHOOHOHOHOHOHANYKEYYEEEEEEEEEEEEEEEEEEEEEEEEEEAHHHHHHHHHHHHHHHHHHHHHHHHHHH.wav");
+        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\ShutUpIllJustPressItMyself.wav");
+        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\Click.wav");
+        
+        Teleporter anyKeyTrigger = new Teleporter(9, 2, 1, 2, new CutsceneLevel(anyKey, anySequence, Train2(), _gameManager), new Graphics(' ', ConsoleColor.Black));
+        
+        Actor[] actors =
+        {
+            chair, chair2, table, chair3, chair4, table2, chair5, chair6, table3, chair7, chair8, table4, chair9, chair10, table5, chair11, chair12, table6, chair13, chair14, table7, chair15, chair16, table8,
+            chair18, chair19, table9, chair20, chair21, table10, wall, wall2, wall3, wall4, wall5, wall6, wall7, wall8, ofirKatz, entranceTrigger, anyKeyTrigger, exit
+        };
+        
+        Level level = Utilities.CreateLevel("Train", new Vector2(31, 6), _player, actors, new Vector2(30, 3));
+        return level;
+    } // Level 15
+    
+     static Level Train2()
+    {
+        TriggerBox entranceTrigger = new TriggerBox(9, 3);
+        Sequence arrived = new Sequence();
+        arrived.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train(2)\\WowThatWorked.wav");
+        arrived.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train(2)\\AlsoWeArrivedToTheAppleStore.wav");
+        arrived.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train(2)\\LetsStealTheBatteryAndGetOut.wav");
+        entranceTrigger.AddCutscene(arrived);
+        
+        Graphics chairGraphics = new Graphics('#', ConsoleColor.Blue);
+        Graphics tableGraphics = new Graphics('-', ConsoleColor.Gray);
+        Graphics wallGraphics = new Graphics('|', ConsoleColor.Black);
+        
+        #region Seats
+
+        Actor chair = new Actor(1, 0, 1, 2, chairGraphics);
+        Actor chair2 = new Actor(5, 0, 1, 2, chairGraphics);
+        Actor table = new Actor(3, 0, 1, 1, tableGraphics);
+        
+        Actor chair3 = new Actor(1, 4, 1, 2, chairGraphics);
+        Actor chair4 = new Actor(5, 4, 1, 2, chairGraphics);
+        Actor table2 = new Actor(3, 5, 1, 1, tableGraphics);
+
+        Actor wall = new Actor(6, 0, 1, 2, wallGraphics);
+        Actor wall2 = new Actor(6, 4, 1, 2, wallGraphics);
+        
+        Actor chair5 = new Actor(7, 0, 1, 2, chairGraphics);
+        Actor chair6 = new Actor(11, 0, 1, 2, chairGraphics);
+        Actor table3 = new Actor(9, 0, 1, 1, tableGraphics);
+        
+        Actor chair7 = new Actor(7, 4, 1, 2, chairGraphics);
+        Actor chair8 = new Actor(11, 4, 1, 2, chairGraphics);
+        Actor table4 = new Actor(9, 5, 1, 1, tableGraphics);
+        
+        Actor wall3 = new Actor(12, 0, 1, 2, wallGraphics);
+        Actor wall4 = new Actor(12, 4, 1, 2, wallGraphics);
+        
+        Actor chair9 = new Actor(13, 0, 1, 2, chairGraphics);
+        Actor chair10 = new Actor(17, 0, 1, 2, chairGraphics);
+        Actor table5 = new Actor(15, 0, 1, 1, tableGraphics);
+        
+        Actor chair11 = new Actor(13, 4, 1, 2, chairGraphics);
+        Actor chair12 = new Actor(17, 4, 1, 2, chairGraphics);
+        Actor table6 = new Actor(15, 5, 1, 1, tableGraphics);
+        
+        Actor wall5 = new Actor(18, 0, 1, 2, wallGraphics);
+        Actor wall6 = new Actor(18, 4, 1, 2, wallGraphics);
+        
+        Actor chair13 = new Actor(19, 0, 1, 2, chairGraphics);
+        Actor chair14 = new Actor(23, 0, 1, 2, chairGraphics);
+        Actor table7 = new Actor(21, 0, 1, 1, tableGraphics);
+        
+        Actor chair15 = new Actor(19, 4, 1, 2, chairGraphics);
+        Actor chair16 = new Actor(23, 4, 1, 2, chairGraphics);
+        Actor table8 = new Actor(21, 5, 1, 1, tableGraphics);
+        
+        Actor wall7 = new Actor(24, 0, 1, 2, wallGraphics);
+        Actor wall8 = new Actor(24, 4, 1, 2, wallGraphics);
+        
+        Actor chair18 = new Actor(25, 0, 1, 2, chairGraphics);
+        Actor chair19 = new Actor(29, 0, 1, 2, chairGraphics);
+        Actor table9 = new Actor(27, 0, 1, 1, tableGraphics);
+        
+        Actor chair20 = new Actor(25, 4, 1, 2, chairGraphics);
+        Actor chair21 = new Actor(29, 4, 1, 2, chairGraphics);
+        Actor table10 = new Actor(27, 5, 1, 1, tableGraphics);
+
+        #endregion
+
+        Actor ofirKatz = new Actor(7, 3, 1, 1, new Graphics('!', ConsoleColor.DarkRed));
+
+        Door exit = new Door(0, 3, DoorDirection.Right, AppleStoreEntrance(), false, true);
+        
+        Actor[] actors =
+        {
+            chair, chair2, table, chair3, chair4, table2, chair5, chair6, table3, chair7, chair8, table4, chair9, chair10, table5, chair11, chair12, table6, chair13, chair14, table7, chair15, chair16, table8,
+            chair18, chair19, table9, chair20, chair21, table10, wall, wall2, wall3, wall4, wall5, wall6, wall7, wall8, ofirKatz, entranceTrigger, exit
+        };
+        
+        Level level = Utilities.CreateLevel("Train", new Vector2(31, 6), _player, actors, new Vector2(9, 3));
+        return level;
+    }// Level 16
+     
+    static Level AppleStoreEntrance() // Level 17
+    {
+        TriggerBox entranceTrigger = new TriggerBox(6, 5);
+        Sequence ofir = new Sequence();
+        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\AppleStoreEntrance\\IllWaitHereAndPrepareTheThing.wav");
+        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\AppleStoreEntrance\\IllGoToTakeTheBattery.wav");
+        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\AppleStoreEntrance\\WatchOutForTheSecurityWhenYouHaveTheVisionProJustConnectItToTheCarIBuiltASpecialDoorForThis.wav");
+        entranceTrigger.AddCutscene(ofir);
+        
+        Door entrance = new Door(7, 0, DoorDirection.Down, AppleStore(), false, true);
+        
+        Actor ofirKatz = new Actor(8, 5, 1, 1, new Graphics('!', ConsoleColor.DarkRed));
+
+        Actor carWheel = new Actor(10, 5, 1, 1, new Graphics('@', ConsoleColor.Black));
+        Actor carWheel2 = new Actor(14, 5, 1, 1, new Graphics('@', ConsoleColor.Black));
+        Actor carBase = new Actor(10, 4, 5, 1, new Graphics('_', ConsoleColor.Black));
+        
+        Mesh delorean = new Mesh("                                                                                          \n                   .                                                                      \n                                                                                          \n       ..::.     .= :*#=                                                                  \n      +#####+.   =---=##*:  ..                                                            \n     :#%######-.:#%@+=+=-::..:-....:--.:                                                  \n     *#%+**+**+=-+*+-=*-==::----::----::::...                                             \n    .=+******+*+-:-++==---::---::::::::-----====-:.                                       \n   :==+**+++*=+=:++=+##*+++=--:-===========--::...:--:.                                   \n  .=-------==+--#*=#%%%#######=:++=------====---::::::-===++.                             \n .+:+#*+==----=*+++###*#%%#####=:=*=---============----==-=+=:                            \n  :-#+#%%#+-+*+===+===++***#####+:=*=====-----=++++==*+=++====:...                        \n   *%+%#**#*+*==-=========*%%%%##*:=*======+#%%%#*++==-::::::::::::::.. .                 \n   .+=#++++##%++=++========+++****=-++++====--:::::::::::::::::::::::::::::.              \n      *++==*%#*====++++++===========-----::::::::::::::::::::::::::::::::::::::.:.        \n      -*+==+%%##+========++++====+=-------=--:::::::::::::::::::::::::::::-----===+=:     \n     ..+**+#%@@@%%#**++====--=++*++=--=*#*+=+++=:..::::::::::::::::---=====++*#*++==*:.   \n      ..=#%%@@%**#%%##%%##*+=====--=+####%%#+:.:==. ....:::-----===++**###*+%%%%++*+=-+.  \n       ...:-======+++==++*%%%%##+====##@%%#%%%#=-.=+*::  .-:-+++#++#@%%%%#*###+-+-:.::.   \n       .........:::--=++*+=+*%@@%%%###@%#+*+**%%**%%%*=..-.::+=+#++*##*+-+--:..:=++*.     \n            ..........::--=+**#%%%%%%%@%=+==-*#%@#%%%-%%%*===+++===-:...:-=+*#%%%%*+:     \n                 .........:::-==++*##%%%++==-+*%%@**#-%%#%-..:...:-=+*#%%@%%*+=:.         \n                       .......:::--==+*#%+++++*%%@%##%%%%%##***#%%@@@%%%##*+-:::.....     \n                           ........:::-=+%####%%@@@@%%##**#@%%%%%%###**+++==-:::......    \n                               .........::=*#%%%%%%%%%%%#####***+++++====---::::....      \n                                     .........:---=================-----::::......        \n                                             .......:::::::::::::::::.......              \n");
+        Door carDoor = new Door(12, 3, DoorDirection.Up, new CutsceneLevel(delorean, $"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\MIDI\\BTTF.mid", Future(), _gameManager));
+        
+        Actor[] actors = { entrance, ofirKatz, entranceTrigger, carWheel, carWheel2, carBase, carDoor };
+        
+        Level level = Utilities.CreateLevel("Somewhere in USA", new Vector2(16, 6), _player, actors, new Vector2(6, 5));
         return level;
     }
 
+    static Level AppleStore()
+    {
+        TriggerBox entranceTrigger = new TriggerBox(2, 2);
+        Sequence sequence = new Sequence();
+        sequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\AppleStore\\OhNoWhereIsThatBattery.wav");
+        sequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\AppleStore\\IShouldStartSearching.wav");
+        entranceTrigger.AddCutscene(sequence);
+        
+        Door entrance = new Door(1, 0, DoorDirection.Down, true, true);
+
+        Chest chest = new Chest(new Item("Macbook Pro", "I hate Mac"), 1, 5);
+        Chest chest2 = new Chest(new Item("Macbook Air", "Now i can publish Fash Catch for Iphone!!!!!!!!!!"), 1, 10);
+        Chest chest3 = new Chest(new Item("Macbook M1", "Why this crap costs 3000 USD?"), 1, 15);
+        Chest chest4 = new Chest(new Item("Macbook M2", "Why this crap costs 9000 USD?"), 1, 20);
+        Chest chest5 = new Chest(new Item("Icloth", "THE APPLE CLOTH!!!!!!!"), 1, 25);
+        Chest chest6 = new Chest(new Item("Airpods", "Tronsamart Onyx Free is better"), 6, 5);
+        Chest chest7 = new Chest(new Item("Wire for Airpods", "Now this is good product"), 6, 10);
+        Chest chest8 = new Chest(new Item("Charger", "Charger for 596048 USD"), 6, 15);
+        Chest chest9 = new Chest(new Item("Iphone 17", "Comes without the screen in the box"), 6, 20);
+        Chest chest10 = new Chest(new Item("iPencil", "Pencil with Apple logo for 600 USD"), 6, 25);
+        Chest chest11 = new Chest(new Item("Pencil", "Completely normal pencil"), 11, 5);
+        Chest chest12 = new Chest(new Item("Ipad", "Ipad (Writing descriptions is hard)"), 11, 10);
+        Chest chest13 = new Chest(new Item("Shahar Chocolate", "Das Eina Gutte Kremaev"), 11, 15);
+        Chest chest14 = new Chest(new Key("Apple Vision Pro", "Quest 3 is better. Oh wait that's what i need to start the car"), 11, 20);
+        Chest chest15 = new Chest(new Healing("Los pollos hermanos", "he's name is gustavo but you can call him gus?", 17), 11, 25);
+        Chest chest16 = new Chest(new Weapon("iBlock", "A block with apple logo that deals 76 HP damage!", 76), 16, 5);
+        Chest chest17 = new Chest(new RickRoll(), 16, 10);
+        Chest chest18 = new Chest(new Item("Better Call Finger", "https://www.youtube.com/watch?v=At0kaXY36Xc&t=56s"), 16, 15);
+        Chest chest19 = new Chest(new Item("Kishke", "Kishke from Maroom Golan"), 16, 20);
+        Chest chest20 = new Chest(new Item("A body", "Some costumer died here"), 16, 25);
+        
+        Actor[] actors =
+        {
+            entrance, entranceTrigger, chest2, chest3, chest4, chest5, chest, chest6, chest7, chest8, chest9, chest10, chest11, chest12, chest13, chest14, chest15, chest16,
+            chest17, chest18, chest19, chest20
+        };
+        
+        Level level = Utilities.CreateLevel("Apple Store", new Vector2(20, 30), _player, actors);
+        Enemy[] enemies = Utilities.GenerateEnemies(80, level, "Apple guy");
+        level.SetEnemies(enemies);
+            
+        return level;
+    } // Level 18
+
+    static Level Future()
+    {
+        TriggerBox entranceTrigger = new TriggerBox(15, 4);
+        Sequence dani = new Sequence();
+        dani.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Future\\WowItWorkedImBack.wav");
+        dani.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Future\\HiImDaniKushmaro.wav");
+        dani.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Future\\WowImInAnEpisodeOfNews.wav");
+        dani.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Future\\NoTheyFiredMeSinceUnityTookAllOfMyMoneySoNowImBroke.wav");
+        dani.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Future\\justLikeAppleThatLostAllOfItsMoneyAfterTheVisionProDiedWhenItWasLaunchByTheWay.wav");
+        dani.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Future\\LolQuest3IsBetter.wav");
+        dani.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Future\\AnywayHaveYouSeenOfirKatz.wav");
+        dani.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Future\\IThinkHeIsInObanKoban.wav");
+        entranceTrigger.AddCutscene(dani);
+        
+        Actor carWheel = new Actor(17, 5, 1, 1, new Graphics('@', ConsoleColor.Black));
+        Actor carWheel2 = new Actor(21, 5, 1, 1, new Graphics('@', ConsoleColor.Black));
+        Actor carBase = new Actor(17, 4, 5, 1, new Graphics('_', ConsoleColor.Black));
+        
+        Door centerDoor = new Door(0, 1, DoorDirection.Right);
+        Door obanKobanDoor = new Door(5, 4, DoorDirection.Up, FutureKoban(), false, true);
+        
+        Actor[] actors = { entranceTrigger, carWheel, carWheel2, carBase, obanKobanDoor, centerDoor };
+        
+        Level level = Utilities.CreateLevel("Tel Aviv", new Vector2(22, 6), _player, actors, new Vector2(15, 4));
+        return level;
+    } // Level 19
+    
+    static Level FutureKoban()
+    {
+        TriggerBox entranceTrigger = new TriggerBox(34, 4);
+        Sequence entranceSequence = new Sequence();
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\FutureKoban\\Roads\\DORYOUGOTTACOMEBACKWITHME.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\FutureKoban\\Roads\\Where.wav");
+        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\FutureKoban\\Roads\\BackToTheFuture.wav");
+        entranceTrigger.AddCutscene(entranceSequence);
+        
+        Graphics tableGraphics = new Graphics('#', ConsoleColor.Blue);
+        
+        Door door = new Door(35, 3, DoorDirection.Left, true, true);
+        Actor doorCover = new Actor(37, 3, 3, 3, new Graphics('&', ConsoleColor.Red));
+        
+        Actor cashier = new Actor(6, 1, 16, 1, new Graphics('.', ConsoleColor.Gray));
+        Actor cashier2 = new Actor(22, 0, 1, 2, new Graphics('.', ConsoleColor.Gray));
+
+        Actor table = new Actor(2, 4, 2, 2, tableGraphics);
+        Actor table2 = new Actor(8, 4, 2, 2, tableGraphics);
+        Actor table3 = new Actor(14, 4, 2, 2, tableGraphics);
+        Actor table4 = new Actor(20, 4, 2, 2, tableGraphics);
+        Actor table5 = new Actor(26, 4, 2, 2, tableGraphics);
+        Actor table6 = new Actor(25, 0, 2, 2, tableGraphics);
+        Actor table7 = new Actor(30, 0, 2, 2, tableGraphics);
+        Actor table8 = new Actor(35, 0, 4, 1, tableGraphics);
+
+        Actor wall = new Actor(35, 2, 5, 1, new Graphics('|', ConsoleColor.Black));
+        Actor wall2 = new Actor(0, 0, 6, 2, new Graphics('|', ConsoleColor.Black));
+        
+        Chest chest = new Chest(new Healing("TanTan Ramen", 76, "Mild fish stock, miso, sesame, tubanjan, chili, ramen noodles, chopped beef in miso, Half an egg, bamboo shoots, shiitake mushrooms, spinach, sprouts and green onions"), 0, 1);
+
+        Actor ofirKatz = new Actor(6, 3, 1, 1, new Graphics('!', ConsoleColor.DarkRed));
+        
+        Sequence roadsSequence = new Sequence();
+        roadsSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\FutureKoban\\Roads\\HiOfirYouMightWantToGetBackWeDontHaveEnoughRoadToGetTo8.wav");
+        roadsSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\FutureKoban\\Roads\\RoadsWhereWeGoingWeDontNeedRoads.wav");
+
+        Mesh mesh = new Mesh(".-==-***#%%%%+.        .:-+==-: ....  . ..::.*********************************************\n  .::+**#%%%%+.  . .=*****##***=:.:.....:--+=*********************************************\n    .+**##%%%+. -#**####%##%%%%%%**##########***************##*####***********************\n    .+**##%%%*..+***##**+***##%%#*-=---=-====*************#%%%%%%%%%#*********************\n    .+**###%%*.-=**=++====+++++*++==-=---====************#%%%%#**#%%%%#*******************\n     +**#*#%%*:-======-====++++++=----------=**************#+-===+#%%%%*******************\n     =**#*#%%#-====+=--=+++++++++=---------=-**************#+*%#**#%##%*******************\n. ...=**###%%#+=+-==-==+**##*+*##=-:::::::---*************+-+*=--=%%%#*###****************\n.....=*####%%#--+--=-==+++++==*#*::::::=+*##%**************#****##@@#+****###*************\n.  ..=*##%%%%#.:==---====+++==++=:---=*#%%%%%**************%++*%%@%#==+==+++*##***********\n     =*##%%%%#..::---==+*****#*+=-=*#%%%%%%%%**************#%%%%%%*++===+#==**##**********\n.   .=*#%%%%%#..:-=+==++*****##+:-#%%%%%%%%%%*************++##**+=====+*#%#+=++##*********\n     =*#%%%%%#..-==++****+*****-=#%%%%%%%%%##************+-=*##*+++****####*===+#*********\n     =*#%%%%%+.:-====+*+++*#*=-=#%%%%%%%%%%%%************+=+#**+=====++*##***=-+#*********\n     +*#%###=:::-=+=++**###+---*%%%%%*++##***************+=##***#*=++*#%%%****###*********\n     +*###%%%#+-==++++++***#%#*##%%%#+#+**=++************+=*#***#%#*#%%%%%#*+===#*********\n..-+#%%%%%%%%%%%#*+++++++*#@%@@%%%%%#***%####***************#***#%%###*###%**+**#*********\n*#%%%%%%%%%%%%%%%%%%#*++#%@@@%@@@@@@%%%%%%%%%******************##%******###***************\n#%#%%%%%%%%%%%%%%%%%@@%%@@%%%%%%@%%@%@%%%%%%%******************#%%*****####***************\n%%%%@%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%@@@%**+**************#%%#**#%%%%%%%***#%%************\n%%%%%@@%%%%%%%%%%%%%%%%@@%%%%%%%%%%@%@@@@#+##*********************************************\n%%%%%@@@%%%%%%%%%%%%%@@@%###%%%%%%%@%@@@@%=*%*********************************************\n");
+        Teleporter roadsTrigger = new Teleporter(7, 2, 1, 3, new CutsceneLevel(mesh, roadsSequence, Credits(), _gameManager), new Graphics(' ', ConsoleColor.Black));
+        
+        Actor[] actors =
+        {
+            door, cashier, cashier2, table, table2, table3, table4, table5, table6, table7, table8, wall, doorCover, wall2, chest, entranceTrigger, ofirKatz, roadsTrigger
+        };
+        
+        Level level = Utilities.CreateLevel("Oban Koban", 40, 6, _player, actors);
+        
+        return level;
+    } // Level 20
+
+    static CutsceneLevel Credits()
+    {
+        Mesh title = new Mesh("$$\\   $$\\  $$$$$$\\  $$\\       $$$$$$$$\\       $$\\       $$$$$$\\ $$$$$$$$\\ $$$$$$$$\\        $$$$$$\\  \n$$ |  $$ |$$  __$$\\ $$ |      $$  _____|      $$ |      \\_$$  _|$$  _____|$$  _____|      $$ ___$$\\ \n$$ |  $$ |$$ /  $$ |$$ |      $$ |            $$ |        $$ |  $$ |      $$ |            \\_/   $$ |\n$$$$$$$$ |$$$$$$$$ |$$ |      $$$$$\\          $$ |        $$ |  $$$$$\\    $$$$$\\            $$$$$ / \n$$  __$$ |$$  __$$ |$$ |      $$  __|         $$ |        $$ |  $$  __|   $$  __|           \\___$$\\ \n$$ |  $$ |$$ |  $$ |$$ |      $$ |            $$ |        $$ |  $$ |      $$ |            $$\\   $$ |\n$$ |  $$ |$$ |  $$ |$$$$$$$$\\ $$ |            $$$$$$$$\\ $$$$$$\\ $$ |      $$$$$$$$\\       \\$$$$$$  |\n\\__|  \\__|\\__|  \\__|\\________|\\__|            \\________|\\______|\\__|      \\________|       \\______/ \n                                                                                                    \n                                                                                                    \n                                                                                                    ");
+        Mesh author = new Mesh(" $$$$$$\\         $$$$$$\\   $$$$$$\\  $$\\      $$\\ $$$$$$$$\\       $$$$$$$\\ $$\\     $$\\                              \n$$  __$$\\       $$  __$$\\ $$  __$$\\ $$$\\    $$$ |$$  _____|      $$  __$$\\\\$$\\   $$  |                             \n$$ /  $$ |      $$ /  \\__|$$ /  $$ |$$$$\\  $$$$ |$$ |            $$ |  $$ |\\$$\\ $$  /$$\\                           \n$$$$$$$$ |      $$ |$$$$\\ $$$$$$$$ |$$\\$$\\$$ $$ |$$$$$\\          $$$$$$$\\ | \\$$$$  / \\__|                          \n$$  __$$ |      $$ |\\_$$ |$$  __$$ |$$ \\$$$  $$ |$$  __|         $$  __$$\\   \\$$  /                                \n$$ |  $$ |      $$ |  $$ |$$ |  $$ |$$ |\\$  /$$ |$$ |            $$ |  $$ |   $$ |   $$\\                           \n$$ |  $$ |      \\$$$$$$  |$$ |  $$ |$$ | \\_/ $$ |$$$$$$$$\\       $$$$$$$  |   $$ |   \\__|                          \n\\__|  \\__|       \\______/ \\__|  \\__|\\__|     \\__|\\________|      \\_______/    \\__|                                 \n                                                                                                                   \n                                                                                                                   \n                                                                                                                   \n$$\\   $$\\ $$$$$$\\ $$$$$$$\\  $$$$$$$$\\  $$$$$$\\        $$\\   $$\\  $$$$$$\\     $$$$$\\ $$$$$$\\ $$\\      $$\\  $$$$$$\\  \n$$ |  $$ |\\_$$  _|$$  __$$\\ $$  _____|$$  __$$\\       $$ | $$  |$$  __$$\\    \\__$$ |\\_$$  _|$$$\\    $$$ |$$  __$$\\ \n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ /  $$ |      $$ |$$  / $$ /  $$ |      $$ |  $$ |  $$$$\\  $$$$ |$$ /  $$ |\n$$$$$$$$ |  $$ |  $$ |  $$ |$$$$$\\    $$ |  $$ |      $$$$$  /  $$ |  $$ |      $$ |  $$ |  $$\\$$\\$$ $$ |$$$$$$$$ |\n$$  __$$ |  $$ |  $$ |  $$ |$$  __|   $$ |  $$ |      $$  $$<   $$ |  $$ |$$\\   $$ |  $$ |  $$ \\$$$  $$ |$$  __$$ |\n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ |  $$ |      $$ |\\$$\\  $$ |  $$ |$$ |  $$ |  $$ |  $$ |\\$  /$$ |$$ |  $$ |\n$$ |  $$ |$$$$$$\\ $$$$$$$  |$$$$$$$$\\  $$$$$$  |      $$ | \\$$\\  $$$$$$  |\\$$$$$$  |$$$$$$\\ $$ | \\_/ $$ |$$ |  $$ |\n\\__|  \\__|\\______|\\_______/ \\________| \\______/       \\__|  \\__| \\______/  \\______/ \\______|\\__|     \\__|\\__|  \\__|\n                                                                                                                   \n                                                                                                                   \n                                                                                                                   ");
+        Mesh director = new Mesh("$$$$$$$\\  $$$$$$\\ $$$$$$$\\  $$$$$$$$\\  $$$$$$\\ $$$$$$$$\\ $$$$$$$$\\ $$$$$$$\\        $$$$$$$\\ $$\\     $$\\            \n$$  __$$\\ \\_$$  _|$$  __$$\\ $$  _____|$$  __$$\\\\__$$  __|$$  _____|$$  __$$\\       $$  __$$\\\\$$\\   $$  |           \n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ /  \\__|  $$ |   $$ |      $$ |  $$ |      $$ |  $$ |\\$$\\ $$  /$$\\         \n$$ |  $$ |  $$ |  $$$$$$$  |$$$$$\\    $$ |        $$ |   $$$$$\\    $$ |  $$ |      $$$$$$$\\ | \\$$$$  / \\__|        \n$$ |  $$ |  $$ |  $$  __$$< $$  __|   $$ |        $$ |   $$  __|   $$ |  $$ |      $$  __$$\\   \\$$  /              \n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ |  $$\\   $$ |   $$ |      $$ |  $$ |      $$ |  $$ |   $$ |   $$\\         \n$$$$$$$  |$$$$$$\\ $$ |  $$ |$$$$$$$$\\ \\$$$$$$  |  $$ |   $$$$$$$$\\ $$$$$$$  |      $$$$$$$  |   $$ |   \\__|        \n\\_______/ \\______|\\__|  \\__|\\________| \\______/   \\__|   \\________|\\_______/       \\_______/    \\__|               \n                                                                                                                   \n                                                                                                                   \n                                                                                                                   \n$$\\   $$\\ $$$$$$\\ $$$$$$$\\  $$$$$$$$\\  $$$$$$\\        $$\\   $$\\  $$$$$$\\     $$$$$\\ $$$$$$\\ $$\\      $$\\  $$$$$$\\  \n$$ |  $$ |\\_$$  _|$$  __$$\\ $$  _____|$$  __$$\\       $$ | $$  |$$  __$$\\    \\__$$ |\\_$$  _|$$$\\    $$$ |$$  __$$\\ \n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ /  $$ |      $$ |$$  / $$ /  $$ |      $$ |  $$ |  $$$$\\  $$$$ |$$ /  $$ |\n$$$$$$$$ |  $$ |  $$ |  $$ |$$$$$\\    $$ |  $$ |      $$$$$  /  $$ |  $$ |      $$ |  $$ |  $$\\$$\\$$ $$ |$$$$$$$$ |\n$$  __$$ |  $$ |  $$ |  $$ |$$  __|   $$ |  $$ |      $$  $$<   $$ |  $$ |$$\\   $$ |  $$ |  $$ \\$$$  $$ |$$  __$$ |\n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ |  $$ |      $$ |\\$$\\  $$ |  $$ |$$ |  $$ |  $$ |  $$ |\\$  /$$ |$$ |  $$ |\n$$ |  $$ |$$$$$$\\ $$$$$$$  |$$$$$$$$\\  $$$$$$  |      $$ | \\$$\\  $$$$$$  |\\$$$$$$  |$$$$$$\\ $$ | \\_/ $$ |$$ |  $$ |\n\\__|  \\__|\\______|\\_______/ \\________| \\______/       \\__|  \\__| \\______/  \\______/ \\______|\\__|     \\__|\\__|  \\__|\n                                                                                                                   \n                                                                                                                   \n                                                                                                                  ");
+        Mesh written = new Mesh("$$\\      $$\\ $$$$$$$\\  $$$$$$\\ $$$$$$$$\\ $$$$$$$$\\ $$$$$$$$\\ $$\\   $$\\       $$$$$$$\\ $$\\     $$\\                  \n$$ | $\\  $$ |$$  __$$\\ \\_$$  _|\\__$$  __|\\__$$  __|$$  _____|$$$\\  $$ |      $$  __$$\\\\$$\\   $$  |                 \n$$ |$$$\\ $$ |$$ |  $$ |  $$ |     $$ |      $$ |   $$ |      $$$$\\ $$ |      $$ |  $$ |\\$$\\ $$  /$$\\               \n$$ $$ $$\\$$ |$$$$$$$  |  $$ |     $$ |      $$ |   $$$$$\\    $$ $$\\$$ |      $$$$$$$\\ | \\$$$$  / \\__|              \n$$$$  _$$$$ |$$  __$$<   $$ |     $$ |      $$ |   $$  __|   $$ \\$$$$ |      $$  __$$\\   \\$$  /                    \n$$$  / \\$$$ |$$ |  $$ |  $$ |     $$ |      $$ |   $$ |      $$ |\\$$$ |      $$ |  $$ |   $$ |   $$\\               \n$$  /   \\$$ |$$ |  $$ |$$$$$$\\    $$ |      $$ |   $$$$$$$$\\ $$ | \\$$ |      $$$$$$$  |   $$ |   \\__|              \n\\__/     \\__|\\__|  \\__|\\______|   \\__|      \\__|   \\________|\\__|  \\__|      \\_______/    \\__|                     \n                                                                                                                   \n                                                                                                                   \n                                                                                                                   \n$$\\   $$\\ $$$$$$\\ $$$$$$$\\  $$$$$$$$\\  $$$$$$\\        $$\\   $$\\  $$$$$$\\     $$$$$\\ $$$$$$\\ $$\\      $$\\  $$$$$$\\  \n$$ |  $$ |\\_$$  _|$$  __$$\\ $$  _____|$$  __$$\\       $$ | $$  |$$  __$$\\    \\__$$ |\\_$$  _|$$$\\    $$$ |$$  __$$\\ \n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ /  $$ |      $$ |$$  / $$ /  $$ |      $$ |  $$ |  $$$$\\  $$$$ |$$ /  $$ |\n$$$$$$$$ |  $$ |  $$ |  $$ |$$$$$\\    $$ |  $$ |      $$$$$  /  $$ |  $$ |      $$ |  $$ |  $$\\$$\\$$ $$ |$$$$$$$$ |\n$$  __$$ |  $$ |  $$ |  $$ |$$  __|   $$ |  $$ |      $$  $$<   $$ |  $$ |$$\\   $$ |  $$ |  $$ \\$$$  $$ |$$  __$$ |\n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ |  $$ |      $$ |\\$$\\  $$ |  $$ |$$ |  $$ |  $$ |  $$ |\\$  /$$ |$$ |  $$ |\n$$ |  $$ |$$$$$$\\ $$$$$$$  |$$$$$$$$\\  $$$$$$  |      $$ | \\$$\\  $$$$$$  |\\$$$$$$  |$$$$$$\\ $$ | \\_/ $$ |$$ |  $$ |\n\\__|  \\__|\\______|\\_______/ \\________| \\______/       \\__|  \\__| \\______/  \\______/ \\______|\\__|     \\__|\\__|  \\__|\n                                                                                                                   \n                                                                                                                   ");
+        Mesh program = new Mesh("$$$$$$$\\  $$$$$$$\\   $$$$$$\\   $$$$$$\\  $$$$$$$\\   $$$$$$\\  $$\\      $$\\ $$$$$$\\ $$\\   $$\\  $$$$$$\\                \n$$  __$$\\ $$  __$$\\ $$  __$$\\ $$  __$$\\ $$  __$$\\ $$  __$$\\ $$$\\    $$$ |\\_$$  _|$$$\\  $$ |$$  __$$\\               \n$$ |  $$ |$$ |  $$ |$$ /  $$ |$$ /  \\__|$$ |  $$ |$$ /  $$ |$$$$\\  $$$$ |  $$ |  $$$$\\ $$ |$$ /  \\__|$$\\           \n$$$$$$$  |$$$$$$$  |$$ |  $$ |$$ |$$$$\\ $$$$$$$  |$$$$$$$$ |$$\\$$\\$$ $$ |  $$ |  $$ $$\\$$ |$$ |$$$$\\ \\__|          \n$$  ____/ $$  __$$< $$ |  $$ |$$ |\\_$$ |$$  __$$< $$  __$$ |$$ \\$$$  $$ |  $$ |  $$ \\$$$$ |$$ |\\_$$ |              \n$$ |      $$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |\\$  /$$ |  $$ |  $$ |\\$$$ |$$ |  $$ |$$\\           \n$$ |      $$ |  $$ | $$$$$$  |\\$$$$$$  |$$ |  $$ |$$ |  $$ |$$ | \\_/ $$ |$$$$$$\\ $$ | \\$$ |\\$$$$$$  |\\__|          \n\\__|      \\__|  \\__| \\______/  \\______/ \\__|  \\__|\\__|  \\__|\\__|     \\__|\\______|\\__|  \\__| \\______/               \n                                                                                                                   \n                                                                                                                   \n                                                                                                                   \n$$\\   $$\\ $$$$$$\\ $$$$$$$\\  $$$$$$$$\\  $$$$$$\\        $$\\   $$\\  $$$$$$\\     $$$$$\\ $$$$$$\\ $$\\      $$\\  $$$$$$\\  \n$$ |  $$ |\\_$$  _|$$  __$$\\ $$  _____|$$  __$$\\       $$ | $$  |$$  __$$\\    \\__$$ |\\_$$  _|$$$\\    $$$ |$$  __$$\\ \n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ /  $$ |      $$ |$$  / $$ /  $$ |      $$ |  $$ |  $$$$\\  $$$$ |$$ /  $$ |\n$$$$$$$$ |  $$ |  $$ |  $$ |$$$$$\\    $$ |  $$ |      $$$$$  /  $$ |  $$ |      $$ |  $$ |  $$\\$$\\$$ $$ |$$$$$$$$ |\n$$  __$$ |  $$ |  $$ |  $$ |$$  __|   $$ |  $$ |      $$  $$<   $$ |  $$ |$$\\   $$ |  $$ |  $$ \\$$$  $$ |$$  __$$ |\n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ |  $$ |      $$ |\\$$\\  $$ |  $$ |$$ |  $$ |  $$ |  $$ |\\$  /$$ |$$ |  $$ |\n$$ |  $$ |$$$$$$\\ $$$$$$$  |$$$$$$$$\\  $$$$$$  |      $$ | \\$$\\  $$$$$$  |\\$$$$$$  |$$$$$$\\ $$ | \\_/ $$ |$$ |  $$ |\n\\__|  \\__|\\______|\\_______/ \\________| \\______/       \\__|  \\__| \\______/  \\______/ \\______|\\__|     \\__|\\__|  \\__|\n                                                                                                                   \n                                                                                                                   \n                                                                                                                   ");
+        Mesh design = new Mesh(" $$$$$$\\   $$$$$$\\  $$\\      $$\\ $$$$$$$$\\       $$$$$$$\\  $$$$$$$$\\  $$$$$$\\  $$$$$$\\  $$$$$$\\  $$\\   $$\\         \n$$  __$$\\ $$  __$$\\ $$$\\    $$$ |$$  _____|      $$  __$$\\ $$  _____|$$  __$$\\ \\_$$  _|$$  __$$\\ $$$\\  $$ |        \n$$ /  \\__|$$ /  $$ |$$$$\\  $$$$ |$$ |            $$ |  $$ |$$ |      $$ /  \\__|  $$ |  $$ /  \\__|$$$$\\ $$ |$$\\     \n$$ |$$$$\\ $$$$$$$$ |$$\\$$\\$$ $$ |$$$$$\\          $$ |  $$ |$$$$$\\    \\$$$$$$\\    $$ |  $$ |$$$$\\ $$ $$\\$$ |\\__|    \n$$ |\\_$$ |$$  __$$ |$$ \\$$$  $$ |$$  __|         $$ |  $$ |$$  __|    \\____$$\\   $$ |  $$ |\\_$$ |$$ \\$$$$ |        \n$$ |  $$ |$$ |  $$ |$$ |\\$  /$$ |$$ |            $$ |  $$ |$$ |      $$\\   $$ |  $$ |  $$ |  $$ |$$ |\\$$$ |$$\\     \n\\$$$$$$  |$$ |  $$ |$$ | \\_/ $$ |$$$$$$$$\\       $$$$$$$  |$$$$$$$$\\ \\$$$$$$  |$$$$$$\\ \\$$$$$$  |$$ | \\$$ |\\__|    \n \\______/ \\__|  \\__|\\__|     \\__|\\________|      \\_______/ \\________| \\______/ \\______| \\______/ \\__|  \\__|        \n                                                                                                                   \n                                                                                                                   \n                                                                                                                   \n$$\\   $$\\ $$$$$$\\ $$$$$$$\\  $$$$$$$$\\  $$$$$$\\        $$\\   $$\\  $$$$$$\\     $$$$$\\ $$$$$$\\ $$\\      $$\\  $$$$$$\\  \n$$ |  $$ |\\_$$  _|$$  __$$\\ $$  _____|$$  __$$\\       $$ | $$  |$$  __$$\\    \\__$$ |\\_$$  _|$$$\\    $$$ |$$  __$$\\ \n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ /  $$ |      $$ |$$  / $$ /  $$ |      $$ |  $$ |  $$$$\\  $$$$ |$$ /  $$ |\n$$$$$$$$ |  $$ |  $$ |  $$ |$$$$$\\    $$ |  $$ |      $$$$$  /  $$ |  $$ |      $$ |  $$ |  $$\\$$\\$$ $$ |$$$$$$$$ |\n$$  __$$ |  $$ |  $$ |  $$ |$$  __|   $$ |  $$ |      $$  $$<   $$ |  $$ |$$\\   $$ |  $$ |  $$ \\$$$  $$ |$$  __$$ |\n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ |  $$ |      $$ |\\$$\\  $$ |  $$ |$$ |  $$ |  $$ |  $$ |\\$  /$$ |$$ |  $$ |\n$$ |  $$ |$$$$$$\\ $$$$$$$  |$$$$$$$$\\  $$$$$$  |      $$ | \\$$\\  $$$$$$  |\\$$$$$$  |$$$$$$\\ $$ | \\_/ $$ |$$ |  $$ |\n\\__|  \\__|\\______|\\_______/ \\________| \\______/       \\__|  \\__| \\______/  \\______/ \\______|\\__|     \\__|\\__|  \\__|\n                                                                                                                   ");
+        Mesh art = new Mesh(" $$$$$$\\  $$$$$$$\\ $$$$$$$$\\                                                                                       \n$$  __$$\\ $$  __$$\\\\__$$  __|                                                                                      \n$$ /  $$ |$$ |  $$ |  $$ |$$\\                                                                                      \n$$$$$$$$ |$$$$$$$  |  $$ |\\__|                                                                                     \n$$  __$$ |$$  __$$<   $$ |                                                                                         \n$$ |  $$ |$$ |  $$ |  $$ |$$\\                                                                                      \n$$ |  $$ |$$ |  $$ |  $$ |\\__|                                                                                     \n\\__|  \\__|\\__|  \\__|  \\__|                                                                                         \n                                                                                                                   \n                                                                                                                   \n                                                                                                                   \n$$\\   $$\\ $$$$$$\\ $$$$$$$\\  $$$$$$$$\\  $$$$$$\\        $$\\   $$\\  $$$$$$\\     $$$$$\\ $$$$$$\\ $$\\      $$\\  $$$$$$\\  \n$$ |  $$ |\\_$$  _|$$  __$$\\ $$  _____|$$  __$$\\       $$ | $$  |$$  __$$\\    \\__$$ |\\_$$  _|$$$\\    $$$ |$$  __$$\\ \n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ /  $$ |      $$ |$$  / $$ /  $$ |      $$ |  $$ |  $$$$\\  $$$$ |$$ /  $$ |\n$$$$$$$$ |  $$ |  $$ |  $$ |$$$$$\\    $$ |  $$ |      $$$$$  /  $$ |  $$ |      $$ |  $$ |  $$\\$$\\$$ $$ |$$$$$$$$ |\n$$  __$$ |  $$ |  $$ |  $$ |$$  __|   $$ |  $$ |      $$  $$<   $$ |  $$ |$$\\   $$ |  $$ |  $$ \\$$$  $$ |$$  __$$ |\n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ |  $$ |      $$ |\\$$\\  $$ |  $$ |$$ |  $$ |  $$ |  $$ |\\$  /$$ |$$ |  $$ |\n$$ |  $$ |$$$$$$\\ $$$$$$$  |$$$$$$$$\\  $$$$$$  |      $$ | \\$$\\  $$$$$$  |\\$$$$$$  |$$$$$$\\ $$ | \\_/ $$ |$$ |  $$ |\n\\__|  \\__|\\______|\\_______/ \\________| \\______/       \\__|  \\__| \\______/  \\______/ \\______|\\__|     \\__|\\__|  \\__|");
+        Mesh model = new Mesh(" $$$$$$\\  $$$$$$$\\        $$\\      $$\\  $$$$$$\\  $$$$$$$\\  $$$$$$$$\\ $$\\       $$$$$$\\ $$\\   $$\\  $$$$$$\\          \n$$ ___$$\\ $$  __$$\\       $$$\\    $$$ |$$  __$$\\ $$  __$$\\ $$  _____|$$ |      \\_$$  _|$$$\\  $$ |$$  __$$\\         \n\\_/   $$ |$$ |  $$ |      $$$$\\  $$$$ |$$ /  $$ |$$ |  $$ |$$ |      $$ |        $$ |  $$$$\\ $$ |$$ /  \\__|$$\\     \n  $$$$$ / $$ |  $$ |      $$\\$$\\$$ $$ |$$ |  $$ |$$ |  $$ |$$$$$\\    $$ |        $$ |  $$ $$\\$$ |$$ |$$$$\\ \\__|    \n  \\___$$\\ $$ |  $$ |      $$ \\$$$  $$ |$$ |  $$ |$$ |  $$ |$$  __|   $$ |        $$ |  $$ \\$$$$ |$$ |\\_$$ |        \n$$\\   $$ |$$ |  $$ |      $$ |\\$  /$$ |$$ |  $$ |$$ |  $$ |$$ |      $$ |        $$ |  $$ |\\$$$ |$$ |  $$ |$$\\     \n\\$$$$$$  |$$$$$$$  |      $$ | \\_/ $$ | $$$$$$  |$$$$$$$  |$$$$$$$$\\ $$$$$$$$\\ $$$$$$\\ $$ | \\$$ |\\$$$$$$  |\\__|    \n \\______/ \\_______/       \\__|     \\__| \\______/ \\_______/ \\________|\\________|\\______|\\__|  \\__| \\______/         \n                                                                                                                   \n                                                                                                                   \n                                                                                                                   \n$$\\   $$\\ $$$$$$\\ $$$$$$$\\  $$$$$$$$\\  $$$$$$\\        $$\\   $$\\  $$$$$$\\     $$$$$\\ $$$$$$\\ $$\\      $$\\  $$$$$$\\  \n$$ |  $$ |\\_$$  _|$$  __$$\\ $$  _____|$$  __$$\\       $$ | $$  |$$  __$$\\    \\__$$ |\\_$$  _|$$$\\    $$$ |$$  __$$\\ \n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ /  $$ |      $$ |$$  / $$ /  $$ |      $$ |  $$ |  $$$$\\  $$$$ |$$ /  $$ |\n$$$$$$$$ |  $$ |  $$ |  $$ |$$$$$\\    $$ |  $$ |      $$$$$  /  $$ |  $$ |      $$ |  $$ |  $$\\$$\\$$ $$ |$$$$$$$$ |\n$$  __$$ |  $$ |  $$ |  $$ |$$  __|   $$ |  $$ |      $$  $$<   $$ |  $$ |$$\\   $$ |  $$ |  $$ \\$$$  $$ |$$  __$$ |\n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ |  $$ |      $$ |\\$$\\  $$ |  $$ |$$ |  $$ |  $$ |  $$ |\\$  /$$ |$$ |  $$ |\n$$ |  $$ |$$$$$$\\ $$$$$$$  |$$$$$$$$\\  $$$$$$  |      $$ | \\$$\\  $$$$$$  |\\$$$$$$  |$$$$$$\\ $$ | \\_/ $$ |$$ |  $$ |\n\\__|  \\__|\\______|\\_______/ \\________| \\______/       \\__|  \\__| \\______/  \\______/ \\______|\\__|     \\__|\\__|  \\__|\n                                                                                                                   ");
+        Mesh concept = new Mesh(" $$$$$$\\   $$$$$$\\  $$\\   $$\\  $$$$$$\\  $$$$$$$$\\ $$$$$$$\\ $$$$$$$$\\        $$$$$$\\  $$$$$$$\\ $$$$$$$$\\            \n$$  __$$\\ $$  __$$\\ $$$\\  $$ |$$  __$$\\ $$  _____|$$  __$$\\\\__$$  __|      $$  __$$\\ $$  __$$\\\\__$$  __|           \n$$ /  \\__|$$ /  $$ |$$$$\\ $$ |$$ /  \\__|$$ |      $$ |  $$ |  $$ |         $$ /  $$ |$$ |  $$ |  $$ |$$\\           \n$$ |      $$ |  $$ |$$ $$\\$$ |$$ |      $$$$$\\    $$$$$$$  |  $$ |         $$$$$$$$ |$$$$$$$  |  $$ |\\__|          \n$$ |      $$ |  $$ |$$ \\$$$$ |$$ |      $$  __|   $$  ____/   $$ |         $$  __$$ |$$  __$$<   $$ |              \n$$ |  $$\\ $$ |  $$ |$$ |\\$$$ |$$ |  $$\\ $$ |      $$ |        $$ |         $$ |  $$ |$$ |  $$ |  $$ |$$\\           \n\\$$$$$$  | $$$$$$  |$$ | \\$$ |\\$$$$$$  |$$$$$$$$\\ $$ |        $$ |         $$ |  $$ |$$ |  $$ |  $$ |\\__|          \n \\______/  \\______/ \\__|  \\__| \\______/ \\________|\\__|        \\__|         \\__|  \\__|\\__|  \\__|  \\__|              \n                                                                                                                   \n                                                                                                                   \n                                                                                                                   \n$$\\   $$\\ $$$$$$\\ $$$$$$$\\  $$$$$$$$\\  $$$$$$\\        $$\\   $$\\  $$$$$$\\     $$$$$\\ $$$$$$\\ $$\\      $$\\  $$$$$$\\  \n$$ |  $$ |\\_$$  _|$$  __$$\\ $$  _____|$$  __$$\\       $$ | $$  |$$  __$$\\    \\__$$ |\\_$$  _|$$$\\    $$$ |$$  __$$\\ \n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ /  $$ |      $$ |$$  / $$ /  $$ |      $$ |  $$ |  $$$$\\  $$$$ |$$ /  $$ |\n$$$$$$$$ |  $$ |  $$ |  $$ |$$$$$\\    $$ |  $$ |      $$$$$  /  $$ |  $$ |      $$ |  $$ |  $$\\$$\\$$ $$ |$$$$$$$$ |\n$$  __$$ |  $$ |  $$ |  $$ |$$  __|   $$ |  $$ |      $$  $$<   $$ |  $$ |$$\\   $$ |  $$ |  $$ \\$$$  $$ |$$  __$$ |\n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ |  $$ |      $$ |\\$$\\  $$ |  $$ |$$ |  $$ |  $$ |  $$ |\\$  /$$ |$$ |  $$ |\n$$ |  $$ |$$$$$$\\ $$$$$$$  |$$$$$$$$\\  $$$$$$  |      $$ | \\$$\\  $$$$$$  |\\$$$$$$  |$$$$$$\\ $$ | \\_/ $$ |$$ |  $$ |\n\\__|  \\__|\\______|\\_______/ \\________| \\______/       \\__|  \\__| \\______/  \\______/ \\______|\\__|     \\__|\\__|  \\__|\n                                                                                                                   ");
+        Mesh tech = new Mesh("$$$$$$$$\\ $$$$$$$$\\  $$$$$$\\  $$\\   $$\\        $$$$$$\\  $$$$$$$\\ $$$$$$$$\\                                         \n\\__$$  __|$$  _____|$$  __$$\\ $$ |  $$ |      $$  __$$\\ $$  __$$\\\\__$$  __|                                        \n   $$ |   $$ |      $$ /  \\__|$$ |  $$ |      $$ /  $$ |$$ |  $$ |  $$ |$$\\                                        \n   $$ |   $$$$$\\    $$ |      $$$$$$$$ |      $$$$$$$$ |$$$$$$$  |  $$ |\\__|                                       \n   $$ |   $$  __|   $$ |      $$  __$$ |      $$  __$$ |$$  __$$<   $$ |                                           \n   $$ |   $$ |      $$ |  $$\\ $$ |  $$ |      $$ |  $$ |$$ |  $$ |  $$ |$$\\                                        \n   $$ |   $$$$$$$$\\ \\$$$$$$  |$$ |  $$ |      $$ |  $$ |$$ |  $$ |  $$ |\\__|                                       \n   \\__|   \\________| \\______/ \\__|  \\__|      \\__|  \\__|\\__|  \\__|  \\__|                                           \n                                                                                                                   \n                                                                                                                   \n                                                                                                                   \n$$\\   $$\\ $$$$$$\\ $$$$$$$\\  $$$$$$$$\\  $$$$$$\\        $$\\   $$\\  $$$$$$\\     $$$$$\\ $$$$$$\\ $$\\      $$\\  $$$$$$\\  \n$$ |  $$ |\\_$$  _|$$  __$$\\ $$  _____|$$  __$$\\       $$ | $$  |$$  __$$\\    \\__$$ |\\_$$  _|$$$\\    $$$ |$$  __$$\\ \n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ /  $$ |      $$ |$$  / $$ /  $$ |      $$ |  $$ |  $$$$\\  $$$$ |$$ /  $$ |\n$$$$$$$$ |  $$ |  $$ |  $$ |$$$$$\\    $$ |  $$ |      $$$$$  /  $$ |  $$ |      $$ |  $$ |  $$\\$$\\$$ $$ |$$$$$$$$ |\n$$  __$$ |  $$ |  $$ |  $$ |$$  __|   $$ |  $$ |      $$  $$<   $$ |  $$ |$$\\   $$ |  $$ |  $$ \\$$$  $$ |$$  __$$ |\n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ |  $$ |      $$ |\\$$\\  $$ |  $$ |$$ |  $$ |  $$ |  $$ |\\$  /$$ |$$ |  $$ |\n$$ |  $$ |$$$$$$\\ $$$$$$$  |$$$$$$$$\\  $$$$$$  |      $$ | \\$$\\  $$$$$$  |\\$$$$$$  |$$$$$$\\ $$ | \\_/ $$ |$$ |  $$ |\n\\__|  \\__|\\______|\\_______/ \\________| \\______/       \\__|  \\__| \\______/  \\______/ \\______|\\__|     \\__|\\__|  \\__|");
+        Mesh music = new Mesh("$$\\      $$\\ $$\\   $$\\  $$$$$$\\  $$$$$$\\  $$$$$$\\                                                                  \n$$$\\    $$$ |$$ |  $$ |$$  __$$\\ \\_$$  _|$$  __$$\\                                                                 \n$$$$\\  $$$$ |$$ |  $$ |$$ /  \\__|  $$ |  $$ /  \\__|$$\\                                                             \n$$\\$$\\$$ $$ |$$ |  $$ |\\$$$$$$\\    $$ |  $$ |      \\__|                                                            \n$$ \\$$$  $$ |$$ |  $$ | \\____$$\\   $$ |  $$ |                                                                      \n$$ |\\$  /$$ |$$ |  $$ |$$\\   $$ |  $$ |  $$ |  $$\\ $$\\                                                             \n$$ | \\_/ $$ |\\$$$$$$  |\\$$$$$$  |$$$$$$\\ \\$$$$$$  |\\__|                                                            \n\\__|     \\__| \\______/  \\______/ \\______| \\______/                                                                 \n                                                                                                                   \n                                                                                                                   \n                                                                                                                   \n$$\\   $$\\ $$$$$$\\ $$$$$$$\\  $$$$$$$$\\  $$$$$$\\        $$\\   $$\\  $$$$$$\\     $$$$$\\ $$$$$$\\ $$\\      $$\\  $$$$$$\\  \n$$ |  $$ |\\_$$  _|$$  __$$\\ $$  _____|$$  __$$\\       $$ | $$  |$$  __$$\\    \\__$$ |\\_$$  _|$$$\\    $$$ |$$  __$$\\ \n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ /  $$ |      $$ |$$  / $$ /  $$ |      $$ |  $$ |  $$$$\\  $$$$ |$$ /  $$ |\n$$$$$$$$ |  $$ |  $$ |  $$ |$$$$$\\    $$ |  $$ |      $$$$$  /  $$ |  $$ |      $$ |  $$ |  $$\\$$\\$$ $$ |$$$$$$$$ |\n$$  __$$ |  $$ |  $$ |  $$ |$$  __|   $$ |  $$ |      $$  $$<   $$ |  $$ |$$\\   $$ |  $$ |  $$ \\$$$  $$ |$$  __$$ |\n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ |  $$ |      $$ |\\$$\\  $$ |  $$ |$$ |  $$ |  $$ |  $$ |\\$  /$$ |$$ |  $$ |\n$$ |  $$ |$$$$$$\\ $$$$$$$  |$$$$$$$$\\  $$$$$$  |      $$ | \\$$\\  $$$$$$  |\\$$$$$$  |$$$$$$\\ $$ | \\_/ $$ |$$ |  $$ |\n\\__|  \\__|\\______|\\_______/ \\________| \\______/       \\__|  \\__| \\______/  \\______/ \\______|\\__|     \\__|\\__|  \\__|\n                                                                                                                   ");
+        Mesh voice = new Mesh("$$\\    $$\\  $$$$$$\\  $$$$$$\\  $$$$$$\\  $$$$$$$$\\        $$$$$$\\   $$$$$$\\ $$$$$$$$\\ $$$$$$\\ $$\\   $$\\  $$$$$$\\      \n$$ |   $$ |$$  __$$\\ \\_$$  _|$$  __$$\\ $$  _____|      $$  __$$\\ $$  __$$\\\\__$$  __|\\_$$  _|$$$\\  $$ |$$  __$$\\     \n$$ |   $$ |$$ /  $$ |  $$ |  $$ /  \\__|$$ |            $$ /  $$ |$$ /  \\__|  $$ |     $$ |  $$$$\\ $$ |$$ /  \\__|$$\\ \n\\$$\\  $$  |$$ |  $$ |  $$ |  $$ |      $$$$$\\          $$$$$$$$ |$$ |        $$ |     $$ |  $$ $$\\$$ |$$ |$$$$\\ \\__|\n \\$$\\$$  / $$ |  $$ |  $$ |  $$ |      $$  __|         $$  __$$ |$$ |        $$ |     $$ |  $$ \\$$$$ |$$ |\\_$$ |    \n  \\$$$  /  $$ |  $$ |  $$ |  $$ |  $$\\ $$ |            $$ |  $$ |$$ |  $$\\   $$ |     $$ |  $$ |\\$$$ |$$ |  $$ |$$\\ \n   \\$  /    $$$$$$  |$$$$$$\\ \\$$$$$$  |$$$$$$$$\\       $$ |  $$ |\\$$$$$$  |  $$ |   $$$$$$\\ $$ | \\$$ |\\$$$$$$  |\\__|\n    \\_/     \\______/ \\______| \\______/ \\________|      \\__|  \\__| \\______/   \\__|   \\______|\\__|  \\__| \\______/     \n                                                                                                                    \n                                                                                                                    \n                                                                                                                    \n$$$$$$$\\   $$$$$$\\  $$$$$$$\\        $$$$$$$\\  $$$$$$$$\\ $$\\   $$\\       $$$$$$$\\   $$$$$$\\  $$$$$$$\\                \n$$  __$$\\ $$  __$$\\ $$  __$$\\       $$  __$$\\ $$  _____|$$$\\  $$ |      $$  __$$\\ $$  __$$\\ $$  __$$\\               \n$$ |  $$ |$$ /  $$ |$$ |  $$ |      $$ |  $$ |$$ |      $$$$\\ $$ |      $$ |  $$ |$$ /  $$ |$$ |  $$ |              \n$$ |  $$ |$$ |  $$ |$$$$$$$  |      $$$$$$$\\ |$$$$$\\    $$ $$\\$$ |      $$ |  $$ |$$ |  $$ |$$$$$$$  |              \n$$ |  $$ |$$ |  $$ |$$  __$$<       $$  __$$\\ $$  __|   $$ \\$$$$ |      $$ |  $$ |$$ |  $$ |$$  __$$<               \n$$ |  $$ |$$ |  $$ |$$ |  $$ |      $$ |  $$ |$$ |      $$ |\\$$$ |      $$ |  $$ |$$ |  $$ |$$ |  $$ |              \n$$$$$$$  | $$$$$$  |$$ |  $$ |      $$$$$$$  |$$$$$$$$\\ $$ | \\$$ |      $$$$$$$  | $$$$$$  |$$ |  $$ |              \n\\_______/  \\______/ \\__|  \\__|      \\_______/ \\________|\\__|  \\__|      \\_______/  \\______/ \\__|  \\__|              \n                                                                                                                    \n                                                                                                                    \n                                                                                                                    \n $$$$$$\\  $$$$$$$$\\ $$$$$$\\ $$$$$$$\\        $$\\   $$\\  $$$$$$\\ $$$$$$$$\\ $$$$$$$$\\                                  \n$$  __$$\\ $$  _____|\\_$$  _|$$  __$$\\       $$ | $$  |$$  __$$\\\\__$$  __|\\____$$  |                                 \n$$ /  $$ |$$ |        $$ |  $$ |  $$ |      $$ |$$  / $$ /  $$ |  $$ |       $$  /                                  \n$$ |  $$ |$$$$$\\      $$ |  $$$$$$$  |      $$$$$  /  $$$$$$$$ |  $$ |      $$  /                                   \n$$ |  $$ |$$  __|     $$ |  $$  __$$<       $$  $$<   $$  __$$ |  $$ |     $$  /                                    \n$$ |  $$ |$$ |        $$ |  $$ |  $$ |      $$ |\\$$\\  $$ |  $$ |  $$ |    $$  /                                     \n $$$$$$  |$$ |      $$$$$$\\ $$ |  $$ |      $$ | \\$$\\ $$ |  $$ |  $$ |   $$$$$$$$\\                                  \n \\______/ \\__|      \\______|\\__|  \\__|      \\__|  \\__|\\__|  \\__|  \\__|   \\________|                                 \n                                                                                                                    \n                                                                                                                    \n                                                                                                                    \n$$\\   $$\\ $$$$$$\\ $$$$$$$\\  $$$$$$$$\\  $$$$$$\\        $$\\   $$\\  $$$$$$\\     $$$$$\\ $$$$$$\\ $$\\      $$\\  $$$$$$\\   \n$$ |  $$ |\\_$$  _|$$  __$$\\ $$  _____|$$  __$$\\       $$ | $$  |$$  __$$\\    \\__$$ |\\_$$  _|$$$\\    $$$ |$$  __$$\\  \n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ /  $$ |      $$ |$$  / $$ /  $$ |      $$ |  $$ |  $$$$\\  $$$$ |$$ /  $$ | \n$$$$$$$$ |  $$ |  $$ |  $$ |$$$$$\\    $$ |  $$ |      $$$$$  /  $$ |  $$ |      $$ |  $$ |  $$\\$$\\$$ $$ |$$$$$$$$ | \n$$  __$$ |  $$ |  $$ |  $$ |$$  __|   $$ |  $$ |      $$  $$<   $$ |  $$ |$$\\   $$ |  $$ |  $$ \\$$$  $$ |$$  __$$ | \n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ |  $$ |      $$ |\\$$\\  $$ |  $$ |$$ |  $$ |  $$ |  $$ |\\$  /$$ |$$ |  $$ | \n$$ |  $$ |$$$$$$\\ $$$$$$$  |$$$$$$$$\\  $$$$$$  |      $$ | \\$$\\  $$$$$$  |\\$$$$$$  |$$$$$$\\ $$ | \\_/ $$ |$$ |  $$ | \n\\__|  \\__|\\______|\\_______/ \\________| \\______/       \\__|  \\__| \\______/  \\______/ \\______|\\__|     \\__|\\__|  \\__| ");
+        Mesh koban = new Mesh(" $$$$$$\\   $$$$$$\\   $$$$$$\\  $$$$$$$\\        $$$$$$$\\  $$$$$$$$\\  $$$$$$\\ $$$$$$$$\\ $$\\   $$\\ $$$$$$$\\   $$$$$$\\  $$\\   $$\\ $$$$$$$$\\  \n$$  __$$\\ $$  __$$\\ $$  __$$\\ $$  __$$\\       $$  __$$\\ $$  _____|$$  __$$\\\\__$$  __|$$ |  $$ |$$  __$$\\ $$  __$$\\ $$$\\  $$ |\\__$$  __| \n$$ /  \\__|$$ /  $$ |$$ /  $$ |$$ |  $$ |      $$ |  $$ |$$ |      $$ /  \\__|  $$ |   $$ |  $$ |$$ |  $$ |$$ /  $$ |$$$$\\ $$ |   $$ |$$\\ \n$$ |$$$$\\ $$ |  $$ |$$ |  $$ |$$ |  $$ |      $$$$$$$  |$$$$$\\    \\$$$$$$\\    $$ |   $$ |  $$ |$$$$$$$  |$$$$$$$$ |$$ $$\\$$ |   $$ |\\__|\n$$ |\\_$$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |      $$  __$$< $$  __|    \\____$$\\   $$ |   $$ |  $$ |$$  __$$< $$  __$$ |$$ \\$$$$ |   $$ |    \n$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |      $$ |  $$ |$$ |      $$\\   $$ |  $$ |   $$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |\\$$$ |   $$ |$$\\ \n\\$$$$$$  | $$$$$$  | $$$$$$  |$$$$$$$  |      $$ |  $$ |$$$$$$$$\\ \\$$$$$$  |  $$ |   \\$$$$$$  |$$ |  $$ |$$ |  $$ |$$ | \\$$ |   $$ |\\__|\n \\______/  \\______/  \\______/ \\_______/       \\__|  \\__|\\________| \\______/   \\__|    \\______/ \\__|  \\__|\\__|  \\__|\\__|  \\__|   \\__|    \n                                                                                                                                        \n                                                                                                                                        \n                                                                                                                                        \n $$$$$$\\  $$$$$$$\\   $$$$$$\\  $$\\   $$\\       $$\\   $$\\  $$$$$$\\  $$$$$$$\\   $$$$$$\\  $$\\   $$\\                                         \n$$  __$$\\ $$  __$$\\ $$  __$$\\ $$$\\  $$ |      $$ | $$  |$$  __$$\\ $$  __$$\\ $$  __$$\\ $$$\\  $$ |                                        \n$$ /  $$ |$$ |  $$ |$$ /  $$ |$$$$\\ $$ |      $$ |$$  / $$ /  $$ |$$ |  $$ |$$ /  $$ |$$$$\\ $$ |                                        \n$$ |  $$ |$$$$$$$\\ |$$$$$$$$ |$$ $$\\$$ |      $$$$$  /  $$ |  $$ |$$$$$$$\\ |$$$$$$$$ |$$ $$\\$$ |                                        \n$$ |  $$ |$$  __$$\\ $$  __$$ |$$ \\$$$$ |      $$  $$<   $$ |  $$ |$$  __$$\\ $$  __$$ |$$ \\$$$$ |                                        \n$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |\\$$$ |      $$ |\\$$\\  $$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |\\$$$ |                                        \n $$$$$$  |$$$$$$$  |$$ |  $$ |$$ | \\$$ |      $$ | \\$$\\  $$$$$$  |$$$$$$$  |$$ |  $$ |$$ | \\$$ |                                        \n \\______/ \\_______/ \\__|  \\__|\\__|  \\__|      \\__|  \\__| \\______/ \\_______/ \\__|  \\__|\\__|  \\__|                                        \n                                                                                                                                        \n                                                                                                     ");
+        Mesh cucumber = new Mesh(" $$$$$$\\  $$\\   $$\\  $$$$$$\\  $$\\   $$\\ $$\\      $$\\ $$$$$$$\\  $$$$$$$$\\ $$$$$$$\\        \n$$  __$$\\ $$ |  $$ |$$  __$$\\ $$ |  $$ |$$$\\    $$$ |$$  __$$\\ $$  _____|$$  __$$\\       \n$$ /  \\__|$$ |  $$ |$$ /  \\__|$$ |  $$ |$$$$\\  $$$$ |$$ |  $$ |$$ |      $$ |  $$ |      \n$$ |      $$ |  $$ |$$ |      $$ |  $$ |$$\\$$\\$$ $$ |$$$$$$$\\ |$$$$$\\    $$$$$$$  |      \n$$ |      $$ |  $$ |$$ |      $$ |  $$ |$$ \\$$$  $$ |$$  __$$\\ $$  __|   $$  __$$<       \n$$ |  $$\\ $$ |  $$ |$$ |  $$\\ $$ |  $$ |$$ |\\$  /$$ |$$ |  $$ |$$ |      $$ |  $$ |      \n\\$$$$$$  |\\$$$$$$  |\\$$$$$$  |\\$$$$$$  |$$ | \\_/ $$ |$$$$$$$  |$$$$$$$$\\ $$ |  $$ |      \n \\______/  \\______/  \\______/  \\______/ \\__|     \\__|\\_______/ \\________|\\__|  \\__|      \n                                                                                         \n                                                                                      ");
+        Mesh dontKnow = new Mesh("$$$$$$\\       $$\\   $$\\  $$$$$$\\  $$\\    $$\\ $$$$$$$$\\       $$\\   $$\\  $$$$$$\\        $$$$$$\\ $$$$$$$\\  $$$$$$$$\\  $$$$$$\\  \n\\_$$  _|      $$ |  $$ |$$  __$$\\ $$ |   $$ |$$  _____|      $$$\\  $$ |$$  __$$\\       \\_$$  _|$$  __$$\\ $$  _____|$$  __$$\\ \n  $$ |        $$ |  $$ |$$ /  $$ |$$ |   $$ |$$ |            $$$$\\ $$ |$$ /  $$ |        $$ |  $$ |  $$ |$$ |      $$ /  $$ |\n  $$ |        $$$$$$$$ |$$$$$$$$ |\\$$\\  $$  |$$$$$\\          $$ $$\\$$ |$$ |  $$ |        $$ |  $$ |  $$ |$$$$$\\    $$$$$$$$ |\n  $$ |        $$  __$$ |$$  __$$ | \\$$\\$$  / $$  __|         $$ \\$$$$ |$$ |  $$ |        $$ |  $$ |  $$ |$$  __|   $$  __$$ |\n  $$ |        $$ |  $$ |$$ |  $$ |  \\$$$  /  $$ |            $$ |\\$$$ |$$ |  $$ |        $$ |  $$ |  $$ |$$ |      $$ |  $$ |\n$$$$$$\\       $$ |  $$ |$$ |  $$ |   \\$  /   $$$$$$$$\\       $$ | \\$$ | $$$$$$  |      $$$$$$\\ $$$$$$$  |$$$$$$$$\\ $$ |  $$ |\n\\______|      \\__|  \\__|\\__|  \\__|    \\_/    \\________|      \\__|  \\__| \\______/       \\______|\\_______/ \\________|\\__|  \\__|\n                                                                                                                             \n                                                                                                                             \n                                                                                                                             \n$$\\      $$\\ $$\\   $$\\ $$\\     $$\\       $$$$$$\\        $$$$$$\\   $$$$$$\\  $$$$$$\\ $$$$$$$\\                                  \n$$ | $\\  $$ |$$ |  $$ |\\$$\\   $$  |      \\_$$  _|      $$  __$$\\ $$  __$$\\ \\_$$  _|$$  __$$\\                                 \n$$ |$$$\\ $$ |$$ |  $$ | \\$$\\ $$  /         $$ |        $$ /  \\__|$$ /  $$ |  $$ |  $$ |  $$ |                                \n$$ $$ $$\\$$ |$$$$$$$$ |  \\$$$$  /          $$ |        \\$$$$$$\\  $$$$$$$$ |  $$ |  $$ |  $$ |                                \n$$$$  _$$$$ |$$  __$$ |   \\$$  /           $$ |         \\____$$\\ $$  __$$ |  $$ |  $$ |  $$ |                                \n$$$  / \\$$$ |$$ |  $$ |    $$ |            $$ |        $$\\   $$ |$$ |  $$ |  $$ |  $$ |  $$ |                                \n$$  /   \\$$ |$$ |  $$ |    $$ |          $$$$$$\\       \\$$$$$$  |$$ |  $$ |$$$$$$\\ $$$$$$$  |                                \n\\__/     \\__|\\__|  \\__|    \\__|          \\______|       \\______/ \\__|  \\__|\\______|\\_______/                                 \n                                                                                                                             \n                                                                                                                             \n                                                                                                                             \n $$$$$$\\  $$\\   $$\\  $$$$$$\\  $$\\   $$\\ $$\\      $$\\ $$$$$$$\\  $$$$$$$$\\ $$$$$$$\\                                            \n$$  __$$\\ $$ |  $$ |$$  __$$\\ $$ |  $$ |$$$\\    $$$ |$$  __$$\\ $$  _____|$$  __$$\\                                           \n$$ /  \\__|$$ |  $$ |$$ /  \\__|$$ |  $$ |$$$$\\  $$$$ |$$ |  $$ |$$ |      $$ |  $$ |                                          \n$$ |      $$ |  $$ |$$ |      $$ |  $$ |$$\\$$\\$$ $$ |$$$$$$$\\ |$$$$$\\    $$$$$$$  |                                          \n$$ |      $$ |  $$ |$$ |      $$ |  $$ |$$ \\$$$  $$ |$$  __$$\\ $$  __|   $$  __$$<                                           \n$$ |  $$\\ $$ |  $$ |$$ |  $$\\ $$ |  $$ |$$ |\\$  /$$ |$$ |  $$ |$$ |      $$ |  $$ |                                          \n\\$$$$$$  |\\$$$$$$  |\\$$$$$$  |\\$$$$$$  |$$ | \\_/ $$ |$$$$$$$  |$$$$$$$$\\ $$ |  $$ |                                          \n \\______/  \\______/  \\______/  \\______/ \\__|     \\__|\\_______/ \\________|\\__|  \\__|                                          \n                                                                                                                             \n                                                                                                                             \n                                                                                            ");
+        Mesh cool = new Mesh("$$$$$$\\        $$$$$$\\  $$\\   $$\\ $$$$$$$$\\  $$$$$$\\   $$$$$$\\        $$$$$$\\          $$$$$\\ $$\\   $$\\  $$$$$$\\ $$$$$$$$\\ \n\\_$$  _|      $$  __$$\\ $$ |  $$ |$$  _____|$$  __$$\\ $$  __$$\\       \\_$$  _|         \\__$$ |$$ |  $$ |$$  __$$\\\\__$$  __|\n  $$ |        $$ /  \\__|$$ |  $$ |$$ |      $$ /  \\__|$$ /  \\__|        $$ |              $$ |$$ |  $$ |$$ /  \\__|  $$ |   \n  $$ |        $$ |$$$$\\ $$ |  $$ |$$$$$\\    \\$$$$$$\\  \\$$$$$$\\          $$ |              $$ |$$ |  $$ |\\$$$$$$\\    $$ |   \n  $$ |        $$ |\\_$$ |$$ |  $$ |$$  __|    \\____$$\\  \\____$$\\         $$ |        $$\\   $$ |$$ |  $$ | \\____$$\\   $$ |   \n  $$ |        $$ |  $$ |$$ |  $$ |$$ |      $$\\   $$ |$$\\   $$ |        $$ |        $$ |  $$ |$$ |  $$ |$$\\   $$ |  $$ |   \n$$$$$$\\       \\$$$$$$  |\\$$$$$$  |$$$$$$$$\\ \\$$$$$$  |\\$$$$$$  |      $$$$$$\\       \\$$$$$$  |\\$$$$$$  |\\$$$$$$  |  $$ |   \n\\______|       \\______/  \\______/ \\________| \\______/  \\______/       \\______|       \\______/  \\______/  \\______/   \\__|   \n                                                                                                                           \n                                                                                                                           \n                                                                                                                           \n$$\\      $$\\  $$$$$$\\  $$\\   $$\\ $$$$$$$$\\ $$$$$$$$\\ $$$$$$$\\        $$$$$$$$\\  $$$$$$\\        $$$$$$$\\  $$$$$$$$\\         \n$$ | $\\  $$ |$$  __$$\\ $$$\\  $$ |\\__$$  __|$$  _____|$$  __$$\\       \\__$$  __|$$  __$$\\       $$  __$$\\ $$  _____|        \n$$ |$$$\\ $$ |$$ /  $$ |$$$$\\ $$ |   $$ |   $$ |      $$ |  $$ |         $$ |   $$ /  $$ |      $$ |  $$ |$$ |              \n$$ $$ $$\\$$ |$$$$$$$$ |$$ $$\\$$ |   $$ |   $$$$$\\    $$ |  $$ |         $$ |   $$ |  $$ |      $$$$$$$\\ |$$$$$\\            \n$$$$  _$$$$ |$$  __$$ |$$ \\$$$$ |   $$ |   $$  __|   $$ |  $$ |         $$ |   $$ |  $$ |      $$  __$$\\ $$  __|           \n$$$  / \\$$$ |$$ |  $$ |$$ |\\$$$ |   $$ |   $$ |      $$ |  $$ |         $$ |   $$ |  $$ |      $$ |  $$ |$$ |              \n$$  /   \\$$ |$$ |  $$ |$$ | \\$$ |   $$ |   $$$$$$$$\\ $$$$$$$  |         $$ |    $$$$$$  |      $$$$$$$  |$$$$$$$$\\         \n\\__/     \\__|\\__|  \\__|\\__|  \\__|   \\__|   \\________|\\_______/          \\__|    \\______/       \\_______/ \\________|        \n                                                                                                                           \n                                                                                                                           \n                                                                                                                           \n $$$$$$\\   $$$$$$\\   $$$$$$\\  $$\\                                                                                          \n$$  __$$\\ $$  __$$\\ $$  __$$\\ $$ |                                                                                         \n$$ /  \\__|$$ /  $$ |$$ /  $$ |$$ |                                                                                         \n$$ |      $$ |  $$ |$$ |  $$ |$$ |                                                                                         \n$$ |      $$ |  $$ |$$ |  $$ |$$ |                                                                                         \n$$ |  $$\\ $$ |  $$ |$$ |  $$ |$$ |                                                                                         \n\\$$$$$$  | $$$$$$  | $$$$$$  |$$$$$$$$\\                                                                                    \n \\______/  \\______/  \\______/ \\________|                                                                                   \n                                         ");
+        Mesh asCucumber = new Mesh(" $$$$$$\\   $$$$$$\\   $$$$$$\\  $$\\              $$$$$$\\   $$$$$$\\         $$$$$$\\   \n$$  __$$\\ $$  __$$\\ $$  __$$\\ $$ |            $$  __$$\\ $$  __$$\\       $$  __$$\\  \n$$ /  \\__|$$ /  $$ |$$ /  $$ |$$ |            $$ /  $$ |$$ /  \\__|      $$ /  $$ | \n$$ |      $$ |  $$ |$$ |  $$ |$$ |            $$$$$$$$ |\\$$$$$$\\        $$$$$$$$ | \n$$ |      $$ |  $$ |$$ |  $$ |$$ |            $$  __$$ | \\____$$\\       $$  __$$ | \n$$ |  $$\\ $$ |  $$ |$$ |  $$ |$$ |            $$ |  $$ |$$\\   $$ |      $$ |  $$ | \n\\$$$$$$  | $$$$$$  | $$$$$$  |$$$$$$$$\\       $$ |  $$ |\\$$$$$$  |      $$ |  $$ | \n \\______/  \\______/  \\______/ \\________|      \\__|  \\__| \\______/       \\__|  \\__| \n                                                                                   \n                                                                                   \n                                                                                   \n $$$$$$\\  $$\\   $$\\  $$$$$$\\  $$\\   $$\\ $$\\      $$\\ $$$$$$$\\  $$$$$$$$\\ $$$$$$$\\  \n$$  __$$\\ $$ |  $$ |$$  __$$\\ $$ |  $$ |$$$\\    $$$ |$$  __$$\\ $$  _____|$$  __$$\\ \n$$ /  \\__|$$ |  $$ |$$ /  \\__|$$ |  $$ |$$$$\\  $$$$ |$$ |  $$ |$$ |      $$ |  $$ |\n$$ |      $$ |  $$ |$$ |      $$ |  $$ |$$\\$$\\$$ $$ |$$$$$$$\\ |$$$$$\\    $$$$$$$  |\n$$ |      $$ |  $$ |$$ |      $$ |  $$ |$$ \\$$$  $$ |$$  __$$\\ $$  __|   $$  __$$< \n$$ |  $$\\ $$ |  $$ |$$ |  $$\\ $$ |  $$ |$$ |\\$  /$$ |$$ |  $$ |$$ |      $$ |  $$ |\n\\$$$$$$  |\\$$$$$$  |\\$$$$$$  |\\$$$$$$  |$$ | \\_/ $$ |$$$$$$$  |$$$$$$$$\\ $$ |  $$ |\n \\______/  \\______/  \\______/  \\______/ \\__|     \\__|\\_______/ \\________|\\__|  \\__|\n                                                                                   ");
+        Mesh anyway = new Mesh(" $$$$$$\\  $$\\   $$\\ $$\\     $$\\ $$\\      $$\\  $$$$$$\\ $$\\     $$\\ \n$$  __$$\\ $$$\\  $$ |\\$$\\   $$  |$$ | $\\  $$ |$$  __$$\\\\$$\\   $$  |\n$$ /  $$ |$$$$\\ $$ | \\$$\\ $$  / $$ |$$$\\ $$ |$$ /  $$ |\\$$\\ $$  / \n$$$$$$$$ |$$ $$\\$$ |  \\$$$$  /  $$ $$ $$\\$$ |$$$$$$$$ | \\$$$$  /  \n$$  __$$ |$$ \\$$$$ |   \\$$  /   $$$$  _$$$$ |$$  __$$ |  \\$$  /   \n$$ |  $$ |$$ |\\$$$ |    $$ |    $$$  / \\$$$ |$$ |  $$ |   $$ |    \n$$ |  $$ |$$ | \\$$ |    $$ |    $$  /   \\$$ |$$ |  $$ |   $$ |    \n\\__|  \\__|\\__|  \\__|    \\__|    \\__/     \\__|\\__|  \\__|   \\__|    ");
+        Mesh stalling = new Mesh("$$$$$$\\ $$\\      $$\\        $$$$$$\\  $$$$$$$$\\ $$$$$$$$\\ $$$$$$$$\\ $$$$$$\\ $$\\   $$\\  $$$$$$\\        \n\\_$$  _|$$$\\    $$$ |      $$  __$$\\ $$  _____|\\__$$  __|\\__$$  __|\\_$$  _|$$$\\  $$ |$$  __$$\\       \n  $$ |  $$$$\\  $$$$ |      $$ /  \\__|$$ |         $$ |      $$ |     $$ |  $$$$\\ $$ |$$ /  \\__|      \n  $$ |  $$\\$$\\$$ $$ |      $$ |$$$$\\ $$$$$\\       $$ |      $$ |     $$ |  $$ $$\\$$ |$$ |$$$$\\       \n  $$ |  $$ \\$$$  $$ |      $$ |\\_$$ |$$  __|      $$ |      $$ |     $$ |  $$ \\$$$$ |$$ |\\_$$ |      \n  $$ |  $$ |\\$  /$$ |      $$ |  $$ |$$ |         $$ |      $$ |     $$ |  $$ |\\$$$ |$$ |  $$ |      \n$$$$$$\\ $$ | \\_/ $$ |      \\$$$$$$  |$$$$$$$$\\    $$ |      $$ |   $$$$$$\\ $$ | \\$$ |\\$$$$$$  |      \n\\______|\\__|     \\__|       \\______/ \\________|   \\__|      \\__|   \\______|\\__|  \\__| \\______/       \n                                                                                                     \n                                                                                                     \n                                                                                                     \n$$$$$$$\\   $$$$$$\\  $$$$$$$\\  $$$$$$$$\\ $$$$$$$\\                                                     \n$$  __$$\\ $$  __$$\\ $$  __$$\\ $$  _____|$$  __$$\\                                                    \n$$ |  $$ |$$ /  $$ |$$ |  $$ |$$ |      $$ |  $$ |                                                   \n$$$$$$$\\ |$$ |  $$ |$$$$$$$  |$$$$$\\    $$ |  $$ |                                                   \n$$  __$$\\ $$ |  $$ |$$  __$$< $$  __|   $$ |  $$ |                                                   \n$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |      $$ |  $$ |                                                   \n$$$$$$$  | $$$$$$  |$$ |  $$ |$$$$$$$$\\ $$$$$$$  |                                                   \n\\_______/  \\______/ \\__|  \\__|\\________|\\_______/ ");
+        Mesh so = new Mesh(" $$$$$$\\   $$$$$$\\              \n$$  __$$\\ $$  __$$\\             \n$$ /  \\__|$$ /  $$ |            \n\\$$$$$$\\  $$ |  $$ |            \n \\____$$\\ $$ |  $$ |            \n$$\\   $$ |$$ |  $$ |            \n\\$$$$$$  | $$$$$$  |$$\\ $$\\ $$\\ \n \\______/  \\______/ \\__|\\__|\\__|\n                                ");
+        Mesh what = new Mesh("$$\\      $$\\ $$\\   $$\\  $$$$$$\\ $$$$$$$$\\  $$$$$$\\        $$\\   $$\\ $$$$$$$\\   $$$$\\  \n$$ | $\\  $$ |$$ |  $$ |$$  __$$\\\\__$$  __|$$  __$$\\       $$ |  $$ |$$  __$$\\ $$  $$\\ \n$$ |$$$\\ $$ |$$ |  $$ |$$ /  $$ |  $$ |   $$ /  \\__|      $$ |  $$ |$$ |  $$ |\\__/$$ |\n$$ $$ $$\\$$ |$$$$$$$$ |$$$$$$$$ |  $$ |   \\$$$$$$\\        $$ |  $$ |$$$$$$$  |   $$  |\n$$$$  _$$$$ |$$  __$$ |$$  __$$ |  $$ |    \\____$$\\       $$ |  $$ |$$  ____/   $$  / \n$$$  / \\$$$ |$$ |  $$ |$$ |  $$ |  $$ |   $$\\   $$ |      $$ |  $$ |$$ |        \\__/  \n$$  /   \\$$ |$$ |  $$ |$$ |  $$ |  $$ |   \\$$$$$$  |      \\$$$$$$  |$$ |        $$\\   \n\\__/     \\__|\\__|  \\__|\\__|  \\__|  \\__|    \\______/        \\______/ \\__|        \\__|  \n                                                                                      ");
+        Mesh care = new Mesh("$$$$$$\\       $$$$$$$\\   $$$$$$\\  $$\\   $$\\ $$$$$$$$\\       $$$$$$$\\  $$$$$$$$\\  $$$$$$\\  $$\\       $$\\   $$\\     $$\\       \n\\_$$  _|      $$  __$$\\ $$  __$$\\ $$$\\  $$ |\\__$$  __|      $$  __$$\\ $$  _____|$$  __$$\\ $$ |      $$ |  \\$$\\   $$  |      \n  $$ |        $$ |  $$ |$$ /  $$ |$$$$\\ $$ |   $$ |         $$ |  $$ |$$ |      $$ /  $$ |$$ |      $$ |   \\$$\\ $$  /       \n  $$ |        $$ |  $$ |$$ |  $$ |$$ $$\\$$ |   $$ |         $$$$$$$  |$$$$$\\    $$$$$$$$ |$$ |      $$ |    \\$$$$  /        \n  $$ |        $$ |  $$ |$$ |  $$ |$$ \\$$$$ |   $$ |         $$  __$$< $$  __|   $$  __$$ |$$ |      $$ |     \\$$  /         \n  $$ |        $$ |  $$ |$$ |  $$ |$$ |\\$$$ |   $$ |         $$ |  $$ |$$ |      $$ |  $$ |$$ |      $$ |      $$ |          \n$$$$$$\\       $$$$$$$  | $$$$$$  |$$ | \\$$ |   $$ |         $$ |  $$ |$$$$$$$$\\ $$ |  $$ |$$$$$$$$\\ $$$$$$$$\\ $$ |          \n\\______|      \\_______/  \\______/ \\__|  \\__|   \\__|         \\__|  \\__|\\________|\\__|  \\__|\\________|\\________|\\__|          \n                                                                                                                            \n                                                                                                                            \n                                                                                                                            \n $$$$$$\\   $$$$$$\\  $$$$$$$\\  $$$$$$$$\\                                                                                     \n$$  __$$\\ $$  __$$\\ $$  __$$\\ $$  _____|                                                                                    \n$$ /  \\__|$$ /  $$ |$$ |  $$ |$$ |                                                                                          \n$$ |      $$$$$$$$ |$$$$$$$  |$$$$$\\                                                                                        \n$$ |      $$  __$$ |$$  __$$< $$  __|                                                                                       \n$$ |  $$\\ $$ |  $$ |$$ |  $$ |$$ |                                                                                          \n\\$$$$$$  |$$ |  $$ |$$ |  $$ |$$$$$$$$\\                                                                                     \n \\______/ \\__|  \\__|\\__|  \\__|\\________|  ");
+        Mesh even = new Mesh("$$$$$$$$\\ $$\\    $$\\ $$$$$$$$\\ $$\\   $$\\       $$$$$$\\ $$$$$$$$\\       \n$$  _____|$$ |   $$ |$$  _____|$$$\\  $$ |      \\_$$  _|$$  _____|      \n$$ |      $$ |   $$ |$$ |      $$$$\\ $$ |        $$ |  $$ |            \n$$$$$\\    \\$$\\  $$  |$$$$$\\    $$ $$\\$$ |        $$ |  $$$$$\\          \n$$  __|    \\$$\\$$  / $$  __|   $$ \\$$$$ |        $$ |  $$  __|         \n$$ |        \\$$$  /  $$ |      $$ |\\$$$ |        $$ |  $$ |            \n$$$$$$$$\\    \\$  /   $$$$$$$$\\ $$ | \\$$ |      $$$$$$\\ $$ |            \n\\________|    \\_/    \\________|\\__|  \\__|      \\______|\\__|            \n                                                                       \n                                                                       \n                                                                       \n$$$$$$\\       $$$$$$$\\   $$$$$$\\                                       \n\\_$$  _|      $$  __$$\\ $$  __$$\\                                      \n  $$ |        $$ |  $$ |$$ /  $$ |                                     \n  $$ |        $$ |  $$ |$$ |  $$ |                                     \n  $$ |        $$ |  $$ |$$ |  $$ |                                     \n  $$ |        $$ |  $$ |$$ |  $$ |                                     \n$$$$$$\\       $$$$$$$  | $$$$$$  |                                     \n\\______|      \\_______/  \\______/ ");
+        Mesh computer = new Mesh("$$$$$$\\ $$\\      $$\\        $$$$$$\\         $$$$$$\\   $$$$$$\\  $$\\      $$\\ $$$$$$$\\  $$\\   $$\\ $$$$$$$$\\ $$$$$$$$\\ $$$$$$$\\  \n\\_$$  _|$$$\\    $$$ |      $$  __$$\\       $$  __$$\\ $$  __$$\\ $$$\\    $$$ |$$  __$$\\ $$ |  $$ |\\__$$  __|$$  _____|$$  __$$\\ \n  $$ |  $$$$\\  $$$$ |      $$ /  $$ |      $$ /  \\__|$$ /  $$ |$$$$\\  $$$$ |$$ |  $$ |$$ |  $$ |   $$ |   $$ |      $$ |  $$ |\n  $$ |  $$\\$$\\$$ $$ |      $$$$$$$$ |      $$ |      $$ |  $$ |$$\\$$\\$$ $$ |$$$$$$$  |$$ |  $$ |   $$ |   $$$$$\\    $$$$$$$  |\n  $$ |  $$ \\$$$  $$ |      $$  __$$ |      $$ |      $$ |  $$ |$$ \\$$$  $$ |$$  ____/ $$ |  $$ |   $$ |   $$  __|   $$  __$$< \n  $$ |  $$ |\\$  /$$ |      $$ |  $$ |      $$ |  $$\\ $$ |  $$ |$$ |\\$  /$$ |$$ |      $$ |  $$ |   $$ |   $$ |      $$ |  $$ |\n$$$$$$\\ $$ | \\_/ $$ |      $$ |  $$ |      \\$$$$$$  | $$$$$$  |$$ | \\_/ $$ |$$ |      \\$$$$$$  |   $$ |   $$$$$$$$\\ $$ |  $$ |\n\\______|\\__|     \\__|      \\__|  \\__|       \\______/  \\______/ \\__|     \\__|\\__|       \\______/    \\__|   \\________|\\__|  \\__|\n                                                                                                                              \n                                                                                                                              \n                                                                                                                              \n$$$$$$$\\  $$$$$$$\\   $$$$$$\\   $$$$$$\\  $$$$$$$\\   $$$$$$\\  $$\\      $$\\                                                      \n$$  __$$\\ $$  __$$\\ $$  __$$\\ $$  __$$\\ $$  __$$\\ $$  __$$\\ $$$\\    $$$ |                                                     \n$$ |  $$ |$$ |  $$ |$$ /  $$ |$$ /  \\__|$$ |  $$ |$$ /  $$ |$$$$\\  $$$$ |                                                     \n$$$$$$$  |$$$$$$$  |$$ |  $$ |$$ |$$$$\\ $$$$$$$  |$$$$$$$$ |$$\\$$\\$$ $$ |                                                     \n$$  ____/ $$  __$$< $$ |  $$ |$$ |\\_$$ |$$  __$$< $$  __$$ |$$ \\$$$  $$ |                                                     \n$$ |      $$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |\\$  /$$ |                                                     \n$$ |      $$ |  $$ | $$$$$$  |\\$$$$$$  |$$ |  $$ |$$ |  $$ |$$ | \\_/ $$ |                                                     \n\\__|      \\__|  \\__| \\______/  \\______/ \\__|  \\__|\\__|  \\__|\\__|     \\__|                                                     \n                                                                           ");
+        Mesh anything = new Mesh(" $$$$$$\\   $$$$$$\\        $$$$$$\\       $$$$$$$\\   $$$$$$\\  $$\\   $$\\ $$$$$$$$\\       $$\\   $$\\  $$$$$$\\  $$\\    $$\\ $$$$$$$$\\      \n$$  __$$\\ $$  __$$\\       \\_$$  _|      $$  __$$\\ $$  __$$\\ $$$\\  $$ |\\__$$  __|      $$ |  $$ |$$  __$$\\ $$ |   $$ |$$  _____|     \n$$ /  \\__|$$ /  $$ |        $$ |        $$ |  $$ |$$ /  $$ |$$$$\\ $$ |   $$ |         $$ |  $$ |$$ /  $$ |$$ |   $$ |$$ |           \n\\$$$$$$\\  $$ |  $$ |        $$ |        $$ |  $$ |$$ |  $$ |$$ $$\\$$ |   $$ |         $$$$$$$$ |$$$$$$$$ |\\$$\\  $$  |$$$$$\\         \n \\____$$\\ $$ |  $$ |        $$ |        $$ |  $$ |$$ |  $$ |$$ \\$$$$ |   $$ |         $$  __$$ |$$  __$$ | \\$$\\$$  / $$  __|        \n$$\\   $$ |$$ |  $$ |        $$ |        $$ |  $$ |$$ |  $$ |$$ |\\$$$ |   $$ |         $$ |  $$ |$$ |  $$ |  \\$$$  /  $$ |           \n\\$$$$$$  | $$$$$$  |      $$$$$$\\       $$$$$$$  | $$$$$$  |$$ | \\$$ |   $$ |         $$ |  $$ |$$ |  $$ |   \\$  /   $$$$$$$$\\      \n \\______/  \\______/       \\______|      \\_______/  \\______/ \\__|  \\__|   \\__|         \\__|  \\__|\\__|  \\__|    \\_/    \\________|     \n                                                                                                                                    \n                                                                                                                                    \n                                                                                                                                    \n $$$$$$\\  $$\\   $$\\ $$\\     $$\\ $$$$$$$$\\ $$\\   $$\\ $$$$$$\\ $$\\   $$\\  $$$$$$\\        $$$$$$$$\\  $$$$$$\\        $$$$$$$\\   $$$$$$\\  \n$$  __$$\\ $$$\\  $$ |\\$$\\   $$  |\\__$$  __|$$ |  $$ |\\_$$  _|$$$\\  $$ |$$  __$$\\       \\__$$  __|$$  __$$\\       $$  __$$\\ $$  __$$\\ \n$$ /  $$ |$$$$\\ $$ | \\$$\\ $$  /    $$ |   $$ |  $$ |  $$ |  $$$$\\ $$ |$$ /  \\__|         $$ |   $$ /  $$ |      $$ |  $$ |$$ /  $$ |\n$$$$$$$$ |$$ $$\\$$ |  \\$$$$  /     $$ |   $$$$$$$$ |  $$ |  $$ $$\\$$ |$$ |$$$$\\          $$ |   $$ |  $$ |      $$ |  $$ |$$ |  $$ |\n$$  __$$ |$$ \\$$$$ |   \\$$  /      $$ |   $$  __$$ |  $$ |  $$ \\$$$$ |$$ |\\_$$ |         $$ |   $$ |  $$ |      $$ |  $$ |$$ |  $$ |\n$$ |  $$ |$$ |\\$$$ |    $$ |       $$ |   $$ |  $$ |  $$ |  $$ |\\$$$ |$$ |  $$ |         $$ |   $$ |  $$ |      $$ |  $$ |$$ |  $$ |\n$$ |  $$ |$$ | \\$$ |    $$ |       $$ |   $$ |  $$ |$$$$$$\\ $$ | \\$$ |\\$$$$$$  |         $$ |    $$$$$$  |      $$$$$$$  | $$$$$$  |\n\\__|  \\__|\\__|  \\__|    \\__|       \\__|   \\__|  \\__|\\______|\\__|  \\__| \\______/          \\__|    \\______/       \\_______/  \\______/ \n                                                                                                                                    \n                                                                                                                                    \n                                                                                                                                    \n$$\\      $$\\ $$$$$$\\ $$$$$$$$\\ $$\\   $$\\       $$$$$$$$\\ $$\\   $$\\ $$$$$$\\  $$$$$$\\        $$$$$$\\ $$\\   $$\\ $$$$$$$$\\  $$$$$$\\     \n$$ | $\\  $$ |\\_$$  _|\\__$$  __|$$ |  $$ |      \\__$$  __|$$ |  $$ |\\_$$  _|$$  __$$\\       \\_$$  _|$$$\\  $$ |$$  _____|$$  __$$\\    \n$$ |$$$\\ $$ |  $$ |     $$ |   $$ |  $$ |         $$ |   $$ |  $$ |  $$ |  $$ /  \\__|        $$ |  $$$$\\ $$ |$$ |      $$ /  $$ |   \n$$ $$ $$\\$$ |  $$ |     $$ |   $$$$$$$$ |         $$ |   $$$$$$$$ |  $$ |  \\$$$$$$\\          $$ |  $$ $$\\$$ |$$$$$\\    $$ |  $$ |   \n$$$$  _$$$$ |  $$ |     $$ |   $$  __$$ |         $$ |   $$  __$$ |  $$ |   \\____$$\\         $$ |  $$ \\$$$$ |$$  __|   $$ |  $$ |   \n$$$  / \\$$$ |  $$ |     $$ |   $$ |  $$ |         $$ |   $$ |  $$ |  $$ |  $$\\   $$ |        $$ |  $$ |\\$$$ |$$ |      $$ |  $$ |   \n$$  /   \\$$ |$$$$$$\\    $$ |   $$ |  $$ |         $$ |   $$ |  $$ |$$$$$$\\ \\$$$$$$  |      $$$$$$\\ $$ | \\$$ |$$ |       $$$$$$  |   \n\\__/     \\__|\\______|   \\__|   \\__|  \\__|         \\__|   \\__|  \\__|\\______| \\______/       \\______|\\__|  \\__|\\__|       \\______/ ");
+        Mesh board = new Mesh("$$$$$$\\ $$\\      $$\\        $$$$$$\\  $$$$$$$$\\ $$$$$$$$\\ $$$$$$$$\\ $$$$$$\\ $$\\   $$\\  $$$$$$\\  \n\\_$$  _|$$$\\    $$$ |      $$  __$$\\ $$  _____|\\__$$  __|\\__$$  __|\\_$$  _|$$$\\  $$ |$$  __$$\\ \n  $$ |  $$$$\\  $$$$ |      $$ /  \\__|$$ |         $$ |      $$ |     $$ |  $$$$\\ $$ |$$ /  \\__|\n  $$ |  $$\\$$\\$$ $$ |      $$ |$$$$\\ $$$$$\\       $$ |      $$ |     $$ |  $$ $$\\$$ |$$ |$$$$\\ \n  $$ |  $$ \\$$$  $$ |      $$ |\\_$$ |$$  __|      $$ |      $$ |     $$ |  $$ \\$$$$ |$$ |\\_$$ |\n  $$ |  $$ |\\$  /$$ |      $$ |  $$ |$$ |         $$ |      $$ |     $$ |  $$ |\\$$$ |$$ |  $$ |\n$$$$$$\\ $$ | \\_/ $$ |      \\$$$$$$  |$$$$$$$$\\    $$ |      $$ |   $$$$$$\\ $$ | \\$$ |\\$$$$$$  |\n\\______|\\__|     \\__|       \\______/ \\________|   \\__|      \\__|   \\______|\\__|  \\__| \\______/ \n                                                                                               \n                                                                                               \n                                                                                               \n$$$$$$$\\   $$$$$$\\   $$$$$$\\  $$$$$$$\\  $$$$$$$\\                                               \n$$  __$$\\ $$  __$$\\ $$  __$$\\ $$  __$$\\ $$  __$$\\                                              \n$$ |  $$ |$$ /  $$ |$$ /  $$ |$$ |  $$ |$$ |  $$ |                                             \n$$$$$$$\\ |$$ |  $$ |$$$$$$$$ |$$$$$$$  |$$ |  $$ |                                             \n$$  __$$\\ $$ |  $$ |$$  __$$ |$$  __$$< $$ |  $$ |                                             \n$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |                                             \n$$$$$$$  | $$$$$$  |$$ |  $$ |$$ |  $$ |$$$$$$$  |                                             \n\\_______/  \\______/ \\__|  \\__|\\__|  \\__|\\_______/ ");
+        Mesh go = new Mesh(" $$$$$$\\   $$$$$$\\        $$$$$$\\       $$\\      $$\\ $$$$$$\\ $$\\       $$\\       \n$$  __$$\\ $$  __$$\\       \\_$$  _|      $$ | $\\  $$ |\\_$$  _|$$ |      $$ |      \n$$ /  \\__|$$ /  $$ |        $$ |        $$ |$$$\\ $$ |  $$ |  $$ |      $$ |      \n\\$$$$$$\\  $$ |  $$ |        $$ |        $$ $$ $$\\$$ |  $$ |  $$ |      $$ |      \n \\____$$\\ $$ |  $$ |        $$ |        $$$$  _$$$$ |  $$ |  $$ |      $$ |      \n$$\\   $$ |$$ |  $$ |        $$ |        $$$  / \\$$$ |  $$ |  $$ |      $$ |      \n\\$$$$$$  | $$$$$$  |      $$$$$$\\       $$  /   \\$$ |$$$$$$\\ $$$$$$$$\\ $$$$$$$$\\ \n \\______/  \\______/       \\______|      \\__/     \\__|\\______|\\________|\\________|\n                                                                                 \n                                                                                 \n                                                                                 \n $$$$$$\\   $$$$$$\\        $$\\   $$\\  $$$$$$\\  $$\\      $$\\                       \n$$  __$$\\ $$  __$$\\       $$$\\  $$ |$$  __$$\\ $$ | $\\  $$ |                      \n$$ /  \\__|$$ /  $$ |      $$$$\\ $$ |$$ /  $$ |$$ |$$$\\ $$ |                      \n$$ |$$$$\\ $$ |  $$ |      $$ $$\\$$ |$$ |  $$ |$$ $$ $$\\$$ |                      \n$$ |\\_$$ |$$ |  $$ |      $$ \\$$$$ |$$ |  $$ |$$$$  _$$$$ |                      \n$$ |  $$ |$$ |  $$ |      $$ |\\$$$ |$$ |  $$ |$$$  / \\$$$ |                      \n\\$$$$$$  | $$$$$$  |      $$ | \\$$ | $$$$$$  |$$  /   \\$$ |                      \n \\______/  \\______/       \\__|  \\__| \\______/ \\__/     \\__|");
+        Mesh sub = new Mesh("$$$$$$$\\   $$$$$$\\  $$\\   $$\\ $$$$$$$$\\       $$$$$$$$\\  $$$$$$\\  $$$$$$$\\   $$$$$$\\  $$$$$$$$\\ $$$$$$$$\\       $$$$$$$$\\  $$$$$$\\  \n$$  __$$\\ $$  __$$\\ $$$\\  $$ |\\__$$  __|      $$  _____|$$  __$$\\ $$  __$$\\ $$  __$$\\ $$  _____|\\__$$  __|      \\__$$  __|$$  __$$\\ \n$$ |  $$ |$$ /  $$ |$$$$\\ $$ |   $$ |         $$ |      $$ /  $$ |$$ |  $$ |$$ /  \\__|$$ |         $$ |            $$ |   $$ /  $$ |\n$$ |  $$ |$$ |  $$ |$$ $$\\$$ |   $$ |         $$$$$\\    $$ |  $$ |$$$$$$$  |$$ |$$$$\\ $$$$$\\       $$ |            $$ |   $$ |  $$ |\n$$ |  $$ |$$ |  $$ |$$ \\$$$$ |   $$ |         $$  __|   $$ |  $$ |$$  __$$< $$ |\\_$$ |$$  __|      $$ |            $$ |   $$ |  $$ |\n$$ |  $$ |$$ |  $$ |$$ |\\$$$ |   $$ |         $$ |      $$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |         $$ |            $$ |   $$ |  $$ |\n$$$$$$$  | $$$$$$  |$$ | \\$$ |   $$ |         $$ |       $$$$$$  |$$ |  $$ |\\$$$$$$  |$$$$$$$$\\    $$ |            $$ |    $$$$$$  |\n\\_______/  \\______/ \\__|  \\__|   \\__|         \\__|       \\______/ \\__|  \\__| \\______/ \\________|   \\__|            \\__|    \\______/ \n                                                                                                                                    \n                                                                                                                                    \n                                                                                                                                    \n $$$$$$\\  $$\\   $$\\ $$$$$$$\\   $$$$$$\\   $$$$$$\\  $$$$$$$\\  $$$$$$\\ $$$$$$$\\  $$$$$$$$\\       $$$$$$$$\\  $$$$$$\\                    \n$$  __$$\\ $$ |  $$ |$$  __$$\\ $$  __$$\\ $$  __$$\\ $$  __$$\\ \\_$$  _|$$  __$$\\ $$  _____|      \\__$$  __|$$  __$$\\                   \n$$ /  \\__|$$ |  $$ |$$ |  $$ |$$ /  \\__|$$ /  \\__|$$ |  $$ |  $$ |  $$ |  $$ |$$ |               $$ |   $$ /  $$ |                  \n\\$$$$$$\\  $$ |  $$ |$$$$$$$\\ |\\$$$$$$\\  $$ |      $$$$$$$  |  $$ |  $$$$$$$\\ |$$$$$\\             $$ |   $$ |  $$ |                  \n \\____$$\\ $$ |  $$ |$$  __$$\\  \\____$$\\ $$ |      $$  __$$<   $$ |  $$  __$$\\ $$  __|            $$ |   $$ |  $$ |                  \n$$\\   $$ |$$ |  $$ |$$ |  $$ |$$\\   $$ |$$ |  $$\\ $$ |  $$ |  $$ |  $$ |  $$ |$$ |               $$ |   $$ |  $$ |                  \n\\$$$$$$  |\\$$$$$$  |$$$$$$$  |\\$$$$$$  |\\$$$$$$  |$$ |  $$ |$$$$$$\\ $$$$$$$  |$$$$$$$$\\          $$ |    $$$$$$  |                  \n \\______/  \\______/ \\_______/  \\______/  \\______/ \\__|  \\__|\\______|\\_______/ \\________|         \\__|    \\______/                   \n                                                                                                                                    \n                                                                                                                                    \n                                                                                                                                    \n $$$$$$\\   $$$$$$\\  $$$$$$$\\   $$$$$$\\        $$\\    $$\\ $$$$$$$\\                                                                   \n$$  __$$\\ $$  __$$\\ $$  __$$\\ $$  __$$\\       $$ |   $$ |$$  __$$\\                                                                  \n$$ /  \\__|$$ /  $$ |$$ |  $$ |$$ /  $$ |      $$ |   $$ |$$ |  $$ |                                                                 \n\\$$$$$$\\  $$ |  $$ |$$$$$$$  |$$$$$$$$ |      \\$$\\  $$  |$$$$$$$  |                                                                 \n \\____$$\\ $$ |  $$ |$$  __$$< $$  __$$ |       \\$$\\$$  / $$  __$$<                                                                  \n$$\\   $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |        \\$$$  /  $$ |  $$ |                                                                 \n\\$$$$$$  | $$$$$$  |$$ |  $$ |$$ |  $$ |         \\$  /   $$ |  $$ |                                                                 \n \\______/  \\______/ \\__|  \\__|\\__|  \\__|          \\_/    \\__|  \\__|  ");
+        Mesh bye = new Mesh("$$$$$$$\\ $$\\     $$\\ $$$$$$$$\\       $$$$$$$\\ $$\\     $$\\ $$$$$$$$\\             \n$$  __$$\\\\$$\\   $$  |$$  _____|      $$  __$$\\\\$$\\   $$  |$$  _____|            \n$$ |  $$ |\\$$\\ $$  / $$ |            $$ |  $$ |\\$$\\ $$  / $$ |                  \n$$$$$$$\\ | \\$$$$  /  $$$$$\\          $$$$$$$\\ | \\$$$$  /  $$$$$\\                \n$$  __$$\\   \\$$  /   $$  __|         $$  __$$\\   \\$$  /   $$  __|               \n$$ |  $$ |   $$ |    $$ |            $$ |  $$ |   $$ |    $$ |                  \n$$$$$$$  |   $$ |    $$$$$$$$\\       $$$$$$$  |   $$ |    $$$$$$$$\\ $$\\ $$\\ $$\\ \n\\_______/    \\__|    \\________|      \\_______/    \\__|    \\________|\\__|\\__|\\__|");
+        Mesh bye2 = new Mesh("$$$$$$$\\ $$\\     $$\\ $$$$$$$$\\       $$$$$$$\\ $$\\     $$\\ $$$$$$$$\\ $$\\ \n$$  __$$\\\\$$\\   $$  |$$  _____|      $$  __$$\\\\$$\\   $$  |$$  _____|$$ |\n$$ |  $$ |\\$$\\ $$  / $$ |            $$ |  $$ |\\$$\\ $$  / $$ |      $$ |\n$$$$$$$\\ | \\$$$$  /  $$$$$\\          $$$$$$$\\ | \\$$$$  /  $$$$$\\    $$ |\n$$  __$$\\   \\$$  /   $$  __|         $$  __$$\\   \\$$  /   $$  __|   \\__|\n$$ |  $$ |   $$ |    $$ |            $$ |  $$ |   $$ |    $$ |          \n$$$$$$$  |   $$ |    $$$$$$$$\\       $$$$$$$  |   $$ |    $$$$$$$$\\ $$\\ \n\\_______/    \\__|    \\________|      \\_______/    \\__|    \\________|\\__|");
+        Mesh last = new Mesh(" $$$$$$\\  $$\\   $$\\        $$$$$$\\  $$\\   $$\\ $$$$$$$$\\       $$\\        $$$$$$\\   $$$$$$\\ $$$$$$$$\\ \n$$  __$$\\ $$ |  $$ |      $$  __$$\\ $$$\\  $$ |$$  _____|      $$ |      $$  __$$\\ $$  __$$\\\\__$$  __|\n$$ /  $$ |$$ |  $$ |      $$ /  $$ |$$$$\\ $$ |$$ |            $$ |      $$ /  $$ |$$ /  \\__|  $$ |   \n$$ |  $$ |$$$$$$$$ |      $$ |  $$ |$$ $$\\$$ |$$$$$\\          $$ |      $$$$$$$$ |\\$$$$$$\\    $$ |   \n$$ |  $$ |$$  __$$ |      $$ |  $$ |$$ \\$$$$ |$$  __|         $$ |      $$  __$$ | \\____$$\\   $$ |   \n$$ |  $$ |$$ |  $$ |      $$ |  $$ |$$ |\\$$$ |$$ |            $$ |      $$ |  $$ |$$\\   $$ |  $$ |   \n $$$$$$  |$$ |  $$ |       $$$$$$  |$$ | \\$$ |$$$$$$$$\\       $$$$$$$$\\ $$ |  $$ |\\$$$$$$  |  $$ |   \n \\______/ \\__|  \\__|       \\______/ \\__|  \\__|\\________|      \\________|\\__|  \\__| \\______/   \\__|   \n                                                                                                     \n                                                                                                     \n                                                                                                     \n$$$$$$$$\\ $$\\   $$\\ $$$$$$\\ $$\\   $$\\  $$$$$$\\                                                       \n\\__$$  __|$$ |  $$ |\\_$$  _|$$$\\  $$ |$$  __$$\\                                                      \n   $$ |   $$ |  $$ |  $$ |  $$$$\\ $$ |$$ /  \\__|                                                     \n   $$ |   $$$$$$$$ |  $$ |  $$ $$\\$$ |$$ |$$$$\\                                                      \n   $$ |   $$  __$$ |  $$ |  $$ \\$$$$ |$$ |\\_$$ |                                                     \n   $$ |   $$ |  $$ |  $$ |  $$ |\\$$$ |$$ |  $$ |                                                     \n   $$ |   $$ |  $$ |$$$$$$\\ $$ | \\$$ |\\$$$$$$  |                                                     \n   \\__|   \\__|  \\__|\\______|\\__|  \\__| \\______/  ");
+        Mesh thanks = new Mesh("$$$$$$$$\\ $$\\   $$\\  $$$$$$\\  $$\\   $$\\ $$\\   $$\\  $$$$$$\\        $$$$$$$$\\  $$$$$$\\  $$$$$$$\\  \n\\__$$  __|$$ |  $$ |$$  __$$\\ $$$\\  $$ |$$ | $$  |$$  __$$\\       $$  _____|$$  __$$\\ $$  __$$\\ \n   $$ |   $$ |  $$ |$$ /  $$ |$$$$\\ $$ |$$ |$$  / $$ /  \\__|      $$ |      $$ /  $$ |$$ |  $$ |\n   $$ |   $$$$$$$$ |$$$$$$$$ |$$ $$\\$$ |$$$$$  /  \\$$$$$$\\        $$$$$\\    $$ |  $$ |$$$$$$$  |\n   $$ |   $$  __$$ |$$  __$$ |$$ \\$$$$ |$$  $$<    \\____$$\\       $$  __|   $$ |  $$ |$$  __$$< \n   $$ |   $$ |  $$ |$$ |  $$ |$$ |\\$$$ |$$ |\\$$\\  $$\\   $$ |      $$ |      $$ |  $$ |$$ |  $$ |\n   $$ |   $$ |  $$ |$$ |  $$ |$$ | \\$$ |$$ | \\$$\\ \\$$$$$$  |      $$ |       $$$$$$  |$$ |  $$ |\n   \\__|   \\__|  \\__|\\__|  \\__|\\__|  \\__|\\__|  \\__| \\______/       \\__|       \\______/ \\__|  \\__|\n                                                                                                \n                                                                                                \n                                                                                                \n$$$$$$$\\  $$\\        $$$$$$\\ $$\\     $$\\ $$$$$$\\ $$\\   $$\\  $$$$$$\\                             \n$$  __$$\\ $$ |      $$  __$$\\\\$$\\   $$  |\\_$$  _|$$$\\  $$ |$$  __$$\\                            \n$$ |  $$ |$$ |      $$ /  $$ |\\$$\\ $$  /   $$ |  $$$$\\ $$ |$$ /  \\__|                           \n$$$$$$$  |$$ |      $$$$$$$$ | \\$$$$  /    $$ |  $$ $$\\$$ |$$ |$$$$\\                            \n$$  ____/ $$ |      $$  __$$ |  \\$$  /     $$ |  $$ \\$$$$ |$$ |\\_$$ |                           \n$$ |      $$ |      $$ |  $$ |   $$ |      $$ |  $$ |\\$$$ |$$ |  $$ |                           \n$$ |      $$$$$$$$\\ $$ |  $$ |   $$ |    $$$$$$\\ $$ | \\$$ |\\$$$$$$  |                           \n\\__|      \\________|\\__|  \\__|   \\__|    \\______|\\__|  \\__| \\______/  ");
+        Mesh lazy = new Mesh("$$$$$$\\ $$\\      $$\\       $$$$$$$$\\  $$$$$$\\        $$\\        $$$$$$\\  $$$$$$$$\\ $$\\     $$\\         \n\\_$$  _|$$$\\    $$$ |      \\__$$  __|$$  __$$\\       $$ |      $$  __$$\\ \\____$$  |\\$$\\   $$  |        \n  $$ |  $$$$\\  $$$$ |         $$ |   $$ /  $$ |      $$ |      $$ /  $$ |    $$  /  \\$$\\ $$  /         \n  $$ |  $$\\$$\\$$ $$ |         $$ |   $$ |  $$ |      $$ |      $$$$$$$$ |   $$  /    \\$$$$  /          \n  $$ |  $$ \\$$$  $$ |         $$ |   $$ |  $$ |      $$ |      $$  __$$ |  $$  /      \\$$  /           \n  $$ |  $$ |\\$  /$$ |         $$ |   $$ |  $$ |      $$ |      $$ |  $$ | $$  /        $$ |            \n$$$$$$\\ $$ | \\_/ $$ |         $$ |    $$$$$$  |      $$$$$$$$\\ $$ |  $$ |$$$$$$$$\\     $$ |            \n\\______|\\__|     \\__|         \\__|    \\______/       \\________|\\__|  \\__|\\________|    \\__|            \n                                                                                                       \n                                                                                                       \n                                                                                                       \n$$$$$$$$\\  $$$$$$\\        $$$$$$$$\\ $$$$$$$\\  $$$$$$\\ $$\\      $$\\       $$$$$$$$\\ $$\\   $$\\ $$$$$$$$\\ \n\\__$$  __|$$  __$$\\       \\__$$  __|$$  __$$\\ \\_$$  _|$$$\\    $$$ |      \\__$$  __|$$ |  $$ |$$  _____|\n   $$ |   $$ /  $$ |         $$ |   $$ |  $$ |  $$ |  $$$$\\  $$$$ |         $$ |   $$ |  $$ |$$ |      \n   $$ |   $$ |  $$ |         $$ |   $$$$$$$  |  $$ |  $$\\$$\\$$ $$ |         $$ |   $$$$$$$$ |$$$$$\\    \n   $$ |   $$ |  $$ |         $$ |   $$  __$$<   $$ |  $$ \\$$$  $$ |         $$ |   $$  __$$ |$$  __|   \n   $$ |   $$ |  $$ |         $$ |   $$ |  $$ |  $$ |  $$ |\\$  /$$ |         $$ |   $$ |  $$ |$$ |      \n   $$ |    $$$$$$  |         $$ |   $$ |  $$ |$$$$$$\\ $$ | \\_/ $$ |         $$ |   $$ |  $$ |$$$$$$$$\\ \n   \\__|    \\______/          \\__|   \\__|  \\__|\\______|\\__|     \\__|         \\__|   \\__|  \\__|\\________|\n                                                                                                       \n                                                                                                       \n                                                                                                       \n$$\\      $$\\ $$\\   $$\\  $$$$$$\\  $$$$$$\\  $$$$$$\\                                                      \n$$$\\    $$$ |$$ |  $$ |$$  __$$\\ \\_$$  _|$$  __$$\\                                                     \n$$$$\\  $$$$ |$$ |  $$ |$$ /  \\__|  $$ |  $$ /  \\__|                                                    \n$$\\$$\\$$ $$ |$$ |  $$ |\\$$$$$$\\    $$ |  $$ |                                                          \n$$ \\$$$  $$ |$$ |  $$ | \\____$$\\   $$ |  $$ |                                                          \n$$ |\\$  /$$ |$$ |  $$ |$$\\   $$ |  $$ |  $$ |  $$\\                                                     \n$$ | \\_/ $$ |\\$$$$$$  |\\$$$$$$  |$$$$$$\\ \\$$$$$$  |                                                    \n\\__|     \\__| \\______/  \\______/ \\______| \\______/                                                     \n                                                        ");
+        Mesh wait = new Mesh(" $$$$$$\\   $$$$$$\\           $$$$$\\ $$\\   $$\\  $$$$$$\\ $$$$$$$$\\       $$\\      $$\\  $$$$$$\\  $$$$$$\\ $$$$$$$$\\ \n$$  __$$\\ $$  __$$\\          \\__$$ |$$ |  $$ |$$  __$$\\\\__$$  __|      $$ | $\\  $$ |$$  __$$\\ \\_$$  _|\\__$$  __|\n$$ /  \\__|$$ /  $$ |            $$ |$$ |  $$ |$$ /  \\__|  $$ |         $$ |$$$\\ $$ |$$ /  $$ |  $$ |     $$ |   \n\\$$$$$$\\  $$ |  $$ |            $$ |$$ |  $$ |\\$$$$$$\\    $$ |         $$ $$ $$\\$$ |$$$$$$$$ |  $$ |     $$ |   \n \\____$$\\ $$ |  $$ |      $$\\   $$ |$$ |  $$ | \\____$$\\   $$ |         $$$$  _$$$$ |$$  __$$ |  $$ |     $$ |   \n$$\\   $$ |$$ |  $$ |      $$ |  $$ |$$ |  $$ |$$\\   $$ |  $$ |         $$$  / \\$$$ |$$ |  $$ |  $$ |     $$ |   \n\\$$$$$$  | $$$$$$  |      \\$$$$$$  |\\$$$$$$  |\\$$$$$$  |  $$ |         $$  /   \\$$ |$$ |  $$ |$$$$$$\\    $$ |   \n \\______/  \\______/        \\______/  \\______/  \\______/   \\__|         \\__/     \\__|\\__|  \\__|\\______|   \\__|   \n                                                                                                                \n                                                                                                                \n                                                                                                                \n$$$$$$$$\\ $$$$$$\\ $$\\       $$\\             $$$$$$$$\\ $$\\   $$\\ $$$$$$$$\\       $$$$$$$$\\ $$\\   $$\\ $$$$$$$\\    \n\\__$$  __|\\_$$  _|$$ |      $$ |            \\__$$  __|$$ |  $$ |$$  _____|      $$  _____|$$$\\  $$ |$$  __$$\\   \n   $$ |     $$ |  $$ |      $$ |               $$ |   $$ |  $$ |$$ |            $$ |      $$$$\\ $$ |$$ |  $$ |  \n   $$ |     $$ |  $$ |      $$ |               $$ |   $$$$$$$$ |$$$$$\\          $$$$$\\    $$ $$\\$$ |$$ |  $$ |  \n   $$ |     $$ |  $$ |      $$ |               $$ |   $$  __$$ |$$  __|         $$  __|   $$ \\$$$$ |$$ |  $$ |  \n   $$ |     $$ |  $$ |      $$ |               $$ |   $$ |  $$ |$$ |            $$ |      $$ |\\$$$ |$$ |  $$ |  \n   $$ |   $$$$$$\\ $$$$$$$$\\ $$$$$$$$\\          $$ |   $$ |  $$ |$$$$$$$$\\       $$$$$$$$\\ $$ | \\$$ |$$$$$$$  |  \n   \\__|   \\______|\\________|\\________|         \\__|   \\__|  \\__|\\________|      \\________|\\__|  \\__|\\_______/ ");
+        
+        Mesh[] meshes =
+        {
+            title, author, director, written, program, design, art, model, concept, tech, music, voice, koban, cucumber,
+            dontKnow, cool, asCucumber, anyway, stalling, so, what,
+            care, even, computer, anything, board, go, sub, bye, bye2, last, thanks, lazy, wait
+        };
+
+        Sequence when = new Sequence();
+        when.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Credits\\UmOfirWhereAreWe.wav");
+        when.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Credits\\IThinkTheRealQuestionIs.wav");
+        when.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Credits\\WhenAreWe.wav");
+        
+        CutsceneLevel level = new CutsceneLevel(meshes, $"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\MIDI\\NeverGonnaGiveYouUp.mid", AnimeStore(), _gameManager);
+        level.AddEndDialogue(when);
+        level.AddEndingURL("https://youtu.be/MMU-CPrUBlk?t=552");
+
+        return level;
+    } //End credits
+    
+    
+    // Other levels
     static Level ObanKoban()
     {
         Graphics tableGraphics = new Graphics('#', ConsoleColor.Blue);
@@ -887,7 +1409,7 @@ class Program
     
     static Level AnimeStore()
     {
-        Door door = new Door(0, 0, DoorDirection.Down, true, true);
+        Door door = new Door(1, 0, DoorDirection.Down, true, true);
         
         Actor cashier = new Actor(0, 7, 4, 1, new Graphics('.', ConsoleColor.Gray));
         Actor cashier2 = new Actor(4, 7, 1, 2, new Graphics('.', ConsoleColor.Gray));
@@ -911,7 +1433,7 @@ class Program
     
     static Level NintendoStore()
     {
-        Door door = new Door(0, 0, DoorDirection.Down, true, true);
+        Door door = new Door(1, 0, DoorDirection.Down, true, true);
         
         Actor cashier = new Actor(0, 7, 4, 1, new Graphics('.', ConsoleColor.Gray));
         Actor cashier2 = new Actor(4, 7, 1, 2, new Graphics('.', ConsoleColor.Gray));
@@ -935,7 +1457,7 @@ class Program
     
     static Level DoctorBack()
     {
-        Door door = new Door(0, 0, DoorDirection.Down, true, true);
+        Door door = new Door(1, 0, DoorDirection.Down, true, true);
         
         Actor cashier = new Actor(0, 7, 4, 1, new Graphics('.', ConsoleColor.Gray));
         Actor cashier2 = new Actor(4, 7, 1, 2, new Graphics('.', ConsoleColor.Gray));
@@ -959,7 +1481,12 @@ class Program
     
     static Level TheThirdEar()
     {
-        Door door = new Door(0, 0, DoorDirection.Down, true, true);
+        Door door = new Door(1, 0, DoorDirection.Down, true, true);
+        TriggerBox clashTrigger = new TriggerBox(2, 2);
+        Sequence clashSequence = new Sequence();
+        clashSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TheThirdEar\\ExcuseMeDoYouHaveAnythingByTheClashAtDemonhead.wav");
+        clashSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TheThirdEar\\HaveYouTriedTheSectionMarkedTheClashAtDemonhead.wav");
+        clashTrigger.AddCutscene(clashSequence);
         
         Actor cashier = new Actor(0, 7, 4, 1, new Graphics('.', ConsoleColor.Gray));
         Actor cashier2 = new Actor(4, 7, 1, 2, new Graphics('.', ConsoleColor.Gray));
@@ -969,12 +1496,12 @@ class Program
         
         Actor[] actors =
         {
-            door, cashier, cashier2, chest, chest2
+            door, cashier, cashier2, chest, chest2, clashTrigger
         };
         
         Level level = Utilities.CreateLevel("The third ear", 10, _player, actors);
         
-        Enemy enemy = Utilities.GenerateEnemy(level, "A guy with 3 ears");
+        Enemy enemy = Utilities.GenerateEnemy(level, "Julie");
         Enemy[] enemies = { enemy };
         level.SetEnemies(enemies);
         
@@ -983,7 +1510,7 @@ class Program
     
     static Level BooksCrossroad()
     {
-        Door door = new Door(0, 0, DoorDirection.Down, true, true);
+        Door door = new Door(1, 0, DoorDirection.Down, true, true);
         
         Actor cashier = new Actor(0, 7, 4, 1, new Graphics('.', ConsoleColor.Gray));
         Actor cashier2 = new Actor(4, 7, 1, 2, new Graphics('.', ConsoleColor.Gray));
@@ -1001,6 +1528,34 @@ class Program
         Enemy enemy = Utilities.GenerateEnemy(level, "Store's manager");
         Enemy[] enemies = { enemy };
         level.SetEnemies(enemies);
+        
+        return level;
+    }
+    
+    static Level DMC()
+    {
+        Door door = new Door(1, 0, DoorDirection.Down, true, true);
+        
+        Actor cashier = new Actor(0, 7, 4, 1, new Graphics('.', ConsoleColor.Gray));
+        Actor cashier2 = new Actor(4, 7, 1, 2, new Graphics('.', ConsoleColor.Gray));
+
+        Chest chest = new Chest(new Weapon("Devil Sword Sparda", "Cool sword, it says she deals 63 HP damage.", 63), 17, 2);
+        Chest chest2 = new Chest(new Item("Arm", "An arm of a dead weight."), 17, 5);
+
+        Enemy v = new Enemy(1, 9, "V");
+
+        TriggerBox vTrigger = new TriggerBox(2, 8, 1, 2);
+        Sequence bible = new Sequence();
+        bible.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\DMC\\Bible.wav");
+        vTrigger.AddCutscene(bible);
+        
+        Actor[] actors =
+        {
+            door, cashier, cashier2, chest, chest2,  vTrigger
+        };
+        
+        Level level = Utilities.CreateLevel("Devil May Cry", 10, _player, actors);
+        level.SetEnemies(new[] {v});
         
         return level;
     }

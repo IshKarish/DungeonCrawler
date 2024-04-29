@@ -2,7 +2,7 @@
 
 public class TriggerBox : Actor
 {
-    public Cutscene Cutscene { get; private set; }
+    public Sequence Sequence { get; private set; }
     
     public TriggerBox(bool drawDebugBox = false)
     {
@@ -54,8 +54,8 @@ public class TriggerBox : Actor
         else Graphics = new Graphics('T', ConsoleColor.Yellow);
     }
 
-    public void AddCutscene(Cutscene cutscene)
+    public void AddCutscene(Sequence sequence)
     {
-        Cutscene = cutscene;
+        Sequence = sequence;
     }
 }

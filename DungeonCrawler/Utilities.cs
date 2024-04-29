@@ -1,6 +1,8 @@
-﻿using System.Speech.Synthesis;
+﻿using System.Diagnostics;
+using System.Speech.Synthesis;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
+using System.Media;
 
 namespace DungeonCrawler;
 
@@ -158,6 +160,73 @@ public static class Utilities
         }
         return enemies;
     }
+    
+    public static Enemy[] GenerateEnemies(int enemyPercentage, Level level, string[] names)
+    {
+        level.UpdateWorldArr();
+        
+        Vector2 mapSize = new Vector2(level.Map.MapArr.GetLength(0), level.Map.MapArr.GetLength(1));
+        
+        int enemyCount = ((mapSize.X * mapSize.Y) * enemyPercentage / 100) / 20;
+        if (enemyCount == 0) enemyCount = 1;
+        
+        Enemy[] enemies = new Enemy[enemyCount];
+        List<Vector2> takenPositions = new List<Vector2>();
+        foreach (Vector2 p in level.World.Positions)
+        {
+            if (p != null) takenPositions.Add(p);
+        }
+        
+        for (int i = 0; i < enemyCount; i++)
+        {
+            string name = names[Random.Shared.Next(names.Length)];
+            
+            Vector2 pos = GetRandomVector(mapSize);
+            while (IsBlocked(takenPositions.ToArray(), pos)) pos = GetRandomVector(mapSize);
+            
+            takenPositions.Add(pos);
+
+            Enemy enemy = new Enemy(pos.X, pos.Y, name);
+            enemy.Transform.SetLastTransform(new Transform(new Vector2(pos.X, pos.Y)));
+            
+            enemies[i] = enemy;
+        }
+        return enemies;
+    }
+    
+    public static Enemy[] GenerateEnemies(int enemyPercentage, Level level, int sensingRange, string[] names)
+    {
+        level.UpdateWorldArr();
+        
+        Vector2 mapSize = new Vector2(level.Map.MapArr.GetLength(0), level.Map.MapArr.GetLength(1));
+        
+        int enemyCount = ((mapSize.X * mapSize.Y) * enemyPercentage / 100) / 20;
+        if (enemyCount == 0) enemyCount = 1;
+        
+        Enemy[] enemies = new Enemy[enemyCount];
+        List<Vector2> takenPositions = new List<Vector2>();
+        foreach (Vector2 p in level.World.Positions)
+        {
+            if (p != null) takenPositions.Add(p);
+        }
+        
+        for (int i = 0; i < enemyCount; i++)
+        {
+            string name = names[Random.Shared.Next(names.Length)];
+            
+            Vector2 pos = GetRandomVector(mapSize);
+            while (IsBlocked(takenPositions.ToArray(), pos)) pos = GetRandomVector(mapSize);
+
+            takenPositions.Add(pos);
+
+            Enemy enemy = new Enemy(pos.X, pos.Y);
+            enemy = new Enemy(pos.X, pos.Y, new PawnSensing(sensingRange, enemy), name);
+            enemy.Transform.SetLastTransform(new Transform(new Vector2(pos.X, pos.Y)));
+            
+            enemies[i] = enemy;
+        }
+        return enemies;
+    }
 
     public static Enemy GenerateEnemy(Level level, int sensingRange, string name = "Bob")
     {
@@ -189,8 +258,32 @@ public static class Utilities
 
         return false;
     }
+
+    public static void Play(string path)
+    {
+        Debug.WriteLine(path);
+        
+        SoundPlayer soundPlayer = new SoundPlayer(path);
+        soundPlayer.PlaySync();
+    }
+
+    public static void PlayAsync(string path)
+    {
+        SoundPlayer soundPlayer = new SoundPlayer(path);
+        soundPlayer.Play();
+    }
+
+    public static void Speak(string str)
+    {
+        SpeechSynthesizer _synthesizer = new SpeechSynthesizer();
+
+        _synthesizer.Volume = 100;
+        _synthesizer.Rate = 2;
+        
+        _synthesizer.Speak(str);
+    }
     
-    public static void Speak(string str, string voice = "Microsoft David Desktop", int volume = 100)
+    public static void SpeakSave(string str, string voice = "Microsoft David Desktop", int volume = 100)
     { 
         SpeechSynthesizer _synthesizer = new SpeechSynthesizer();
     
@@ -199,6 +292,22 @@ public static class Utilities
         if (voice == "Microsoft David Desktop") _synthesizer.Rate = 2;
         _synthesizer.SelectVoice(voice);
         
+        string name = String.Empty;
+        for (int i = 0; i < str.Length; i++)
+        {
+            char c = str[i];
+
+            if (c == ' ')
+            {
+                name += str[i + 1].ToString().ToUpper();
+                i++;
+                continue;
+            }
+            
+            if (Char.IsLetter(c)) name += c;
+        }
+
+        _synthesizer.SetOutputToWaveFile($@"F:\Gay\{name}.wav");
         _synthesizer.Speak(str);
     }
 

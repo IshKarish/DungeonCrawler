@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace DungeonCrawler;
+﻿namespace DungeonCrawler;
 
 public class GameManager
 {
@@ -11,25 +9,26 @@ public class GameManager
     private World _world;
 
     private bool _isPaused;
+    private bool _inCombat;
 
     private bool _switchingLevel;
     private bool _canInteract;
     private bool _standingOnDoor;
-    private bool _standingOnDoorTrigger;
 
     private bool _shouldRetractTrap;
     private Trap _trap;
     
     private ConsoleKeyInfo _input;
 
-    public bool StartEnemiesMovement;
-    
+    public bool StartPlayerMovement = true;
+    public bool StartEnemiesMovement = true;
+    public bool IsPlaying;
+
     #region Managment
 
     public void StartGame(Level firstLevel)
     {
         StartLevel(firstLevel);
-        new Thread(PauseManager).Start();
     }
     
     public void StartLevel(Level level)
@@ -53,6 +52,10 @@ public class GameManager
         Renderer.RenderMap(_map);
         
         _player = _level.Player;
+        
+        if (level.StartPosition != null) _player.Transform.SetPosition(level.StartPosition);
+        else _player.Transform.SetPosition(0, 0);
+        
         foreach (Actor a in _map.Actors)
         {
             if (a is Door door && door.IsEntrance)
@@ -67,6 +70,16 @@ public class GameManager
         
         _switchingLevel = false;
         Logs.Add("You entered a new level");
+
+        foreach (Actor a in _map.Actors)
+        {
+            if (a is TriggerBox t && t.Sequence != null)
+            {
+                if (t.Sequence.HoldPlayer) StartPlayerMovement = false;
+                if (t.Sequence.HoldEnemies) StartEnemiesMovement = false;
+                break;
+            }
+        }
         
         StartThreads();
     }
@@ -86,7 +99,7 @@ public class GameManager
 
     public void SwitchLevel(Level level)
     {
-        if (_level != null) _level.UpdateWorldArr();
+        if (_level != null && _level is not CutsceneLevel) _level.UpdateWorldArr();
         if (level is not CutsceneLevel) level.UpdateWorldArr();
         
         _switchingLevel = true;
@@ -129,23 +142,6 @@ public class GameManager
         
         StartThreads();
     }
-    
-    void PauseManager()
-    {
-        while (!_player.IsDead)
-        {
-            bool pause = _input.Key == Keybindings.Pause;
-            switch (pause)
-            {
-                case true when !_isPaused:
-                    Pause(false);
-                    break;
-                case true when _isPaused:
-                    Resume(false);
-                    break;
-            }
-        }
-    }
 
     #endregion
 
@@ -156,25 +152,26 @@ public class GameManager
         _player.Moved = false;
         while (!_switchingLevel && !_player.IsDead && !_isPaused)
         {
-            Debug.WriteLine(StartEnemiesMovement);
-            
-            _input = Console.ReadKey(true);
-            if (_player.IsDead) break;
-            
-            switch (_input.Key)
+            if (StartPlayerMovement)
             {
-                case Keybindings.Forward:
-                    _player.PawnMovement.MoveUp(1, _world);
-                    break;
-                case Keybindings.Backwards:
-                    _player.PawnMovement.MoveUp(-1, _world);
-                    break;
-                case Keybindings.Right:
-                    _player.PawnMovement.MoveRight(1, _world);
-                    break;
-                case Keybindings.Left:
-                    _player.PawnMovement.MoveRight(-1, _world);
-                    break;
+                _input = Console.ReadKey(true);
+                if (_player.IsDead) break;
+            
+                switch (_input.Key)
+                {
+                    case Keybindings.Forward:
+                        _player.PawnMovement.MoveUp(1, _world);
+                        break;
+                    case Keybindings.Backwards:
+                        _player.PawnMovement.MoveUp(-1, _world);
+                        break;
+                    case Keybindings.Right:
+                        _player.PawnMovement.MoveRight(1, _world);
+                        break;
+                    case Keybindings.Left:
+                        _player.PawnMovement.MoveRight(-1, _world);
+                        break;
+                }
             }
         }
     }
@@ -315,6 +312,8 @@ public class GameManager
         
         Console.SetCursorPosition(0, top);
         
+        //RenderSubtitles();
+        
         if (Logs.HasChanged()) RenderLogs();
 
         int left = Logs.LogsLst[^1].Length + 14;
@@ -333,8 +332,12 @@ public class GameManager
     {
         int top = _world.WorldArr.GetLength(0) + 2;
         string emptyLine = "                                                                                                                                                                                                                 ";
-        
-        foreach (string s in Logs.LogsLst) Console.WriteLine(emptyLine);
+
+        for (int i = 0; i < Logs.LogsLst.ToArray().Length; i++)
+        {
+            Console.WriteLine(emptyLine);
+        }
+
         Console.SetCursorPosition(0, top);
         Console.WriteLine(Logs.ToString());
     }
@@ -401,6 +404,7 @@ public class GameManager
         
         if (isInteractButtonPressed && !_player.Ineractor.IsIteracting)
         {
+            _input = new ConsoleKeyInfo();
             _player.Ineractor.Interact(interactable, _input);
         }
         else if (!isInteractButtonPressed && _player.Ineractor.IsIteracting)
@@ -418,7 +422,7 @@ public class GameManager
             _switchingLevel = true;
             if (actor is Teleporter a)
             {
-                if (a.Door != null)
+                if (a.Door != null && a.Destination is not CutsceneLevel)
                 {
                     a.Door.SetAsEntrance(_map.Actors);
                     a.Destination.SetEntrance(_level);
@@ -433,8 +437,10 @@ public class GameManager
     {
         if (_player.PawnMovement.IsOverlapped(_enemies, out Actor hitActor))
         {
-            if (hitActor is Enemy e && !e.IsDead)
+            if (hitActor is Enemy e && !e.IsDead && !_inCombat)
             {
+                _inCombat = true;
+                Pause();
                 EnterEncounter(new Encounter(e, _player));
             }
         }
@@ -442,8 +448,13 @@ public class GameManager
         {
             if (hitActor is not Teleporter)
             {
-                if (hitActor is TriggerBox t && t.Cutscene != null) t.Cutscene.Play(this);
+                if (hitActor is TriggerBox t && t.Sequence != null && !IsPlaying)
+                {
+                    IsPlaying = true;
+                    t.Sequence.Play(this);
+                }
             }
+            _map.RemoveActor(hitActor);
             _world.RemoveActor(hitActor);
         }
     }
@@ -452,8 +463,6 @@ public class GameManager
 
     void EnterEncounter(Encounter encounter)
     {
-        Pause();
-        
         Renderer.RenderEncounter(encounter, out int hpLeft, out int hpTop, out int optionsLeft, out int optionsTop);
         encounter.SetScreenValues(optionsLeft, optionsTop, hpLeft, hpTop);
         
@@ -480,6 +489,8 @@ public class GameManager
             Pause();
             Renderer.RenderDeathScreen();
         }
+
+        _inCombat = false;
     }
 
     private void KillEnemy(Enemy e)

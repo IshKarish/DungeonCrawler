@@ -55,6 +55,20 @@ public class Inventory
         return false;
     }
 
+    public bool HasKey(bool remove = false)
+    {
+        foreach (Item i in Items.ToArray())
+        {
+            if (i is Key)
+            {
+                if (remove) RemoveItem(i.Name);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public override string ToString()
     {
         if (Items.Count == 0) return "You have nothing lol";

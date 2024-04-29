@@ -96,6 +96,7 @@ public class Encounter
                     break;
                 default:
                     Use(c);
+                    Renderer.RenderFightOptions(Player, _optionsLeft, _optionsTop);
                     break;
             }
             
@@ -125,9 +126,9 @@ public class Encounter
             RenderMessage($"You used {item.Name} and restored {h.HP} HP.");
         }
         else RenderMessage($"You used {item.Name} but it didn't do anything");
-        
         RenderHP();
-        Renderer.RenderFightOptions(Player, _optionsLeft, _optionsTop);
+
+        Console.ReadKey(true);
     }
 
     void Talk()

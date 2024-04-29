@@ -67,7 +67,7 @@ public class Pawn : Actor
 
         double roll = Random.Shared.NextDouble();
         Debug.WriteLine(roll);
-        if (roll > 0.5)
+        if (roll > 0.3)
         {
             pawn.Damage(damage);
             return true;

@@ -2,6 +2,15 @@
   "version": 3,
   "targets": {
     "net7.0": {
+      "ConsoleHelperLibrary/1.0.2": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/ConsoleHelperLibrary.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/ConsoleHelperLibrary.dll": {}
+        }
+      },
       "Melanchall.DryWetMidi/7.0.3-prerelease2": {
         "type": "package",
         "compile": {
@@ -220,10 +229,43 @@
             "rid": "win"
           }
         }
+      },
+      "System.Windows.Extensions/8.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net7.0/System.Windows.Extensions.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/System.Windows.Extensions.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net7.0/System.Windows.Extensions.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
       }
     }
   },
   "libraries": {
+    "ConsoleHelperLibrary/1.0.2": {
+      "sha512": "/fNth7GKXQhXBPLCO9EkLwoPD9ZqXW0VdNnLCZZe0kbH2eRre7X9zl9ra0Dff2sdOVS1ZKAZd/YCcpBhMV//mQ==",
+      "type": "package",
+      "path": "consolehelperlibrary/1.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "consolehelperlibrary.1.0.2.nupkg.sha512",
+        "consolehelperlibrary.nuspec",
+        "lib/net6.0/ConsoleHelperLibrary.dll",
+        "packImage.png",
+        "readme.md"
+      ]
+    },
     "Melanchall.DryWetMidi/7.0.3-prerelease2": {
       "sha512": "HL8HrNJ71VjQi8dkq8LJSk07LVBXVS6jB+Sy4RNKdZCbq8PEPu0uwiNNMTt2n+ngHQONeR/INh/FRsSVApw3qA==",
       "type": "package",
@@ -530,13 +572,42 @@
         "system.speech.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "System.Windows.Extensions/8.0.0": {
+      "sha512": "Obg3a90MkOw9mYKxrardLpY2u0axDMrSmy4JCdq2cYbelM2cUwmUir5Bomvd1yxmPL9h5LVHU1tuKBZpUjfASg==",
+      "type": "package",
+      "path": "system.windows.extensions/8.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net6.0/System.Windows.Extensions.dll",
+        "lib/net6.0/System.Windows.Extensions.xml",
+        "lib/net7.0/System.Windows.Extensions.dll",
+        "lib/net7.0/System.Windows.Extensions.xml",
+        "lib/net8.0/System.Windows.Extensions.dll",
+        "lib/net8.0/System.Windows.Extensions.xml",
+        "runtimes/win/lib/net6.0/System.Windows.Extensions.dll",
+        "runtimes/win/lib/net6.0/System.Windows.Extensions.xml",
+        "runtimes/win/lib/net7.0/System.Windows.Extensions.dll",
+        "runtimes/win/lib/net7.0/System.Windows.Extensions.xml",
+        "runtimes/win/lib/net8.0/System.Windows.Extensions.dll",
+        "runtimes/win/lib/net8.0/System.Windows.Extensions.xml",
+        "system.windows.extensions.8.0.0.nupkg.sha512",
+        "system.windows.extensions.nuspec",
+        "useSharedDesignerContext.txt"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
+      "ConsoleHelperLibrary >= 1.0.2",
       "Melanchall.DryWetMidi >= 7.0.3-prerelease2",
       "NAudio >= 2.2.1",
-      "System.Speech >= 7.0.0"
+      "System.Speech >= 7.0.0",
+      "System.Windows.Extensions >= 8.0.0"
     ]
   },
   "packageFolders": {
@@ -578,6 +649,10 @@
       "net7.0": {
         "targetAlias": "net7.0",
         "dependencies": {
+          "ConsoleHelperLibrary": {
+            "target": "Package",
+            "version": "[1.0.2, )"
+          },
           "Melanchall.DryWetMidi": {
             "target": "Package",
             "version": "[7.0.3-prerelease2, )"
@@ -589,6 +664,10 @@
           "System.Speech": {
             "target": "Package",
             "version": "[7.0.0, )"
+          },
+          "System.Windows.Extensions": {
+            "target": "Package",
+            "version": "[8.0.0, )"
           }
         },
         "imports": [

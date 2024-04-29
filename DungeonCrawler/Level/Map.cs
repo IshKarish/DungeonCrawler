@@ -107,6 +107,14 @@ public class Map
         }
     }
 
+    public void RemoveActor(Actor actor)
+    {
+        List<Actor> actors = Actors.ToList();
+        actors.Remove(actor);
+
+        Actors = actors.ToArray();
+    }
+
     void AddToActorArr(Actor actor)
     {
         Actor[] newArr = new Actor[Actors.Length + 1];

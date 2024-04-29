@@ -41,11 +41,17 @@ public class Level
 
     public void SetEntrance(Level previousLevel)
     {
-        foreach (Actor a in Map.Actors)
+        if (previousLevel != null && previousLevel.Map != null)
         {
-            if (a is Door d && d.IsEntrance)
+            previousLevel.UpdateWorldArr();
+            
+            
+            foreach (Actor a in Map.Actors)
             {
-                d.SetDestination(previousLevel);
+                if (a is Door d && d.IsEntrance)
+                {
+                    d.SetDestination(previousLevel);
+                }
             }
         }
     }

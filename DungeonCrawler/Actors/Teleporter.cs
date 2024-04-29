@@ -33,6 +33,14 @@ public class Teleporter : Actor
         Trigger = true;
         Graphics = graphics;
     }
+    
+    public Teleporter(int x, int y, int xSize, int ySize, Level destination)
+    {
+        Transform = new Transform(new Vector2(x, y), new Vector2(xSize, ySize));
+        Destination = destination;
+        Trigger = true;
+    }
+
 
     public void ChangeDestination(Level destination)
     {

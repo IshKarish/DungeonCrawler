@@ -61,12 +61,12 @@ public class PawnIneractor
                     p.Inventory.AddItem(chest.Item);
                     chest.Interactable = false;
                     
-                    if (chest.Cutscene != null) chest.Cutscene.Play();
+                    if (chest.Sequence != null) chest.Sequence.Play();
                     if (chest.Item is RickRoll rickRoll) rickRoll.OpenRickRoll();
                     
                     break;
                 case Door:
-                    if (p.Inventory.HasItem("Key", true))
+                    if (p.Inventory.HasKey(true))
                     {
                         Logs.Add("You opened a door");
                         OpenDoor = true;
@@ -75,8 +75,6 @@ public class PawnIneractor
                     break;
             }
         }
-
-        IsIteracting = true;
     }
 
     public void Release()

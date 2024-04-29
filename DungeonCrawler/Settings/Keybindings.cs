@@ -13,5 +13,4 @@ public struct Keybindings
     
     // UI
     public const ConsoleKey Inventory = ConsoleKey.Tab;
-    public const ConsoleKey Pause = ConsoleKey.Escape;
 }
