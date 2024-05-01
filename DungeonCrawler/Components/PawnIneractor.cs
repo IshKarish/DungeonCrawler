@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Melanchall.DryWetMidi.Multimedia;
 
 namespace DungeonCrawler;
 
@@ -61,14 +62,25 @@ public class PawnIneractor
                         rickRoll.OpenRickRoll();
                         return;
                     }
+
+                    if (p.Inventory.Items.ToArray().Length >= 9) Logs.Add("You can't have more then 9 items!");
+                    else
+                    {
+                        Logs.Add($"You have picked up a {chest.Item.Name}");
                     
-                    Logs.Add($"You have picked up a {chest.Item.Name}");
+                        p.Inventory.AddItem(chest.Item);
+                        chest.Interactable = false;
                     
-                    p.Inventory.AddItem(chest.Item);
-                    chest.Interactable = false;
-                    
-                    if (chest.Sequence != null) chest.Sequence.Play();
-                    if (chest.Midi != null) Utilities.CreatePlaybackMidi(chest.Midi).Play();
+                        if (chest.Sequence != null) chest.Sequence.Play();
+                        if (chest.Midi != null)
+                        {
+                            Playback playback = Utilities.CreatePlaybackMidi(chest.Midi, out OutputDevice outputDevice);
+                            playback.Play();
+
+                            playback.Finished += (sender, args) => { outputDevice.Dispose(); };
+                        }
+                        
+                    }
                     
                     break;
                 case Door:

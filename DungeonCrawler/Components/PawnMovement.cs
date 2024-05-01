@@ -64,25 +64,33 @@ public class PawnMovement
     
     bool IsCollidingFromRight(World world)
     {
-        bool isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Right, out HitResult hitResult) && !hitResult.HitActor.Trigger == _canEnterTriggers;
+        bool isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Right, out HitResult hitResult);
+        if (_canEnterTriggers) isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Right, out hitResult) && !hitResult.HitActor.Trigger;
+        
         return isColliding;
     }
 
     bool IsCollidingFromLeft(World world)
     {
-        bool isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Left, out HitResult hitResult) && !hitResult.HitActor.Trigger == _canEnterTriggers;
+        bool isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Left, out HitResult hitResult);
+        if (_canEnterTriggers) isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Left, out hitResult) && !hitResult.HitActor.Trigger;
+        
         return isColliding;
     }
 
     bool IsCollidingFromTop(World world)
     {
-        bool isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Up, out HitResult hitResult) && !hitResult.HitActor.Trigger == _canEnterTriggers;
+        bool isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Up, out HitResult hitResult);
+        if (_canEnterTriggers) isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Up, out hitResult) && !hitResult.HitActor.Trigger;
+        
         return isColliding;
     }
 
     bool IsCollidingFromBottom(World world)
     {
-        bool isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Down, out HitResult hitResult) && !hitResult.HitActor.Trigger == _canEnterTriggers;
+        bool isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Down, out HitResult hitResult);
+        if (_canEnterTriggers) isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Down, out hitResult) && !hitResult.HitActor.Trigger;
+        
         return isColliding;
     }
 

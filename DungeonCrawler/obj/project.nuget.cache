@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "LL+jcKI8uhbfXBqdh+yuctO8RRCOPRxoQThO6CgzFOw+mWLVZkfQr40VoIRqkHprTir29X+vb6BBW1MfLU3OYg==",
+  "dgSpecHash": "Oq55232+NMh4l5AjJECAWmky+1cMTUxwRXT3zpoqCSShFu+1QQ3ulRmDCRMP/Sjrnj7cyUVHX/WKWLkz1qi1aA==",
   "success": true,
   "projectFilePath": "F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\DungeonCrawler.csproj",
   "expectedPackageFiles": [
@@ -17,7 +17,10 @@
     "C:\\Users\\danie\\.nuget\\packages\\system.security.accesscontrol\\4.7.0\\system.security.accesscontrol.4.7.0.nupkg.sha512",
     "C:\\Users\\danie\\.nuget\\packages\\system.security.principal.windows\\4.7.0\\system.security.principal.windows.4.7.0.nupkg.sha512",
     "C:\\Users\\danie\\.nuget\\packages\\system.speech\\7.0.0\\system.speech.7.0.0.nupkg.sha512",
-    "C:\\Users\\danie\\.nuget\\packages\\system.windows.extensions\\8.0.0\\system.windows.extensions.8.0.0.nupkg.sha512"
+    "C:\\Users\\danie\\.nuget\\packages\\system.windows.extensions\\8.0.0\\system.windows.extensions.8.0.0.nupkg.sha512",
+    "C:\\Users\\danie\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\7.0.9\\microsoft.netcore.app.runtime.win-x64.7.0.9.nupkg.sha512",
+    "C:\\Users\\danie\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\7.0.9\\microsoft.windowsdesktop.app.runtime.win-x64.7.0.9.nupkg.sha512",
+    "C:\\Users\\danie\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\7.0.9\\microsoft.aspnetcore.app.runtime.win-x64.7.0.9.nupkg.sha512"
   ],
   "logs": []
 }

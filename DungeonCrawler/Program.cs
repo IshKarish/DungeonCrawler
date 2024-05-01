@@ -18,8 +18,6 @@ class Program
 
     public static void Start()
     { 
-        _player = new Player(new Graphics('*', ConsoleColor.White));
-        
         Console.Clear();
         
         Console.WriteLine();
@@ -31,7 +29,7 @@ class Program
         Console.WriteLine();
         Console.WriteLine();
         Console.WriteLine("Press T to play the tutorial");
-        Console.WriteLine("Press any other key to start.");
+        Console.WriteLine("Press any other key to start the game.");
 
         ConsoleKey c = Console.ReadKey(true).Key;
         if (c == ConsoleKey.T) _gameManager.StartGame(Tutorial());
@@ -51,7 +49,7 @@ class Program
             Thread.Sleep(2000);
             Console.WriteLine("     Press Any Key to continue...");
             
-            Console.ReadLine();
+            Console.ReadKey();
                     
             _gameManager.StartGame(StudioClassroom());
         }
@@ -62,7 +60,7 @@ class Program
     static Level Tutorial()
     {
         TriggerBox tutorialTrigger = new TriggerBox(1, 0);
-        Sequence tutorial = new Sequence(true);
+        Sequence tutorial = new Sequence();
         tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial\\WelcomeToTheTutorialOfHalfLife3.wav");
         tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial\\UseWASDToWalkFToInteractWithStuffAndTabToOpenYourInventory.wav");
         tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial\\YouNeedToWalkThroughThatDoorToContinueButToOpenItYouNeedAKey.wav");
@@ -88,6 +86,8 @@ class Program
         TriggerBox tutorialTrigger = new TriggerBox(2, 2);
         Sequence tutorial = new Sequence();
         tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial2\\TheNextRoomHasAFightInItSoGearUpWithTheEquipmentFromThoseBoxes.wav");
+        tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial2\\AlsoYouCantCarryMoreThen9Items.wav");
+        tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial2\\ToDropAnItemJustOpenYourInventoryAndPressOnTheCorrespondingNumber.wav");
         tutorialTrigger.AddSequance(tutorial);
 
         Door entrance = new Door(1, 0, DoorDirection.Down, true);
@@ -114,7 +114,7 @@ class Program
     static Level Tutorial3()
     {
         TriggerBox tutorialTrigger = new TriggerBox(2, 2);
-        Sequence tutorial = new Sequence(true);
+        Sequence tutorial = new Sequence();
         tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial3\\WhenYouEnterTheFightYouCanChooseToPunchTalkUseKillYourselfOrCheatAndKillTheEnemyRightAway.wav");
         tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial3\\ThePunchOptionHasAChanceOfDamagingTheEnemyButYouMightMiss.wav");
         tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial3\\YouCanTryToReasonWithTheEnemyByTalkingToHim.wav");
@@ -145,7 +145,7 @@ class Program
         Graphics graphics = new Graphics('%', ConsoleColor.Cyan);
         
         TriggerBox tutorialTrigger = new TriggerBox(2, 2);
-        Sequence tutorial = new Sequence(true);
+        Sequence tutorial = new Sequence();
         tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial4\\AlsoTheBriefSaidINeedToCreateTrapsButTheyDontFitInTheActualGame.wav");
         tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial4\\SoJustWalkOnThoseUntilYouDie.wav");
         tutorialTrigger.AddSequance(tutorial);
@@ -181,7 +181,7 @@ class Program
     static Level StudioClassroom()
     {
         TriggerBox ofirCallTrigger = new TriggerBox(9, 0);
-        Sequence ofirCall = new Sequence(false);
+        Sequence ofirCall = new Sequence();
         ofirCall.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom\\RiseAndShineDorBenDor.wav"); 
         ofirCall.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom\\RiseAndShine.wav");
         ofirCall.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom\\ItIsMeYourFriendOfirKatz.wav");
@@ -467,7 +467,7 @@ class Program
         
         Level level = Utilities.CreateLevel("Train station Haifa merkaz hashmona", new Vector2(50, 20), _player, actors);
 
-        Enemy guard = Utilities.GenerateEnemy(level, "Security guard");
+        Enemy guard = new Enemy(22, 6, "Security guard");
         Enemy[] enemies = { guard };
         level.SetEnemies(enemies);
         
@@ -477,7 +477,7 @@ class Program
     static Level Dizingof()
     {
         TriggerBox callTrigger = new TriggerBox(97, 1);
-        Sequence call = new Sequence(true);
+        Sequence call = new Sequence();
         call.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Dizingof\\RingRingRingRingRingRing.wav");
         call.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Dizingof\\Hello.wav");
         call.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Dizingof\\OfirIGotToDizingofCenterWhereAreYou.wav");
@@ -1073,7 +1073,7 @@ class Program
     static Level Train2017()
     {
         TriggerBox trainAnnouncementTrigger = new TriggerBox(38, 2);
-        Sequence trainAnnouncement = new Sequence(true);
+        Sequence trainAnnouncement = new Sequence();
         trainAnnouncement.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train2017\\TheNextTrainToTheUnitedStatesWillEnterRightAway.wav");
         trainAnnouncementTrigger.AddSequance(trainAnnouncement);
 
@@ -1119,7 +1119,7 @@ class Program
         
         Level level = Utilities.CreateLevel("Train station Haifa merkaz hashmona 2017", new Vector2(50, 20), _player, actors);
         
-        Enemy guard = Utilities.GenerateEnemy(level, "Security guard");
+        Enemy guard = new Enemy(22, 6, "Security guard");
         Enemy[] enemies = { guard };
         level.SetEnemies(enemies);
         
@@ -1405,7 +1405,9 @@ class Program
         Door centerDoor = new Door(0, 1, DoorDirection.Right);
         Door obanKobanDoor = new Door(5, 4, DoorDirection.Up, FutureKoban(), false, true);
         
-        Actor[] actors = { entranceTrigger, carWheel, carWheel2, carBase, obanKobanDoor, centerDoor };
+        Actor Kushmaro = new Actor(13, 5, 1, 1, new Graphics('!', ConsoleColor.DarkRed));
+        
+        Actor[] actors = { entranceTrigger, carWheel, carWheel2, carBase, obanKobanDoor, centerDoor, Kushmaro };
         
         Level level = Utilities.CreateLevel("Tel Aviv", new Vector2(22, 6), _player, actors, new Vector2(15, 4));
         return level;
@@ -1414,7 +1416,7 @@ class Program
     static Level FutureKoban()
     {
         TriggerBox entranceTrigger = new TriggerBox(34, 4);
-        Sequence entranceSequence = new Sequence(true);
+        Sequence entranceSequence = new Sequence();
         entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\FutureKoban\\Roads\\DORYOUGOTTACOMEBACKWITHME.wav");
         entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\FutureKoban\\Roads\\Where.wav");
         entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\FutureKoban\\Roads\\BackToTheFuture.wav");

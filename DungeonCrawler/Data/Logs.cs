@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace DungeonCrawler;
+﻿namespace DungeonCrawler;
 
 public static class Logs
 {
@@ -31,8 +29,6 @@ public static class Logs
 
     public new static string ToString()
     {
-        Debug.WriteLine($"Logs {LogsLst.ToArray().Length}");
-        
         if (LogsLst.Count == 0) return "You have nothing lol";
         
         string lstStr = "";

@@ -17,6 +17,7 @@ public class CutsceneLevel : Level
     private Sequence _sequenceDialogue;
 
     private Playback _playback;
+    private OutputDevice _outputDevice;
     
     public CutsceneLevel(string path, Level nextLevel, GameManager gameManager)
     {
@@ -79,7 +80,7 @@ public class CutsceneLevel : Level
 
         if (_path != null)
         {
-            _playback = Utilities.CreatePlaybackMidi(_path);
+            _playback = Utilities.CreatePlaybackMidi(_path, out _outputDevice);
             _playback.Start();
 
             if (_meshes != null && _meshes.Length > 0)
@@ -108,6 +109,8 @@ public class CutsceneLevel : Level
 
     private void SwitchLevel(object? sender, EventArgs e)
     {
+        _outputDevice.Dispose();
+        
         if (_endingMesh != null)
         {
             Console.Clear();
@@ -127,6 +130,7 @@ public class CutsceneLevel : Level
     
     private void SwitchLevel()
     {
+        _outputDevice.Dispose();
         _gameManager.SwitchLevel(_nextLevel);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace DungeonCrawler;
+﻿using System.Diagnostics;
+
+namespace DungeonCrawler;
 
 public class Inventory
 {
@@ -28,6 +30,20 @@ public class Inventory
                 return;
             }
         }
+    }
+    
+    public void RemoveItem(int x, GameManager gameManager)
+    {
+        if (x != 0) x--;
+
+        if (Items.ToArray().Length > x)
+        {
+            Logs.Add($"You dropped {Items.ToArray()[x].Name}");
+            Items.RemoveAt(x);
+        }
+
+        Thread.Sleep(10);
+        gameManager.IsDroppingItem = false;
     }
     
     public void RemoveItem(Item item)

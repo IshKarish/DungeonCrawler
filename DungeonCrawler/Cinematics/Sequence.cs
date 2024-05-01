@@ -6,24 +6,19 @@ public class Sequence
     private List<SkeletalMesh> _skeletalMeshes = new List<SkeletalMesh>();
     private List<int> _volumes = new List<int>();
 
-    public bool HoldPlayer { get; private set; }
-    public bool HoldEnemies { get; private set; }
+    public bool HoldMovement { get; private set; }
 
-    public Sequence(List<string> lines, bool holdPlayer = false, bool holdEnemies = true)
+    public Sequence(List<string> lines)
     {
         _lines = lines;
-        HoldPlayer = holdPlayer;
-        HoldEnemies = holdEnemies;
     }
 
-    public Sequence(bool holdPlayer = false, bool holdEnemies = true)
-    {
-        HoldPlayer = holdPlayer;
-        HoldEnemies = holdEnemies;
-    }
+    public Sequence() {}
     
     public void Play(GameManager gameManager)
     {
+        gameManager.StartMovement = false;
+        
         foreach (string s in _lines)
         {
             Utilities.Play(s); 
@@ -31,8 +26,7 @@ public class Sequence
 
         gameManager.IsPlaying = false;
 
-        if (HoldPlayer) gameManager.StartPlayerMovement = true;
-        if (HoldEnemies) gameManager.StartEnemiesMovement = true;
+        gameManager.StartMovement = true;
     }
     
     public void Play()

@@ -2,32 +2,37 @@
 
 public class GameManager
 {
+    private ConsoleKeyInfo _input;
+    
+    // Level related stuff
     private Map _map;
     private Player _player;
     private Enemy[] _enemies;
     private Level _level;
     private World _world;
-
+    
+    // States
+    public bool StartMovement;
+    
     private bool _isPaused;
     private bool _inCombat;
-
     private bool _switchingLevel;
+    
     private bool _canInteract;
     private bool _standingOnDoor;
-
     private bool _shouldRetractTrap;
-    private Trap _trap;
     
-    private ConsoleKeyInfo _input;
-
-    public bool StartPlayerMovement = true;
-    public bool StartEnemiesMovement = true;
     public bool IsPlaying;
+    public bool IsDroppingItem;
+    
+    // Other
+    private Trap _currentTrap;
 
     #region Managment
 
     public void StartGame(Level firstLevel)
     {
+        new Thread(Input).Start();
         StartLevel(firstLevel);
     }
     
@@ -41,7 +46,7 @@ public class GameManager
         
         _shouldRetractTrap = false;
         _canInteract = false;
-        _trap = null!;
+        _currentTrap = null!;
         
         Console.Clear();
         
@@ -63,6 +68,14 @@ public class GameManager
                 _player.Transform.SetPosition(door.PlayerSpawnPoint);
                 _player.Transform.SetLastTransform(_player.Transform);
             }
+            
+            if (a is TriggerBox t && t.Sequence != null)
+            {
+                bool isTriggerOnEntrance = a.Transform.Position.X == _player.Transform.Position.X && a.Transform.Position.Y == _player.Transform.Position.Y;
+                
+                if (!isTriggerOnEntrance) StartMovement = true;
+                break;
+            }
         }
 
         if (_level.Enemies != null) _enemies = _level.Enemies;
@@ -70,16 +83,6 @@ public class GameManager
         
         _switchingLevel = false;
         Logs.Add("You entered a new level");
-
-        foreach (Actor a in _map.Actors)
-        {
-            if (a is TriggerBox t && t.Sequence != null)
-            {
-                if (t.Sequence.HoldPlayer) StartPlayerMovement = false;
-                if (t.Sequence.HoldEnemies) StartEnemiesMovement = false;
-                break;
-            }
-        }
         
         StartThreads();
     }
@@ -133,11 +136,7 @@ public class GameManager
     {
         _input = new ConsoleKeyInfo();
 
-        if (cleared)
-        {
-            Renderer.RenderMap(_map);
-            Console.WriteLine(Logs.ToString());
-        }
+        if (cleared) Renderer.RenderMap(_map);
         _isPaused = false;
         
         StartThreads();
@@ -152,11 +151,10 @@ public class GameManager
         _player.Moved = false;
         while (!_switchingLevel && !_player.IsDead && !_isPaused)
         {
-            if (StartPlayerMovement)
+            if (StartMovement)
             {
-                _input = Console.ReadKey(true);
                 if (_player.IsDead) break;
-            
+                
                 switch (_input.Key)
                 {
                     case Keybindings.Forward:
@@ -180,7 +178,7 @@ public class GameManager
     {
         while (!_switchingLevel && !_isPaused)
         {
-            if (StartEnemiesMovement)
+            if (StartMovement)
             {
                 foreach (Enemy e in _enemies)
                 {
@@ -227,7 +225,7 @@ public class GameManager
         if (openInventory && !_player.IsInventoryOpened) RenderInventory();
         else if (openInventory && _player.IsInventoryOpened) RenderInventory(false);
 
-        if (_player.Inventory.Equipped && _player.IsInventoryOpened) 
+        if ((_player.Inventory.Equipped || IsDroppingItem) && _player.IsInventoryOpened) 
         {
             _player.Inventory.Equipped = false;
             RenderInventory(false);
@@ -244,12 +242,12 @@ public class GameManager
         if (!render)
         {
             Console.SetCursorPosition(left, top);
-            Console.WriteLine("                                            ");
-            foreach (Item i in _player.Inventory.Items)
+            Console.WriteLine("                                                                                                        ");
+            foreach (Item i in _player.Inventory.Items.ToArray())
             {
                 Console.SetCursorPosition(left, top);
 
-                string current = $"* {i.Name}: {i.Description}.";
+                string current = $"1. {i.Name}: {i.Description}.";
                 for (int j = 0; j < current.Length; j++) Console.Write(" ");
                 
                 top++;
@@ -261,12 +259,15 @@ public class GameManager
             Console.WriteLine("You have nothing lol");
             for (int i = 0; i < _player.Inventory.Items.Count; i++)
             {
-                Item item = _player.Inventory.Items[i];
                 Console.SetCursorPosition(left, top);
+                
+                Item item = _player.Inventory.Items[i];
                 Console.WriteLine($"{i + 1}. {item.Name}: {item.Description}");
+                
                 top++;
             }
         }
+        
         _player.Inventory.HasChanged = false;
     
         _input = new ConsoleKeyInfo();
@@ -295,7 +296,7 @@ public class GameManager
         if (_shouldRetractTrap)
         {
             _shouldRetractTrap = false;
-            Renderer.RetractTrap(_trap);
+            Renderer.RetractTrap(_currentTrap);
         }
     
         if (_player.Ineractor.OpenDoor)
@@ -307,20 +308,20 @@ public class GameManager
     
     void TextRendering()
     {
-        int top = _world.WorldArr.GetLength(0) + 2;
-        string emptyLine = "                                                                     ";
+        int top = _world.WorldArr.GetLength(0) + 10;
         
         Console.SetCursorPosition(0, top);
-
-        if (Logs.HasChanged() || _player.IsInventoryOpened) RenderLogs(false);
-        else RenderLogs();
         
+        top = _world.WorldArr.GetLength(0) + 2;
         Console.SetCursorPosition(1, top);
         if (_canInteract) Console.WriteLine($"Press {Keybindings.Use} to interact.");
-        else Console.WriteLine(emptyLine);
+        else Console.WriteLine("                    ");
         
         if (_player.HpChanged()) RenderHP(false);
         else RenderHP();
+        
+        if (Logs.HasChanged()) RenderLogs(false);
+        else RenderLogs();
         
         Console.SetCursorPosition(0, 0);
         
@@ -331,20 +332,22 @@ public class GameManager
     {
         Logs.KeepFive();
         
-        int top = _world.WorldArr.GetLength(0) + 5;
-        string emptyLine = "                                                                                                                                                                                                                 ";
+        int top = _world.WorldArr.GetLength(0) + 10;
 
         if (!render)
         {
             Console.SetCursorPosition(0, top);
             for (int i = 0; i < Logs.LogsLst.ToArray().Length; i++)
             {
-                Console.WriteLine(emptyLine);
+                Console.WriteLine("                                                                                                                                                          ");
             }
         }
+        else
+        {
+            Console.SetCursorPosition(0, top);
 
-        Console.SetCursorPosition(0, top);
-        if (render) Console.WriteLine(Logs.ToString());
+            Console.WriteLine(Logs.ToString());
+        }
     }
 
     void RenderHP(bool render = true)
@@ -370,6 +373,20 @@ public class GameManager
             TrapsDetector();
             InteractionsManager(); 
             LevelSwitcher();
+            InventoryManagement();
+        }
+    }
+
+    void InventoryManagement()
+    {
+        if (_player.IsInventoryOpened && _input.Key != 0 && !IsDroppingItem)
+        {
+            bool b = int.TryParse(_input.KeyChar.ToString(), out int c);
+            if (b)
+            {
+                IsDroppingItem = true;
+                _player.Inventory.RemoveItem(c, this);
+            }
         }
     }
 
@@ -383,7 +400,7 @@ public class GameManager
                 _player.Damage(t.Damage);
                 
                 _shouldRetractTrap = true;
-                _trap = t;
+                _currentTrap = t;
                 _world.UpdateActor(t);
                 
                 if (_player.IsDead)
@@ -401,7 +418,7 @@ public class GameManager
                     KillEnemy(e);
                     
                     _shouldRetractTrap = true;
-                    _trap = tr;
+                    _currentTrap = tr;
                     _world.UpdateActor(tr);
                 }
             }
@@ -472,6 +489,16 @@ public class GameManager
 
     #endregion
 
+    void Input()
+    {
+        while (!_inCombat)
+        {
+            _input = Console.ReadKey(true);
+            Thread.Sleep(1);
+            _input = new ConsoleKeyInfo();
+        }
+    }
+
     void EnterEncounter(Encounter encounter)
     {
         Renderer.RenderEncounter(encounter, out int hpLeft, out int hpTop, out int optionsLeft, out int optionsTop);
@@ -482,10 +509,10 @@ public class GameManager
 
         do
         {
-            ConsoleKey input = Console.ReadKey(true).Key;
-                
-            if (encounter.IsUsing) encounter.Use(input);
-            else encounter.Act(input);
+            _input = Console.ReadKey(true);
+            
+            if (encounter.IsUsing) encounter.Use(_input.Key);
+            else encounter.Act(_input.Key);
         } 
         while (!_player.IsDead && !encounter.Enemy.IsDead);
 
@@ -502,6 +529,7 @@ public class GameManager
         }
 
         _inCombat = false;
+        new Thread(Input).Start();
     }
 
     private void KillEnemy(Enemy e)

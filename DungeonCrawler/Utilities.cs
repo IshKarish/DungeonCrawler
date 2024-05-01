@@ -258,6 +258,8 @@ public static class Utilities
 
         return false;
     }
+    
+    // XP media player vehasimha raba
 
     public static void Play(string path)
     {
@@ -307,17 +309,15 @@ public static class Utilities
             if (Char.IsLetter(c)) name += c;
         }
 
-        _synthesizer.SetOutputToWaveFile($@"F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Release\net7.0\win-x64\VoiceLines\{folder}\{name}.wav");
+        _synthesizer.SetOutputToWaveFile($@"F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Debug\net7.0\VoiceLines\{folder}\{name}.wav");
         _synthesizer.Speak(str);
     }
 
-    public static Playback CreatePlaybackMidi(string path)
+    public static Playback CreatePlaybackMidi(string path, out OutputDevice outputDevice)
     {
         var midiFile = MidiFile.Read(path);
 
-        OutputDevice outputDevice = OutputDevice.GetByIndex(0);
-        outputDevice.TurnAllNotesOff();
-        
+        outputDevice = OutputDevice.GetByIndex(0);
         Playback playback = midiFile.GetPlayback(outputDevice);
         
         return playback;
