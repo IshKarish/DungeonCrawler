@@ -12,49 +12,49 @@ public class Pawn : Actor
 
     public float HP { get; private set; } = 100;
     private bool _hpChanged = true;
-    
-    public Pawn(string name = "Bob")
+
+    public Pawn(string name = "Bob", bool canEnterTriggers = true)
     {
-        PawnMovement = new PawnMovement(this);
+        PawnMovement = new PawnMovement(this, canEnterTriggers);
         Graphics = new Graphics('@', ConsoleColor.Gray);
         Name = name;
     }
 
-    public Pawn(int x, int y, string name = "Bob")
+    public Pawn(int x, int y, string name = "Bob", bool canEnterTriggers = true)
     {
-        PawnMovement = new PawnMovement(this);
+        PawnMovement = new PawnMovement(this, canEnterTriggers);
         Transform.SetPosition(x, y);
         Graphics = new Graphics('@', ConsoleColor.Gray);
         Name = name;
     }
 
-    public Pawn(Vector2 position, Graphics graphics, string name = "Bob")
+    public Pawn(Vector2 position, Graphics graphics, string name = "Bob", bool canEnterTriggers = true)
     {
-        PawnMovement = new PawnMovement(this);
+        PawnMovement = new PawnMovement(this, canEnterTriggers);
         Transform.SetPosition(position.X, position.Y);
         Graphics = graphics;
         Name = name;
     }
     
-    public Pawn(int x, int y,  Graphics graphics, string name = "Bob")
+    public Pawn(int x, int y,  Graphics graphics, string name = "Bob", bool canEnterTriggers = true)
     {
-        PawnMovement = new PawnMovement(this);
+        PawnMovement = new PawnMovement(this, canEnterTriggers);
         Transform.SetPosition(x, y);
         Graphics = graphics;
         Name = name;
     }
 
-    public Pawn(Vector2 position, string name = "Bob")
+    public Pawn(Vector2 position, string name = "Bob", bool canEnterTriggers = true)
     {
-        PawnMovement = new PawnMovement(this);
+        PawnMovement = new PawnMovement(this, canEnterTriggers);
         Transform.SetPosition(position.X, position.Y);
         Graphics = new Graphics('@', ConsoleColor.Gray);
         Name = name;
     }
     
-    public Pawn(Graphics graphics, string name = "Bob")
+    public Pawn(Graphics graphics, string name = "Bob", bool canEnterTriggers = true)
     {
-        PawnMovement = new PawnMovement(this);
+        PawnMovement = new PawnMovement(this, canEnterTriggers);
         Graphics = graphics;
         Name = name;
     }

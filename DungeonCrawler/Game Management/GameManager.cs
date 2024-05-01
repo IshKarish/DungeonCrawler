@@ -258,7 +258,7 @@ public class GameManager
         else
         {
             Console.SetCursorPosition(left, top);
-            Console.WriteLine("You have nothing");
+            Console.WriteLine("You have nothing lol");
             for (int i = 0; i < _player.Inventory.Items.Count; i++)
             {
                 Item item = _player.Inventory.Items[i];
@@ -311,46 +311,51 @@ public class GameManager
         string emptyLine = "                                                                     ";
         
         Console.SetCursorPosition(0, top);
-        
-        //RenderSubtitles();
-        
-        if (Logs.HasChanged()) RenderLogs();
 
-        int left = Logs.LogsLst[^1].Length + 14;
-        Console.SetCursorPosition(left, top);
+        if (Logs.HasChanged() || _player.IsInventoryOpened) RenderLogs(false);
+        else RenderLogs();
+        
+        Console.SetCursorPosition(1, top);
         if (_canInteract) Console.WriteLine($"Press {Keybindings.Use} to interact.");
         else Console.WriteLine(emptyLine);
         
-        if (_player.HpChanged()) RenderHP();
+        if (_player.HpChanged()) RenderHP(false);
+        else RenderHP();
         
         Console.SetCursorPosition(0, 0);
         
         Console.BackgroundColor = ConsoleColor.Black;
     }
 
-    void RenderLogs()
+    void RenderLogs(bool render = true)
     {
-        int top = _world.WorldArr.GetLength(0) + 2;
+        Logs.KeepFive();
+        
+        int top = _world.WorldArr.GetLength(0) + 5;
         string emptyLine = "                                                                                                                                                                                                                 ";
 
-        for (int i = 0; i < Logs.LogsLst.ToArray().Length; i++)
+        if (!render)
         {
-            Console.WriteLine(emptyLine);
+            Console.SetCursorPosition(0, top);
+            for (int i = 0; i < Logs.LogsLst.ToArray().Length; i++)
+            {
+                Console.WriteLine(emptyLine);
+            }
         }
 
         Console.SetCursorPosition(0, top);
-        Console.WriteLine(Logs.ToString());
+        if (render) Console.WriteLine(Logs.ToString());
     }
 
-    void RenderHP()
+    void RenderHP(bool render = true)
     {
         int left = _world.WorldArr.GetLength(1) + 4;
         string emptyLine = "                                          ";
         
         Console.SetCursorPosition(left, 1);
-        Console.WriteLine(emptyLine);
+        if (!render) Console.WriteLine(emptyLine);
         Console.SetCursorPosition(left, 1);
-        Console.WriteLine($"You have {_player.HP} HP.");
+        if (render) Console.WriteLine($"You have {_player.HP} HP.");
     }
     
     #endregion
@@ -380,6 +385,12 @@ public class GameManager
                 _shouldRetractTrap = true;
                 _trap = t;
                 _world.UpdateActor(t);
+                
+                if (_player.IsDead)
+                {
+                    Pause();
+                    Renderer.RenderDeathScreen();
+                }
             }
 
             foreach (Enemy e in _enemies)

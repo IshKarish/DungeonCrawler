@@ -54,7 +54,7 @@ public class TriggerBox : Actor
         else Graphics = new Graphics('T', ConsoleColor.Yellow);
     }
 
-    public void AddCutscene(Sequence sequence)
+    public void AddSequance(Sequence sequence)
     {
         Sequence = sequence;
     }

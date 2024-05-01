@@ -4,7 +4,7 @@ public class CombatOptions
 {
     public List<string> Options { get; private set; } = new List<string>
     {
-        "Fight",
+        "Punch",
         "Talk",
         "Use",
         "Kill yourself",

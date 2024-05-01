@@ -1,4 +1,6 @@
-﻿namespace DungeonCrawler;
+﻿using System.Diagnostics;
+
+namespace DungeonCrawler;
 
 public static class Logs
 {
@@ -7,7 +9,6 @@ public static class Logs
 
     public static void Add(string log)
     {
-        if (LogsLst.Count >= 5) LogsLst.Remove(log);
         LogsLst.Add(log);
         _changed = true;
     }
@@ -23,8 +24,15 @@ public static class Logs
         return false;
     }
 
+    public static void KeepFive()
+    {
+        if (LogsLst.ToArray().Length > 5) LogsLst.RemoveAt(0);
+    }
+
     public new static string ToString()
     {
+        Debug.WriteLine($"Logs {LogsLst.ToArray().Length}");
+        
         if (LogsLst.Count == 0) return "You have nothing lol";
         
         string lstStr = "";

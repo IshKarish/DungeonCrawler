@@ -7,6 +7,7 @@ public class CutsceneLevel : Level
 {
     private Mesh _mesh;
     private Mesh[] _meshes;
+    private Mesh _endingMesh;
     
     private string _path;
     private string _url;
@@ -64,6 +65,11 @@ public class CutsceneLevel : Level
     {
         _url = url;
     }
+
+    public void AddEndingMesh(Mesh mesh)
+    {
+        _endingMesh = mesh;
+    }
     
     public void Play()
     {
@@ -73,7 +79,7 @@ public class CutsceneLevel : Level
 
         if (_path != null)
         {
-            _playback = Utilities.PlayMidi(_path);
+            _playback = Utilities.CreatePlaybackMidi(_path);
             _playback.Start();
 
             if (_meshes != null && _meshes.Length > 0)
@@ -102,6 +108,13 @@ public class CutsceneLevel : Level
 
     private void SwitchLevel(object? sender, EventArgs e)
     {
+        if (_endingMesh != null)
+        {
+            Console.Clear();
+            Console.WriteLine(_endingMesh.Ascii);
+            Thread.Sleep(5000);
+        }
+        
         if (_sequenceDialogue != null)
         {
             Console.Clear();

@@ -56,13 +56,19 @@ public class PawnIneractor
             switch (interactable)
             {
                 case Chest chest:
+                    if (chest.Item is RickRoll rickRoll)
+                    {
+                        rickRoll.OpenRickRoll();
+                        return;
+                    }
+                    
                     Logs.Add($"You have picked up a {chest.Item.Name}");
                     
                     p.Inventory.AddItem(chest.Item);
                     chest.Interactable = false;
                     
                     if (chest.Sequence != null) chest.Sequence.Play();
-                    if (chest.Item is RickRoll rickRoll) rickRoll.OpenRickRoll();
+                    if (chest.Midi != null) Utilities.CreatePlaybackMidi(chest.Midi).Play();
                     
                     break;
                 case Door:

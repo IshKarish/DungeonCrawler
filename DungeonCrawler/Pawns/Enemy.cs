@@ -10,99 +10,74 @@ public class Enemy : Pawn
     private ConsoleColor _color = ConsoleColor.DarkRed;
     private string _ascii = " .----------------. \n| .--------------. |\n| |              | |\n| |      _       | |\n| |     | |      | |\n| |     | |      | |\n| |     | |      | |\n| |     |_|      | |\n| |     (_)      | |\n| '--------------' |\n '----------------' ";
     
-    public Enemy(string name = "Bob")
+    public Enemy(string name = "Bob") : base(name, false)
     {
         Graphics = new Graphics(_symbol, _color, _ascii);
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = new PawnSensing(this);
-        Name = name;
     }
 
-    public Enemy(int x, int y, string name = "Bob")
+    public Enemy(int x, int y, string name = "Bob") : base(x, y, name, false)
     {
-        Transform.SetPosition(x, y);
         Graphics = new Graphics(_symbol, _color, _ascii);
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = new PawnSensing(5, this);
-        Name = name;
     }
     
-    public Enemy(int x, int y, PawnSensing pawnSensing, string name = "Bob")
+    public Enemy(int x, int y, PawnSensing pawnSensing, string name = "Bob") : base(x, y, name, false)
     {
-        Transform.SetPosition(x, y);
         Graphics = new Graphics(_symbol, _color, _ascii);
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = pawnSensing;
-        Name = name;
     }
 
-    public Enemy(Vector2 position, Graphics graphics, string name = "Bob")
+    public Enemy(Vector2 position, Graphics graphics, string name = "Bob") : base(position, graphics, name, false)
     {
-        Transform.SetPosition(position.X, position.Y);
-        Graphics = graphics;
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = new PawnSensing(this);
-        Name = name;
     }
     
-    public Enemy(Vector2 position, Graphics graphics, PawnSensing pawnSensing, string name = "Bob")
+    public Enemy(Vector2 position, Graphics graphics, PawnSensing pawnSensing, string name = "Bob") : base(position, graphics, name, false)
     {
-        Transform.SetPosition(position.X, position.Y);
-        Graphics = graphics;
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = pawnSensing;
-        Name = name;
     }
     
-    public Enemy(int x, int y,  Graphics graphics, string name = "Bob")
+    public Enemy(int x, int y, Graphics graphics, string name = "Bob") : base(x, y, graphics, name, false)
     {
-        Transform.SetPosition(x, y);
-        Graphics = graphics;
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = new PawnSensing(this);
-        Name = name;
     }
     
-    public Enemy(int x, int y,  Graphics graphics, PawnSensing pawnSensing, string name = "Bob")
+    public Enemy(int x, int y,  Graphics graphics, PawnSensing pawnSensing, string name = "Bob") : base(x, y, graphics, name, false)
     {
-        Transform.SetPosition(x, y);
-        Graphics = graphics;
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = pawnSensing;
-        Name = name;
     }
     
-    public Enemy(Vector2 position, string name = "Bob")
+    public Enemy(Vector2 position, string name = "Bob") : base(position, name, false)
     {
-        Transform.SetPosition(position.X, position.Y);
         Graphics = new Graphics(_symbol, _color, _ascii);
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = new PawnSensing(this);
-        Name = name;
     }
     
-    public Enemy(Vector2 position, PawnSensing pawnSensing, string name = "Bob")
+    public Enemy(Vector2 position, PawnSensing pawnSensing, string name = "Bob") : base(position, name, false)
     {
-        Transform.SetPosition(position.X, position.Y);
         Graphics = new Graphics(_symbol, _color, _ascii);
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = pawnSensing;
-        Name = name;
     }
     
-    public Enemy(Graphics graphics, string name = "Bob")
+    public Enemy(Graphics graphics, string name = "Bob") : base(graphics, name, false)
     {
-        Graphics = graphics;
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = new PawnSensing(this);
-        Name = name;
     }
     
-    public Enemy(Graphics graphics, PawnSensing pawnSensing, string name = "Bob")
+    public Enemy(Graphics graphics, PawnSensing pawnSensing, string name = "Bob") : base(graphics, name, false)
     {
-        Graphics = graphics;
         BehaviorTree = new BehaviorTree(this);
         PawnSensing = pawnSensing;
-        Name = name;
     }
 }

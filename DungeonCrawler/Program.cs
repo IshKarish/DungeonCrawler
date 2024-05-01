@@ -12,7 +12,16 @@ class Program
     {
         //ConsoleHelperLibrary.Classes.WindowUtility.SetConsoleWindowPosition(ConsoleHelperLibrary.Classes.WindowUtility.AnchorWindow.Fill);
         Console.CursorVisible = false;
+        
+        Start();
+    }
 
+    public static void Start()
+    { 
+        _player = new Player(new Graphics('*', ConsoleColor.White));
+        
+        Console.Clear();
+        
         Console.WriteLine();
         Console.WriteLine();
         Console.WriteLine("$$\\   $$\\  $$$$$$\\  $$\\       $$$$$$$$\\       $$\\       $$$$$$\\ $$$$$$$$\\ $$$$$$$$\\        $$$$$$\\  \n$$ |  $$ |$$  __$$\\ $$ |      $$  _____|      $$ |      \\_$$  _|$$  _____|$$  _____|      $$ ___$$\\ \n$$ |  $$ |$$ /  $$ |$$ |      $$ |            $$ |        $$ |  $$ |      $$ |            \\_/   $$ |\n$$$$$$$$ |$$$$$$$$ |$$ |      $$$$$\\          $$ |        $$ |  $$$$$\\    $$$$$\\            $$$$$ / \n$$  __$$ |$$  __$$ |$$ |      $$  __|         $$ |        $$ |  $$  __|   $$  __|           \\___$$\\ \n$$ |  $$ |$$ |  $$ |$$ |      $$ |            $$ |        $$ |  $$ |      $$ |            $$\\   $$ |\n$$ |  $$ |$$ |  $$ |$$$$$$$$\\ $$ |            $$$$$$$$\\ $$$$$$\\ $$ |      $$$$$$$$\\       \\$$$$$$  |\n\\__|  \\__|\\__|  \\__|\\________|\\__|            \\________|\\______|\\__|      \\________|       \\______/ ");
@@ -21,40 +30,167 @@ class Program
         Console.WriteLine();
         Console.WriteLine();
         Console.WriteLine();
-        Console.WriteLine("Press Enter to start.");
-        
-        Console.ReadLine();
-        
-        Console.Clear();
-        Console.WriteLine();
-        Console.WriteLine();
-        //Renderer.Write("     There once was a Dor... \n     His name was Ben Dor.");
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        //Thread.Sleep(2000);
-        Console.WriteLine("     Press Enter to continue...");
+        Console.WriteLine("Press T to play the tutorial");
+        Console.WriteLine("Press any other key to start.");
 
-        Console.ReadLine();
-        
-        _gameManager.StartGame(Tiltan());
+        ConsoleKey c = Console.ReadKey(true).Key;
+        if (c == ConsoleKey.T) _gameManager.StartGame(Tutorial());
+        else
+        {
+            Console.Clear();
+            Thread.Sleep(1000);
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.Write("     ");
+            Renderer.Write("There once was a Dor... \n     His name was Ben Dor.");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Thread.Sleep(2000);
+            Console.WriteLine("     Press Any Key to continue...");
+            
+            Console.ReadLine();
+                    
+            _gameManager.StartGame(StudioClassroom());
+        }
     }
+
+    #region Tutorial Levels
+
+    static Level Tutorial()
+    {
+        TriggerBox tutorialTrigger = new TriggerBox(1, 0);
+        Sequence tutorial = new Sequence(true);
+        tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial\\WelcomeToTheTutorialOfHalfLife3.wav");
+        tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial\\UseWASDToWalkFToInteractWithStuffAndTabToOpenYourInventory.wav");
+        tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial\\YouNeedToWalkThroughThatDoorToContinueButToOpenItYouNeedAKey.wav");
+        tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial\\LuckilyThatGreenChestHasAKeyInsideOfIt.wav");
+        tutorialTrigger.AddSequance(tutorial);
+        
+        Door door = new Door(1, 8, DoorDirection.Up, Tutorial2());
+        
+        Chest chest = new Chest(new Key(), 10, 2);
+        
+        Actor[] actors =
+        {
+            door, tutorialTrigger, chest
+        };
+        
+        Level level = Utilities.CreateLevel("Test", 10, _player, actors, new Vector2(1, 0));
+        
+        return level;
+    }
+    
+    static Level Tutorial2()
+    {
+        TriggerBox tutorialTrigger = new TriggerBox(2, 2);
+        Sequence tutorial = new Sequence();
+        tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial2\\TheNextRoomHasAFightInItSoGearUpWithTheEquipmentFromThoseBoxes.wav");
+        tutorialTrigger.AddSequance(tutorial);
+
+        Door entrance = new Door(1, 0, DoorDirection.Down, true);
+        Door door = new Door(1, 8, DoorDirection.Up, Tutorial3(), false, true);
+        
+        Chest chest = new Chest(new Item("Dor Ben Dor figure", "Comes with the collectors edition"), 17, 2);
+        Chest chest2 = new Chest(new Weapon("Sword", 16, "But it's made from plastic so it won't really hurt anyone"), 17, 5);
+        Chest chest3 = new Chest(new Healing("Meth", "La ciudad se llama DukeNuevo Mexico, el estado (Heals you bu 69 HP)", 69), 10, 2);
+        chest3.AddMidi($"{Environment.CurrentDirectory}\\MIDI\\BreakingBad.mid");
+        
+        Chest chest4 = new Chest(new Item("Shahar Chocolate", "Das Eina Gutte Kremaev"), 10, 5);
+        Chest chest5 = new Chest(new RickRoll(), 3, 2);
+        
+        Actor[] actors =
+        {
+            tutorialTrigger, entrance, chest, chest2, chest3, chest4, door, chest5
+        };
+        
+        Level level = Utilities.CreateLevel("Tutorial", 10, _player, actors);
+        
+        return level;
+    }
+    
+    static Level Tutorial3()
+    {
+        TriggerBox tutorialTrigger = new TriggerBox(2, 2);
+        Sequence tutorial = new Sequence(true);
+        tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial3\\WhenYouEnterTheFightYouCanChooseToPunchTalkUseKillYourselfOrCheatAndKillTheEnemyRightAway.wav");
+        tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial3\\ThePunchOptionHasAChanceOfDamagingTheEnemyButYouMightMiss.wav");
+        tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial3\\YouCanTryToReasonWithTheEnemyByTalkingToHim.wav");
+        tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial3\\YouCanUseStuffYouCollectedInTheLevelsToHealYourselfOrHurtTheEnemy.wav");
+        tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial3\\AndTheOtherOptionsArePrettySelfExplanatory.wav");
+        tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial3\\WhenYouCollideWithAnEnemyYouWillEnterAFightOrYouCanJustBeAChickenAndRun.wav");
+        tutorialTrigger.AddSequance(tutorial);
+        
+        Door entrance = new Door(1, 0, DoorDirection.Down, true);
+        Door door = new Door(1, 8, DoorDirection.Up, Tutorial4(), false, true);
+        
+        Actor[] actors =
+        {
+            door, tutorialTrigger, entrance
+        };
+        
+        Level level = Utilities.CreateLevel("Tutorial", 10, _player, actors, new Vector2(1, 0));
+        
+        Enemy enemy = Utilities.GenerateEnemy(level);
+        Enemy[] enemies = { enemy };
+        level.SetEnemies(enemies);
+        
+        return level;
+    }
+    
+    static Level Tutorial4()
+    {
+        Graphics graphics = new Graphics('%', ConsoleColor.Cyan);
+        
+        TriggerBox tutorialTrigger = new TriggerBox(2, 2);
+        Sequence tutorial = new Sequence(true);
+        tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial4\\AlsoTheBriefSaidINeedToCreateTrapsButTheyDontFitInTheActualGame.wav");
+        tutorial.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tutorial4\\SoJustWalkOnThoseUntilYouDie.wav");
+        tutorialTrigger.AddSequance(tutorial);
+        
+        Door entrance = new Door(1, 0, DoorDirection.Down, true);
+
+        Actor actor = new Actor(5, 2, 2, 5, graphics);
+        Actor actor2 = new Actor(13, 4, 1, 6, graphics);
+        Actor actor3 = new Actor(10, 4, 3, 1, graphics);
+        
+        Trap trap3 = new Trap(TrapDirection.Right, 4, actor);
+        Trap trap4 = new Trap(TrapDirection.Left, 4, actor2);
+        Trap trap5 = new Trap(TrapDirection.Right, 0, actor3);
+        
+        Actor[] actors =
+        {
+            tutorialTrigger, entrance, trap3, trap4, trap5, actor, actor2, actor3
+        };
+        
+        Level level = Utilities.CreateLevel("Tutorial", 10, _player, actors, new Vector2(1, 0));
+        
+        Trap trap = new Trap(TrapDirection.Right, 4, level.Map);
+        Trap trap2 = new Trap(TrapDirection.Left, 7, level.Map);
+        level.Map.AddActors(new[] {trap, trap2});
+        
+        return level;
+    }
+
+    #endregion
+
+    #region Levels
 
     static Level StudioClassroom()
     {
-        TriggerBox ofirCallTrigger = new TriggerBox(9, 1);
-        Sequence ofirCall = new Sequence(true);
-        ofirCall.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom\\RiseAndShineDorBenDor.wav"); 
-        ofirCall.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom\\RiseAndShine.wav");
-        ofirCall.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom\\ItIsMeYourFriendOfirKatz.wav");
-        ofirCall.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom\\CanYouComeToDizingofCenter.wav");
-        ofirCall.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom\\TiltanIsProbablyClosedNowSoILeftYouTheClassroomKeyByYourDeskInTheGreenChestWithTheDollars.wav");
-        ofirCall.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom\\AsForTiltansKeyIForgotWhereItIs.wav");
-        ofirCall.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom\\SoYouBetterFindIt.wav");
-        ofirCall.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom\\OnMyWay.wav");
-        ofirCallTrigger.AddCutscene(ofirCall);
+        TriggerBox ofirCallTrigger = new TriggerBox(9, 0);
+        Sequence ofirCall = new Sequence(false);
+        ofirCall.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom\\RiseAndShineDorBenDor.wav"); 
+        ofirCall.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom\\RiseAndShine.wav");
+        ofirCall.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom\\ItIsMeYourFriendOfirKatz.wav");
+        ofirCall.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom\\CanYouComeToDizingofCenter.wav");
+        ofirCall.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom\\TiltanIsProbablyClosedNowSoILeftYouTheClassroomKeyByYourDeskInTheGreenChestWithTheDollars.wav");
+        ofirCall.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom\\AsForTiltansKeyIForgotWhereItIs.wav");
+        ofirCall.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom\\SoYouBetterFindIt.wav");
+        ofirCall.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom\\OnMyWay.wav");
+        ofirCallTrigger.AddSequance(ofirCall);
         
         Graphics deskGraphics = new Graphics('.', ConsoleColor.Gray);
         
@@ -69,6 +205,11 @@ class Program
         Vector2 chairSize = new Vector2(1, 1);
 
         Graphics chairGraphics = new Graphics('#', ConsoleColor.Blue);
+        
+        TriggerBox meTrigger = new TriggerBox(61, 8, 3, 2);
+        Sequence withoutMe = new Sequence();
+        withoutMe.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom\\PlayingWithoutMe.wav");
+        meTrigger.AddSequance(withoutMe);
 
         #region Row1
 
@@ -123,7 +264,7 @@ class Program
         Actor chair11 = new Actor(51, 8, chairSize, chairGraphics);
         
         Actor chair12 = new Actor(58, 8, chairSize, chairGraphics);
-        Actor chair13 = new Actor(61, 8, chairSize, chairGraphics);
+        Actor chair13 = new Actor(61, 8, chairSize, new Graphics('!', ConsoleColor.DarkRed));
 
         #endregion
         
@@ -177,12 +318,12 @@ class Program
 
         Actor[] actors =
         {
-            whiteboard, monitor, desk, desk2, desk3, desk4, desk5, desk6, desk7, desk8, desk9, desk10, desk11, desk12, desk13, desk14, desk15, desk16, desk17, desk18, desk19, desk20,
+            meTrigger, whiteboard, monitor, desk, desk2, desk3, desk4, desk5, desk6, desk7, desk8, desk9, desk10, desk11, desk12, desk13, desk14, desk15, desk16, desk17, desk18, desk19, desk20,
             chair1, chair2, chair3, chair4, chair6, chair7, chair8, chair9, chair10, chair11, chair12, chair13, chair14, chair15, chair16, chair17, chair18, chair19, chair20, chair21, chair22,
             chair23, chair24, chair25, chair26, chair27, chair28, chair29, chair30, chair31, chair32, chair33, chair34, chair35, chair36, chair37, exitDoor, keyChest, ofirCallTrigger
         };
 
-        Level level = Utilities.CreateLevel("Studio class - Tiltan", new Vector2(65, 17), _player, actors, new Vector2(9, 1));
+        Level level = Utilities.CreateLevel("Studio class - Tiltan", new Vector2(65, 17), _player, actors, new Vector2(9, 0));
         return level;
     } // Level 1
 
@@ -243,11 +384,19 @@ class Program
         Actor couch3 = new Actor(49, 9, 2, 1, couchGraphics);
         Actor couch4 = new Actor(30, 9, 5, 1, couchGraphics);
         Actor couch5 = new Actor(21, 4, 1, 2, couchGraphics);
+
+        Actor erez = new Actor(7, 2, 1, 1, new Graphics('!', ConsoleColor.DarkRed));
+        TriggerBox erezTrigger = new TriggerBox(8, 2, 2, 1);
+        Sequence erezSequence = new Sequence();
+        erezSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tiltan\\שלוםלךדורבןדורזהאניחאברךהארזיסאחארובמנכלתלתן.wav");
+        erezSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tiltan\\הידעתהזמןרבלפנישלתלתןהיהShemמאסטרהספינגיטסוהראשוןיצראתחיפה.wav");
+        erezSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tiltan\\והשםהראשוןשחשבנועליולמכללההיהמאקולמדעלשםמערכתההפעלההמצליחההמשומשתבידירביםלעריכותעיצוביםושללאומנויותאחרותהלאהיאמאק.wav");
+        erezTrigger.AddSequance(erezSequence);
         
         Actor[] actors =
         {
             hallwayDoor, exitDoor, wall, wall2, wall3, lockedDoor, lockedDoor2, wall4, lockedDoor3, wall5, wall6, lockedDoor4, vendingMachine, vendingMachine2, table, table2, table3, table4, couch,
-            couch2, couch3, couch4, table5, wall7, wall8, wall9, wall10, table6, couch5
+            couch2, couch3, couch4, table5, wall7, wall8, wall9, wall10, table6, couch5, erez, erezTrigger
         };
         
         Level level = Utilities.CreateLevel("Tiltan Campus (Floor 3)", new Vector2(60, 10), _player, actors);
@@ -258,25 +407,27 @@ class Program
     {
         TriggerBox trainAnnouncementTrigger = new TriggerBox(38, 2);
         Sequence trainAnnouncement = new Sequence();
-        trainAnnouncement.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\TheNextTrainToModiiiinMerkazWillEnterRightAway.wav");
-        trainAnnouncementTrigger.AddCutscene(trainAnnouncement);
+        trainAnnouncement.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TrainStation\\TheNextTrainToModiiiinMerkazWillEnterRightAway.wav");
+        trainAnnouncementTrigger.AddSequance(trainAnnouncement);
 
         TriggerBox ravPassTrigger = new TriggerBox(5, 4, 10, 1);
         Sequence ravPass = new Sequence();
-        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\OhICantBelieveItTheGpsIsGoneAndSayingImInBeirutSoICantComeInIWillCallOfirToAskWhatToDo.wav");
-        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\RingRingRingRingRingRing.wav");
-        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\Hello.wav");
-        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\OfirICantEnterTheStationWhatShouldIDo.wav");
-        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\TryToFindAWayWithoutTheGuardSeeingYou.wav");
-        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\HeLooksLikeRedQuestionMark.wav");
-        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\IfHeSeesYouYouWillEnterAFight.wav");
-        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\LuckilyMostPeopleAreDumbAndCanOnlySeeYouFromAStraightLine.wav");
-        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\SoIfYouAreComingDiagonallyTheyWillNotSeeYou.wav");
-        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\AlmostLikeYouAreTheOnlyRealPersonAndAllOfTheOthersAreJustNPCs.wav");
-        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\HahahahaJustKidding.wav");
-        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TrainStation\\OfirCall\\IWillCallYouWhenImThere.wav");
+        ravPass.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TrainStation\\OfirCall\\OhICantBelieveItTheGpsIsGoneAndSayingImInBeirutSoICantComeInIWillCallOfirToAskWhatToDo.wav");
+        ravPass.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TrainStation\\OfirCall\\RingRingRingRingRingRing.wav");
+        ravPass.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TrainStation\\OfirCall\\Hello.wav");
+        ravPass.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TrainStation\\OfirCall\\OfirICantEnterTheStationWhatShouldIDo.wav");
+        ravPass.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TrainStation\\OfirCall\\TryToFindAWayWithoutTheGuardSeeingYou.wav");
+        ravPass.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TrainStation\\OfirCall\\HeLooksLikeRedQuestionMark.wav");
+        ravPass.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TrainStation\\OfirCall\\IfHeSeesYouYouWillEnterAFight.wav");
+        ravPass.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TrainStation\\OfirCall\\AndIfYouDoPressTheScreenWithYourMouseToContinue.wav");
+        ravPass.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TrainStation\\OfirCall\\ItsNotABugItsAFeature.wav");
+        ravPass.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TrainStation\\OfirCall\\LuckilyMostPeopleAreDumbAndCanOnlySeeYouFromAStraightLine.wav");
+        ravPass.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TrainStation\\OfirCall\\SoIfYouAreComingDiagonallyTheyWillNotSeeYou.wav");
+        ravPass.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TrainStation\\OfirCall\\AlmostLikeYouAreTheOnlyRealPersonAndAllOfTheOthersAreJustNPCs.wav");
+        ravPass.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TrainStation\\OfirCall\\HahahahaJustKidding.wav");
+        ravPass.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TrainStation\\OfirCall\\IWillCallYouWhenImThere.wav");
         
-        ravPassTrigger.AddCutscene(ravPass);
+        ravPassTrigger.AddSequance(ravPass);
         
         Graphics wallGraphics = new Graphics('|', ConsoleColor.Black);
         
@@ -327,16 +478,16 @@ class Program
     {
         TriggerBox callTrigger = new TriggerBox(97, 1);
         Sequence call = new Sequence(true);
-        call.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Dizingof\\RingRingRingRingRingRing.wav");
-        call.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Dizingof\\Hello.wav");
-        call.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Dizingof\\OfirIGotToDizingofCenterWhereAreYou.wav");
-        call.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Dizingof\\ImOutside.wav");
-        call.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Dizingof\\WhereIsTheExit.wav");
-        call.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Dizingof\\ILiterallyHaveNoIdea.wav");
-        call.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Dizingof\\IWillTryToFindIt.wav");
-        call.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Dizingof\\WatchOutThereAreALotOfCenterKidsThere.wav");
-        call.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Dizingof\\DontWorry.wav");
-        callTrigger.AddCutscene(call);
+        call.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Dizingof\\RingRingRingRingRingRing.wav");
+        call.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Dizingof\\Hello.wav");
+        call.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Dizingof\\OfirIGotToDizingofCenterWhereAreYou.wav");
+        call.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Dizingof\\ImOutside.wav");
+        call.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Dizingof\\WhereIsTheExit.wav");
+        call.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Dizingof\\ILiterallyHaveNoIdea.wav");
+        call.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Dizingof\\IWillTryToFindIt.wav");
+        call.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Dizingof\\WatchOutThereAreALotOfCenterKidsThere.wav");
+        call.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Dizingof\\DontWorry.wav");
+        callTrigger.AddSequance(call);
         
         Graphics graphics = new Graphics('#', ConsoleColor.Blue);
         
@@ -388,7 +539,7 @@ class Program
             "Center kid (Refrigerator)", "Center kid (Who/He/Remains)", "Center kid (Ori/Meir)"
         };
         
-        Enemy[] enemies = Utilities.GenerateEnemies(40, level, names);
+        Enemy[] enemies = Utilities.GenerateEnemies(10, level, names);
         level.SetEnemies(enemies);
         
         return level;
@@ -398,18 +549,18 @@ class Program
     {
         TriggerBox entranceTrigger = new TriggerBox(2, 2);
         Sequence ofir = new Sequence();
-        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv\\DorBenDorYouCameItIsMeOfirKatzLookWhatIBuildItsATimeMachineByTheWay.wav");
-        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv\\WaitAMinuteOfirAreYouTellingMeYouBuiltATimeMachineOutOfADelorean.wav");
-        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv\\WellIFiguredIfYouGonnaBuildATimeMachineIntoACarWhyNotDoItWithSomeStyle.wav");
-        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv\\CanITry.wav");
-        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv\\OfCourseJustStepIntoTheCar.wav");
-        entranceTrigger.AddCutscene(ofir);
+        ofir.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TelAviv\\DorBenDorYouCameItIsMeOfirKatzLookWhatIBuildItsATimeMachineByTheWay.wav");
+        ofir.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TelAviv\\WaitAMinuteOfirAreYouTellingMeYouBuiltATimeMachineOutOfADelorean.wav");
+        ofir.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TelAviv\\WellIFiguredIfYouGonnaBuildATimeMachineIntoACarWhyNotDoItWithSomeStyle.wav");
+        ofir.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TelAviv\\CanITry.wav");
+        ofir.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TelAviv\\OfCourseJustStepIntoTheCar.wav");
+        entranceTrigger.AddSequance(ofir);
         
         Door entrance = new Door(0, 1, DoorDirection.Right, true);
         Door obanKobanDoor = new Door(5, 4, DoorDirection.Up, ObanKoban(), false, true);
 
         Mesh delorean = new Mesh("                                                                                          \n                                                                      .                   \n                                                                                          \n                                                                  =#*: =.     .::..       \n                                                            ..  .+##=---=    =#####*      \n                                                  ..--:....-:...:-=++=@%%:.-*#####%#-     \n                                             ...:::::---::----::==-*=-=*+--=**+**+%#*     \n                                       .:-====-----::::::::---::---===+-:-+*+******++:    \n                                   .:--:...::--===========-:--=+++**#+=++:=+=*+++**+==-   \n                             .++===-::::::---=====-----=++:=#######%%%#+*#=-+==-------=:  \n                            :=+=-==----============---=*+:=#####%%#*###+++*+---===+*#+:+. \n                        ...:-===++=+#===+++=-----===-=*=:+#####***++===+===+*+-+#%%#+#-:  \n                 . ..::::::::::::::-===+*##%%#+==+===*=:+##%%%%*=========-==*+*#**#%*%*   \n              .:::::::::::::::::::::::::::::--====++++-=+***+++========++=++%##++++#++:   \n        .:.:::::::::::::::::::::::::::::::::::::------============+++++====*#%*==+=#      \n     .=+===------::::::::::::::::::::::::::::--=--------+====++++========+##%%*=++*=      \n   .:*==*+*#*++=====----:::::::::::::::..:-+++=+*#*=--=++*++=--====++**#%%@@@%#****..     \n  .=-=+*++%%%%+*###**++===----:-::.... .==:.:+#%%####+=--=+===+**##%%#%%#**#@@%%#=..      \n   .::.:-+-+###*#%%%%@#++#+++-::.  ::*++.--*%%%#%%@%#=-==+*#%%%%#++==+++======-:...       \n     .*++=-..:--+-+*##*++#+=+::.-..=*%%%#*%%#*+*+*%@###%%%@@%*==+*++=--:::.........       \n     .+*%%%%#*+=-:...:-===+++===*#%%=#%%#@%#*-==+=%%%%%%%%%#**+=--::..........            \n         .:-+*#%@@%#*+=--...:..:%#%%-***@%%*+-+=++%%%%#*++==--::.........                 \n     .....:::-+*##%%%@@@%%#***##%%%%%##%@@%*+++++##*+==--:::.......                       \n    ......:::-==+++***###%%%%%@#**##%%@@@@%%####%*=--::........                           \n      ....::::---====+++++***#####%%%%%%%%%%%#*=-:.........                               \n        ......::::-----=================---::........                                     \n              .......:::::::::::::::::.......                                             \n");
-        Teleporter carDoor = new Teleporter(17, 4, 5, 1, new CutsceneLevel(delorean, $"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\MIDI\\BTTF.mid", TelAviv2017(), _gameManager), new Graphics('_', ConsoleColor.Black));
+        Teleporter carDoor = new Teleporter(17, 4, 5, 1, new CutsceneLevel(delorean, $"{Environment.CurrentDirectory}\\MIDI\\BTTF.mid", TelAviv2017(), _gameManager), new Graphics('_', ConsoleColor.Black));
 
         Actor ofirKatz = new Actor(13, 5, 1, 1, new Graphics('!', ConsoleColor.DarkRed));
 
@@ -426,13 +577,13 @@ class Program
     {
         TriggerBox entranceTrigger = new TriggerBox(15, 4);
         Sequence dialog = new Sequence();
-        dialog.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\WowITraveledBackInTimeExcuseMeKindSirWhatYearIsIt.wav");
-        dialog.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\2017.wav");
-        dialog.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\AndWhatAreThoseBoxes.wav");
-        dialog.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\InTheLeftBoxSomeBitcoins.wav");
-        dialog.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\InTheRightBoxAllOfTheStocksOfEATheGamingCompany.wav");
-        dialog.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\OhMyGodICanBuyBitcoinsHereInThePastAndBeReachWhenIGoBackToTheFuture.wav");
-        entranceTrigger.AddCutscene(dialog);
+        dialog.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TelAviv2017\\WowITraveledBackInTimeExcuseMeKindSirWhatYearIsIt.wav");
+        dialog.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TelAviv2017\\2017.wav");
+        dialog.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TelAviv2017\\AndWhatAreThoseBoxes.wav");
+        dialog.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TelAviv2017\\InTheLeftBoxSomeBitcoins.wav");
+        dialog.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TelAviv2017\\InTheRightBoxAllOfTheStocksOfEATheGamingCompany.wav");
+        dialog.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TelAviv2017\\OhMyGodICanBuyBitcoinsHereInThePastAndBeReachWhenIGoBackToTheFuture.wav");
+        entranceTrigger.AddSequance(dialog);
         
         Door door = new Door(5, 4, DoorDirection.Up, NotKoban(), false, true);
 
@@ -444,15 +595,15 @@ class Program
 
         Chest chest = new Chest(new Item("EA stocks"), 3, 0);
         Sequence sequence = new Sequence();
-        sequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\Box2\\WhatTheFuck.wav");
-        sequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\Box2\\ThatBoxHasNoBitcoins.wav");
-        sequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\Box2\\JustEAStocks.wav");
+        sequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TelAviv2017\\Box2\\WhatTheFuck.wav");
+        sequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TelAviv2017\\Box2\\ThatBoxHasNoBitcoins.wav");
+        sequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TelAviv2017\\Box2\\JustEAStocks.wav");
         chest.AddCutscene(sequence);
         
         Chest chest2 = new Chest(new Item("EA stocks"), 10, 0);
         Sequence cutscene2 = new Sequence();
-        cutscene2.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\Box1\\OhNoIAccidentallyTookAllOfTheStocksOfEA.wav");
-        cutscene2.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TelAviv2017\\Box1\\IGuessIAmTheCEONow.wav");
+        cutscene2.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TelAviv2017\\Box1\\OhNoIAccidentallyTookAllOfTheStocksOfEA.wav");
+        cutscene2.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TelAviv2017\\Box1\\IGuessIAmTheCEONow.wav");
         chest2.AddCutscene(cutscene2);
         
         Actor[] actors = { door, randomMan, entranceTrigger, carWheel, carWheel2, carBase, chest, chest2 };
@@ -465,17 +616,17 @@ class Program
     {
         TriggerBox entranceTrigger = new TriggerBox(34, 4);
         Sequence entranceSequence = new Sequence();
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\NotKoban\\Hello.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\NotKoban\\HiWhatHappenedHere.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\NotKoban\\OhIAmJustBuildingANewRestaurantCalledObanKoban.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\NotKoban\\HeyIKnowThisRestaurantIAteThere.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\NotKoban\\WhatDoYouMeanYouAteThereItsBrandNew.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\NotKoban\\AnywayHowCanIArriveToTiltan.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\NotKoban\\WhatsTiltan.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\NotKoban\\SorryIMeantMacAndLearn.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\NotKoban\\OhItsInHaifaRightPassTheBackDoor.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\NotKoban\\ThankYou.wav");
-        entranceTrigger.AddCutscene(entranceSequence);
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\NotKoban\\Hello.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\NotKoban\\HiWhatHappenedHere.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\NotKoban\\OhIAmJustBuildingANewRestaurantCalledObanKoban.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\NotKoban\\HeyIKnowThisRestaurantIAteThere.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\NotKoban\\WhatDoYouMeanYouAteThereItsBrandNew.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\NotKoban\\AnywayHowCanIArriveToTiltan.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\NotKoban\\WhatsTiltan.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\NotKoban\\SorryIMeantMacAndLearn.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\NotKoban\\OhItsInHaifaRightPassTheBackDoor.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\NotKoban\\ThankYou.wav");
+        entranceTrigger.AddSequance(entranceSequence);
         
         Graphics tableGraphics = new Graphics('#', ConsoleColor.Blue);
         
@@ -511,9 +662,9 @@ class Program
     {
         TriggerBox entranceTrigger = new TriggerBox(58, 2);
         Sequence entranceSequence = new Sequence();
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Tiltan2017\\WowHowEmptyWasThisPlaceIn2.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Tiltan2017\\IllGoSearchOfirKatzNowHeIsProbablyInTheStudioClassroom.wav");
-        entranceTrigger.AddCutscene(entranceSequence);
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tiltan2017\\WowHowEmptyWasThisPlaceIn2.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Tiltan2017\\IllGoSearchOfirKatzNowHeIsProbablyInTheStudioClassroom.wav");
+        entranceTrigger.AddSequance(entranceSequence);
         
         Graphics doorGraphics = new Graphics('&', ConsoleColor.Red);
         Graphics wallGraphics = new Graphics('|', ConsoleColor.Black);
@@ -567,21 +718,21 @@ class Program
     {
         TriggerBox entranceTrigger = new TriggerBox(63, 2);
         Sequence entranceSequence = new Sequence();
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\HelloOfir.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\WhoTheHellAreYou.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\YourFriendDorBenDorImFromTheFutureAndICameHereInATimeMachineThatYouInvented.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\YourLying.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\NoIDont.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\ProveIt.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\GrimeIsCurrentlyInDevelopment.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\HolyShitIHaventToldAnyoneAboutGrimeYet.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\DoYouKnowWhatThatMeans.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\What.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\IFinallyInventedSomethingThatWorks.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\YesHeresAPictureOfMineFromTheFuture.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\CanYouComeAndShowMeThis.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017\\Coming.wav");
-        entranceTrigger.AddCutscene(entranceSequence);
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017\\HelloOfir.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017\\WhoTheHellAreYou.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017\\YourFriendDorBenDorImFromTheFutureAndICameHereInATimeMachineThatYouInvented.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017\\YourLying.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017\\NoIDont.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017\\ProveIt.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017\\GrimeIsCurrentlyInDevelopment.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017\\HolyShitIHaventToldAnyoneAboutGrimeYet.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017\\DoYouKnowWhatThatMeans.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017\\What.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017\\IFinallyInventedSomethingThatWorks.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017\\YesHeresAPictureOfMineFromTheFuture.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017\\CanYouComeAndShowMeThis.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017\\Coming.wav");
+        entranceTrigger.AddSequance(entranceSequence);
 
         Mesh dor = new Mesh("$$\\      $$\\  $$$$$$\\  $$$$$$$\\  $$$$$$$$\\       $$\\      $$\\ $$$$$$\\ $$$$$$$$\\ $$\\   $$\\        $$$$$$\\    $$\\ $$\\   \n$$$\\    $$$ |$$  __$$\\ $$  __$$\\ $$  _____|      $$ | $\\  $$ |\\_$$  _|\\__$$  __|$$ |  $$ |      $$  __$$\\   $$ \\$$ \\  \n$$$$\\  $$$$ |$$ /  $$ |$$ |  $$ |$$ |            $$ |$$$\\ $$ |  $$ |     $$ |   $$ |  $$ |      $$ /  \\__|$$$$$$$$$$\\ \n$$\\$$\\$$ $$ |$$$$$$$$ |$$ |  $$ |$$$$$\\          $$ $$ $$\\$$ |  $$ |     $$ |   $$$$$$$$ |      $$ |      \\_$$  $$   |\n$$ \\$$$  $$ |$$  __$$ |$$ |  $$ |$$  __|         $$$$  _$$$$ |  $$ |     $$ |   $$  __$$ |      $$ |      $$$$$$$$$$\\ \n$$ |\\$  /$$ |$$ |  $$ |$$ |  $$ |$$ |            $$$  / \\$$$ |  $$ |     $$ |   $$ |  $$ |      $$ |  $$\\ \\_$$  $$  _|\n$$ | \\_/ $$ |$$ |  $$ |$$$$$$$  |$$$$$$$$\\       $$  /   \\$$ |$$$$$$\\    $$ |   $$ |  $$ |      \\$$$$$$  |  $$ |$$ |  \n\\__|     \\__|\\__|  \\__|\\_______/ \\________|      \\__/     \\__|\\______|   \\__|   \\__|  \\__|       \\______/   \\__|\\__|  \n                                                                                                                     \n**************************************************\n**************************************************\n*****************##*******************************\n***************#%%%%%##%##************************\n**************%%%%@%%%%%%%%#**********************\n**************#%%++===+#%%%@%*********************\n*****************=+**++*%%#%%*********************\n****************+=##*+**%%#%%*********************\n***************==+#====#%%%**###******************\n***************##****##%@%*+*++**##***************\n***************#*=+*%%@%%+=++==+++**#*************\n***************#%%%%%%%*+++===+#+=+**#************\n***************+#%#**+++====++#%#++=+*#***********\n**************=-+*#*++++++***###%*+++=*#**********\n**************-=*#*#+===+++***###**=-=+#**********\n**************-+#****+=====+*###****++##**********\n**************-+##***%%+*+#%%%%%****++*#**********\n**************=+*#****#%###%###%#**=-==#**********\n********************##%%###**###%#**+##***********\n********************##%*******##%*****************\n********************#%%#*****####*****************\n***************#%#***##%%%%%%#***#%%#*************\n****************####################**************\n**************************************************\n**************************************************\n\n");
         Teleporter pictureTrigger = new Teleporter(10, 0, 1, 2, new CutsceneLevel(dor, StudioClassroom20172(), _gameManager), new Graphics(' ', ConsoleColor.Black));
@@ -721,14 +872,14 @@ class Program
     {
         TriggerBox entranceTrigger = new TriggerBox(10, 0, 1, 2);
         Sequence entranceSequence = new Sequence();
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017(2)\\WowVeryCool.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017(2)\\AnywayWeNeedToGetYouBackToTheFuture.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017(2)\\YesWeJustNeed1Gigawatts.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017(2)\\OkNeverMindYouStuckHere.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017(2)\\NextWeekAppleAreIntroducingTheVisionProWith1GigawattsBattery.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017(2)\\GreatSoWeWillUseThat.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\StudioClassroom2017(2)\\IllWaitForYouAtFloor0ComeWhenYouReady.wav");
-        entranceTrigger.AddCutscene(entranceSequence);
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017(2)\\WowVeryCool.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017(2)\\AnywayWeNeedToGetYouBackToTheFuture.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017(2)\\YesWeJustNeed1Gigawatts.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017(2)\\OkNeverMindYouStuckHere.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017(2)\\NextWeekAppleAreIntroducingTheVisionProWith1GigawattsBattery.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017(2)\\GreatSoWeWillUseThat.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\StudioClassroom2017(2)\\IllWaitForYouAtFloor0ComeWhenYouReady.wav");
+        entranceTrigger.AddSequance(entranceSequence);
         
         Graphics deskGraphics = new Graphics('.', ConsoleColor.Gray);
         
@@ -865,10 +1016,10 @@ class Program
     {
         TriggerBox entranceTrigger = new TriggerBox(11, 3);
         Sequence ofir = new Sequence();
-        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0\\ByTheWayHaveYouChangedAnythingWhileYouWereHere.wav");
-        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0\\IAccidentallyBoughtAllOfEAStocksSoIOwnTheCompanyNow.wav");
-        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0\\WhatShowMeYourPictureAgain.wav");
-        entranceTrigger.AddCutscene(ofir);
+        ofir.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0\\ByTheWayHaveYouChangedAnythingWhileYouWereHere.wav");
+        ofir.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0\\IAccidentallyBoughtAllOfEAStocksSoIOwnTheCompanyNow.wav");
+        ofir.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0\\WhatShowMeYourPictureAgain.wav");
+        entranceTrigger.AddSequance(ofir);
         
         Door exit = new Door(1, 0, DoorDirection.Down, false, true);
         Door elevator = new Door(12, 2, DoorDirection.Left, true, true);
@@ -888,25 +1039,25 @@ class Program
     {
         TriggerBox entranceTrigger = new TriggerBox(2, 4);
         Sequence greatScott = new Sequence();
-        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\OhNo.wav");
-        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\WhatHappened.wav");
-        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\IsThereAChanceSomethingHappenedWithTheUnityEngineInTheFuture.wav");
-        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\YesTheyTook2CentsForEveryDownloadSoManyPeopleLeftTheEngine.wav");
-        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\WasThatRelatedToEASomehow.wav");
-        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\UnityCEOWasFormerEACeo.wav");
-        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\GreatScott.wav");
-        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\What.wav");
-        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\IGuessYourStocksExchangeCreatedAChainReaction.wav");
-        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\andYouEndedUpBeingCreatedInUnityInsteadOfPlainCConsoleApplication.wav");
-        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\AndYouAreGoingToBe.wav");
-        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\ErasedFromExistence.wav");
-        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\WowThisIsHeavy.wav");
-        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\TheresThatWordAgain.wav");
-        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\Heavy.wav");
-        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\WhyAreThingsSoHeavyInTheFuture.wav");
-        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\IsThereAProblemWithTheEarthsGravitationalPull.wav");
-        greatScott.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Floor0(2)\\LetsGoOutAndFigureWhatToDo.wav");
-        entranceTrigger.AddCutscene(greatScott);
+        greatScott.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0(2)\\OhNo.wav");
+        greatScott.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0(2)\\WhatHappened.wav");
+        greatScott.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0(2)\\IsThereAChanceSomethingHappenedWithTheUnityEngineInTheFuture.wav");
+        greatScott.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0(2)\\YesTheyTook2CentsForEveryDownloadSoManyPeopleLeftTheEngine.wav");
+        greatScott.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0(2)\\WasThatRelatedToEASomehow.wav");
+        greatScott.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0(2)\\UnityCEOWasFormerEACeo.wav");
+        greatScott.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0(2)\\GreatScott.wav");
+        greatScott.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0(2)\\What.wav");
+        greatScott.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0(2)\\IGuessYourStocksExchangeCreatedAChainReaction.wav");
+        greatScott.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0(2)\\andYouEndedUpBeingCreatedInUnityInsteadOfPlainCConsoleApplication.wav");
+        greatScott.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0(2)\\AndYouAreGoingToBe.wav");
+        greatScott.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0(2)\\ErasedFromExistence.wav");
+        greatScott.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0(2)\\WowThisIsHeavy.wav");
+        greatScott.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0(2)\\TheresThatWordAgain.wav");
+        greatScott.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0(2)\\Heavy.wav");
+        greatScott.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0(2)\\WhyAreThingsSoHeavyInTheFuture.wav");
+        greatScott.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0(2)\\IsThereAProblemWithTheEarthsGravitationalPull.wav");
+        greatScott.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Floor0(2)\\LetsGoOutAndFigureWhatToDo.wav");
+        entranceTrigger.AddSequance(greatScott);
         
         Door exit = new Door(1, 0, DoorDirection.Down, Train2017(), false, true);
         Door elevator = new Door(12, 2, DoorDirection.Left, false, true);
@@ -923,14 +1074,14 @@ class Program
     {
         TriggerBox trainAnnouncementTrigger = new TriggerBox(38, 2);
         Sequence trainAnnouncement = new Sequence(true);
-        trainAnnouncement.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train2017\\TheNextTrainToTheUnitedStatesWillEnterRightAway.wav");
-        trainAnnouncementTrigger.AddCutscene(trainAnnouncement);
+        trainAnnouncement.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train2017\\TheNextTrainToTheUnitedStatesWillEnterRightAway.wav");
+        trainAnnouncementTrigger.AddSequance(trainAnnouncement);
 
         TriggerBox ravPassTrigger = new TriggerBox(5, 4, 10, 1);
         Sequence ravPass = new Sequence();
-        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train2017\\RavPass\\WaitYouAreFromTheFutureSoTheRavKavWillNotWork.wav");
-        ravPass.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train2017\\RavPass\\DontWorryIKnowWhatToDo.wav");
-        ravPassTrigger.AddCutscene(ravPass);
+        ravPass.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train2017\\RavPass\\WaitYouAreFromTheFutureSoTheRavKavWillNotWork.wav");
+        ravPass.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train2017\\RavPass\\DontWorryIKnowWhatToDo.wav");
+        ravPassTrigger.AddSequance(ravPass);
         
         Graphics wallGraphics = new Graphics('|', ConsoleColor.Black);
         
@@ -979,13 +1130,13 @@ class Program
     {
         TriggerBox entranceTrigger = new TriggerBox(30, 3);
         Sequence sell = new Sequence();
-        sell.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\IHaveAnIdeaTheWholeThingHappenedBecauseIBoughtTheStocksRight.wav");
-        sell.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\Yes.wav");
-        sell.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\WhatIfIJustSellThemBack.wav");
-        sell.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\ThatWillWorkIThink.wav");
-        sell.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\WhereIsMyPhone.wav");
-        sell.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\HereComeAndIWillGiveYou.wav");
-        entranceTrigger.AddCutscene(sell);
+        sell.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train\\IHaveAnIdeaTheWholeThingHappenedBecauseIBoughtTheStocksRight.wav");
+        sell.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train\\Yes.wav");
+        sell.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train\\WhatIfIJustSellThemBack.wav");
+        sell.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train\\ThatWillWorkIThink.wav");
+        sell.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train\\WhereIsMyPhone.wav");
+        sell.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train\\HereComeAndIWillGiveYou.wav");
+        entranceTrigger.AddSequance(sell);
         
         Graphics chairGraphics = new Graphics('#', ConsoleColor.Blue);
         Graphics tableGraphics = new Graphics('-', ConsoleColor.Gray);
@@ -1053,20 +1204,20 @@ class Program
 
         Mesh anyKey = new Mesh("$$$$$$$\\  $$$$$$$\\  $$$$$$$$\\  $$$$$$\\   $$$$$$\\         $$$$$$\\  $$\\   $$\\ $$\\     $$\\       $$\\   $$\\ $$$$$$$$\\ $$\\     $$\\                       \n$$  __$$\\ $$  __$$\\ $$  _____|$$  __$$\\ $$  __$$\\       $$  __$$\\ $$$\\  $$ |\\$$\\   $$  |      $$ | $$  |$$  _____|\\$$\\   $$  |                      \n$$ |  $$ |$$ |  $$ |$$ |      $$ /  \\__|$$ /  \\__|      $$ /  $$ |$$$$\\ $$ | \\$$\\ $$  /       $$ |$$  / $$ |       \\$$\\ $$  /                       \n$$$$$$$  |$$$$$$$  |$$$$$\\    \\$$$$$$\\  \\$$$$$$\\        $$$$$$$$ |$$ $$\\$$ |  \\$$$$  /        $$$$$  /  $$$$$\\      \\$$$$  /                        \n$$  ____/ $$  __$$< $$  __|    \\____$$\\  \\____$$\\       $$  __$$ |$$ \\$$$$ |   \\$$  /         $$  $$<   $$  __|      \\$$  /                         \n$$ |      $$ |  $$ |$$ |      $$\\   $$ |$$\\   $$ |      $$ |  $$ |$$ |\\$$$ |    $$ |          $$ |\\$$\\  $$ |          $$ |                          \n$$ |      $$ |  $$ |$$$$$$$$\\ \\$$$$$$  |\\$$$$$$  |      $$ |  $$ |$$ | \\$$ |    $$ |          $$ | \\$$\\ $$$$$$$$\\     $$ |                          \n\\__|      \\__|  \\__|\\________| \\______/  \\______/       \\__|  \\__|\\__|  \\__|    \\__|          \\__|  \\__|\\________|    \\__|                          \n                                                                                                                                                    \n                                                                                                                                                    \n                                                                                                                                                    \n$$$$$$$$\\  $$$$$$\\        $$$$$$$$\\ $$$$$$$\\   $$$$$$\\  $$\\   $$\\  $$$$$$\\  $$$$$$$$\\ $$$$$$$$\\ $$$$$$$\\        $$$$$$$$\\ $$\\   $$\\ $$$$$$$$\\       \n\\__$$  __|$$  __$$\\       \\__$$  __|$$  __$$\\ $$  __$$\\ $$$\\  $$ |$$  __$$\\ $$  _____|$$  _____|$$  __$$\\       \\__$$  __|$$ |  $$ |$$  _____|      \n   $$ |   $$ /  $$ |         $$ |   $$ |  $$ |$$ /  $$ |$$$$\\ $$ |$$ /  \\__|$$ |      $$ |      $$ |  $$ |         $$ |   $$ |  $$ |$$ |            \n   $$ |   $$ |  $$ |         $$ |   $$$$$$$  |$$$$$$$$ |$$ $$\\$$ |\\$$$$$$\\  $$$$$\\    $$$$$\\    $$$$$$$  |         $$ |   $$$$$$$$ |$$$$$\\          \n   $$ |   $$ |  $$ |         $$ |   $$  __$$< $$  __$$ |$$ \\$$$$ | \\____$$\\ $$  __|   $$  __|   $$  __$$<          $$ |   $$  __$$ |$$  __|         \n   $$ |   $$ |  $$ |         $$ |   $$ |  $$ |$$ |  $$ |$$ |\\$$$ |$$\\   $$ |$$ |      $$ |      $$ |  $$ |         $$ |   $$ |  $$ |$$ |            \n   $$ |    $$$$$$  |         $$ |   $$ |  $$ |$$ |  $$ |$$ | \\$$ |\\$$$$$$  |$$ |      $$$$$$$$\\ $$ |  $$ |         $$ |   $$ |  $$ |$$$$$$$$\\       \n   \\__|    \\______/          \\__|   \\__|  \\__|\\__|  \\__|\\__|  \\__| \\______/ \\__|      \\________|\\__|  \\__|         \\__|   \\__|  \\__|\\________|      \n                                                                                                                                                    \n                                                                                                                                                    \n                                                                                                                                                    \n $$$$$$\\ $$$$$$$$\\  $$$$$$\\   $$$$$$\\  $$\\   $$\\  $$$$$$\\        $$$$$$$$\\  $$$$$$\\        $$$$$$$$\\  $$$$$$\\                                       \n$$  __$$\\\\__$$  __|$$  __$$\\ $$  __$$\\ $$ | $$  |$$  __$$\\       \\__$$  __|$$  __$$\\       $$  _____|$$  __$$\\                                      \n$$ /  \\__|  $$ |   $$ /  $$ |$$ /  \\__|$$ |$$  / $$ /  \\__|         $$ |   $$ /  $$ |      $$ |      $$ /  $$ |                                     \n\\$$$$$$\\    $$ |   $$ |  $$ |$$ |      $$$$$  /  \\$$$$$$\\           $$ |   $$ |  $$ |      $$$$$\\    $$$$$$$$ |                                     \n \\____$$\\   $$ |   $$ |  $$ |$$ |      $$  $$<    \\____$$\\          $$ |   $$ |  $$ |      $$  __|   $$  __$$ |                                     \n$$\\   $$ |  $$ |   $$ |  $$ |$$ |  $$\\ $$ |\\$$\\  $$\\   $$ |         $$ |   $$ |  $$ |      $$ |      $$ |  $$ |                                     \n\\$$$$$$  |  $$ |    $$$$$$  |\\$$$$$$  |$$ | \\$$\\ \\$$$$$$  |         $$ |    $$$$$$  |      $$$$$$$$\\ $$ |  $$ |                                     \n \\______/   \\__|    \\______/  \\______/ \\__|  \\__| \\______/          \\__|    \\______/       \\________|\\__|  \\__|                                     \n                                                                                                                                                    \n                                                                                                                                   ");
         Sequence anySequence = new Sequence();
-        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\DammitWhereIsThatAnyKeyButton.wav");
-        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\ItsNotByTheF.wav");
-        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\NotByTheF.wav");
-        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\EvenNotByTheF.wav");
-        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\WhatToDo.wav");
-        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\HelloCanSomebodyHereMeINeedHelp.wav");
-        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\Hello.wav");
-        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\MMMMMMMMMMMMSupportiveMan.wav");
-        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\HowCanIHelpYou.wav");
-        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\ASupportiveAndKindManMmmmm.wav");
-        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\IveAlwaysCountedOnTheKindnessOfStrangers.wav");
-        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\OHOHOHOOHOHOHOHOHANYKEYYEEEEEEEEEEEEEEEEEEEEEEEEEEAHHHHHHHHHHHHHHHHHHHHHHHHHHH.wav");
-        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\ShutUpIllJustPressItMyself.wav");
-        anySequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train\\AnyCutscene\\Click.wav");
+        anySequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train\\AnyCutscene\\DammitWhereIsThatAnyKeyButton.wav");
+        anySequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train\\AnyCutscene\\ItsNotByTheF.wav");
+        anySequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train\\AnyCutscene\\NotByTheF.wav");
+        anySequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train\\AnyCutscene\\EvenNotByTheF.wav");
+        anySequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train\\AnyCutscene\\WhatToDo.wav");
+        anySequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train\\AnyCutscene\\HelloCanSomebodyHereMeINeedHelp.wav");
+        anySequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train\\AnyCutscene\\Hello.wav");
+        anySequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train\\AnyCutscene\\MMMMMMMMMMMMSupportiveMan.wav");
+        anySequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train\\AnyCutscene\\HowCanIHelpYou.wav");
+        anySequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train\\AnyCutscene\\ASupportiveAndKindManMmmmm.wav");
+        anySequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train\\AnyCutscene\\IveAlwaysCountedOnTheKindnessOfStrangers.wav");
+        anySequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train\\AnyCutscene\\OHOHOHOOHOHOHOHOHANYKEYYEEEEEEEEEEEEEEEEEEEEEEEEEEAHHHHHHHHHHHHHHHHHHHHHHHHHHH.wav");
+        anySequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train\\AnyCutscene\\ShutUpIllJustPressItMyself.wav");
+        anySequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train\\AnyCutscene\\Click.wav");
         
         Teleporter anyKeyTrigger = new Teleporter(9, 2, 1, 2, new CutsceneLevel(anyKey, anySequence, Train2(), _gameManager), new Graphics(' ', ConsoleColor.Black));
         
@@ -1080,14 +1231,14 @@ class Program
         return level;
     } // Level 15
     
-     static Level Train2()
+    static Level Train2()
     {
         TriggerBox entranceTrigger = new TriggerBox(9, 3);
         Sequence arrived = new Sequence();
-        arrived.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train(2)\\WowThatWorked.wav");
-        arrived.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train(2)\\AlsoWeArrivedToTheAppleStore.wav");
-        arrived.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Train(2)\\LetsStealTheBatteryAndGetOut.wav");
-        entranceTrigger.AddCutscene(arrived);
+        arrived.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train(2)\\WowThatWorked.wav");
+        arrived.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train(2)\\AlsoWeArrivedToTheAppleStore.wav");
+        arrived.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Train(2)\\LetsStealTheBatteryAndGetOut.wav");
+        entranceTrigger.AddSequance(arrived);
         
         Graphics chairGraphics = new Graphics('#', ConsoleColor.Blue);
         Graphics tableGraphics = new Graphics('-', ConsoleColor.Gray);
@@ -1167,10 +1318,10 @@ class Program
     {
         TriggerBox entranceTrigger = new TriggerBox(6, 5);
         Sequence ofir = new Sequence();
-        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\AppleStoreEntrance\\IllWaitHereAndPrepareTheThing.wav");
-        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\AppleStoreEntrance\\IllGoToTakeTheBattery.wav");
-        ofir.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\AppleStoreEntrance\\WatchOutForTheSecurityWhenYouHaveTheVisionProJustConnectItToTheCarIBuiltASpecialDoorForThis.wav");
-        entranceTrigger.AddCutscene(ofir);
+        ofir.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\AppleStoreEntrance\\IllWaitHereAndPrepareTheThing.wav");
+        ofir.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\AppleStoreEntrance\\IllGoToTakeTheBattery.wav");
+        ofir.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\AppleStoreEntrance\\WatchOutForTheSecurityWhenYouHaveTheVisionProJustConnectItToTheCarIBuiltASpecialDoorForThis.wav");
+        entranceTrigger.AddSequance(ofir);
         
         Door entrance = new Door(7, 0, DoorDirection.Down, AppleStore(), false, true);
         
@@ -1181,7 +1332,7 @@ class Program
         Actor carBase = new Actor(10, 4, 5, 1, new Graphics('_', ConsoleColor.Black));
         
         Mesh delorean = new Mesh("                                                                                          \n                   .                                                                      \n                                                                                          \n       ..::.     .= :*#=                                                                  \n      +#####+.   =---=##*:  ..                                                            \n     :#%######-.:#%@+=+=-::..:-....:--.:                                                  \n     *#%+**+**+=-+*+-=*-==::----::----::::...                                             \n    .=+******+*+-:-++==---::---::::::::-----====-:.                                       \n   :==+**+++*=+=:++=+##*+++=--:-===========--::...:--:.                                   \n  .=-------==+--#*=#%%%#######=:++=------====---::::::-===++.                             \n .+:+#*+==----=*+++###*#%%#####=:=*=---============----==-=+=:                            \n  :-#+#%%#+-+*+===+===++***#####+:=*=====-----=++++==*+=++====:...                        \n   *%+%#**#*+*==-=========*%%%%##*:=*======+#%%%#*++==-::::::::::::::.. .                 \n   .+=#++++##%++=++========+++****=-++++====--:::::::::::::::::::::::::::::.              \n      *++==*%#*====++++++===========-----::::::::::::::::::::::::::::::::::::::.:.        \n      -*+==+%%##+========++++====+=-------=--:::::::::::::::::::::::::::::-----===+=:     \n     ..+**+#%@@@%%#**++====--=++*++=--=*#*+=+++=:..::::::::::::::::---=====++*#*++==*:.   \n      ..=#%%@@%**#%%##%%##*+=====--=+####%%#+:.:==. ....:::-----===++**###*+%%%%++*+=-+.  \n       ...:-======+++==++*%%%%##+====##@%%#%%%#=-.=+*::  .-:-+++#++#@%%%%#*###+-+-:.::.   \n       .........:::--=++*+=+*%@@%%%###@%#+*+**%%**%%%*=..-.::+=+#++*##*+-+--:..:=++*.     \n            ..........::--=+**#%%%%%%%@%=+==-*#%@#%%%-%%%*===+++===-:...:-=+*#%%%%*+:     \n                 .........:::-==++*##%%%++==-+*%%@**#-%%#%-..:...:-=+*#%%@%%*+=:.         \n                       .......:::--==+*#%+++++*%%@%##%%%%%##***#%%@@@%%%##*+-:::.....     \n                           ........:::-=+%####%%@@@@%%##**#@%%%%%%###**+++==-:::......    \n                               .........::=*#%%%%%%%%%%%#####***+++++====---::::....      \n                                     .........:---=================-----::::......        \n                                             .......:::::::::::::::::.......              \n");
-        Door carDoor = new Door(12, 3, DoorDirection.Up, new CutsceneLevel(delorean, $"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\MIDI\\BTTF.mid", Future(), _gameManager));
+        Door carDoor = new Door(12, 3, DoorDirection.Up, new CutsceneLevel(delorean, $"{Environment.CurrentDirectory}\\MIDI\\BTTF.mid", Future(), _gameManager));
         
         Actor[] actors = { entrance, ofirKatz, entranceTrigger, carWheel, carWheel2, carBase, carDoor };
         
@@ -1193,28 +1344,28 @@ class Program
     {
         TriggerBox entranceTrigger = new TriggerBox(2, 2);
         Sequence sequence = new Sequence();
-        sequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\AppleStore\\OhNoWhereIsThatBattery.wav");
-        sequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\AppleStore\\IShouldStartSearching.wav");
-        entranceTrigger.AddCutscene(sequence);
+        sequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\AppleStore\\OhNoWhereIsThatBattery.wav");
+        sequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\AppleStore\\IShouldStartSearching.wav");
+        entranceTrigger.AddSequance(sequence);
         
         Door entrance = new Door(1, 0, DoorDirection.Down, true, true);
 
-        Chest chest = new Chest(new Item("Macbook Pro", "I hate Mac"), 1, 5);
+        Chest chest = new Chest(new RickRoll(), 1, 5);
         Chest chest2 = new Chest(new Item("Macbook Air", "Now i can publish Fash Catch for Iphone!!!!!!!!!!"), 1, 10);
-        Chest chest3 = new Chest(new Item("Macbook M1", "Why this crap costs 3000 USD?"), 1, 15);
-        Chest chest4 = new Chest(new Item("Macbook M2", "Why this crap costs 9000 USD?"), 1, 20);
+        Chest chest3 = new Chest(new Item("Macbook M1", "Why this crap costs 6000 USD?"), 1, 15);
+        Chest chest4 = new Chest(new Item("Shahar Chocolate", "Das Eina Gutte Kremaev"), 1, 20);
         Chest chest5 = new Chest(new Item("Icloth", "THE APPLE CLOTH!!!!!!!"), 1, 25);
-        Chest chest6 = new Chest(new Item("Airpods", "Tronsamart Onyx Free is better"), 6, 5);
+        Chest chest6 = new Chest(new RickRoll(), 6, 5);
         Chest chest7 = new Chest(new Item("Wire for Airpods", "Now this is good product"), 6, 10);
         Chest chest8 = new Chest(new Item("Charger", "Charger for 596048 USD"), 6, 15);
-        Chest chest9 = new Chest(new Item("Iphone 17", "Comes without the screen in the box"), 6, 20);
-        Chest chest10 = new Chest(new Item("iPencil", "Pencil with Apple logo for 600 USD"), 6, 25);
-        Chest chest11 = new Chest(new Item("Pencil", "Completely normal pencil"), 11, 5);
-        Chest chest12 = new Chest(new Item("Ipad", "Ipad (Writing descriptions is hard)"), 11, 10);
+        Chest chest9 = new Chest(new RickRoll(), 6, 20);
+        Chest chest10 = new Chest(new Weapon("Apple", "Pink lady apple that gives 49 HP", 49), 6, 25);
+        Chest chest11 = new Chest(new Item("Shahar Chocolate", "Das Eina Gutte Kremaev"), 11, 5);
+        Chest chest12 = new Chest(new Weapon("Android", "Apple workers hate this so much. If you use it they just die.", 100), 11, 10);
         Chest chest13 = new Chest(new Item("Shahar Chocolate", "Das Eina Gutte Kremaev"), 11, 15);
         Chest chest14 = new Chest(new Key("Apple Vision Pro", "Quest 3 is better. Oh wait that's what i need to start the car"), 11, 20);
         Chest chest15 = new Chest(new Healing("Los pollos hermanos", "he's name is gustavo but you can call him gus?", 17), 11, 25);
-        Chest chest16 = new Chest(new Weapon("iBlock", "A block with apple logo that deals 76 HP damage!", 76), 16, 5);
+        Chest chest16 = new Chest(new Weapon("Petah Tikva", "This place is real???????????????? so it just kills everyone who touches it?", 100), 16, 5);
         Chest chest17 = new Chest(new RickRoll(), 16, 10);
         Chest chest18 = new Chest(new Item("Better Call Finger", "https://www.youtube.com/watch?v=At0kaXY36Xc&t=56s"), 16, 15);
         Chest chest19 = new Chest(new Item("Kishke", "Kishke from Maroom Golan"), 16, 20);
@@ -1227,7 +1378,7 @@ class Program
         };
         
         Level level = Utilities.CreateLevel("Apple Store", new Vector2(20, 30), _player, actors);
-        Enemy[] enemies = Utilities.GenerateEnemies(80, level, "Apple guy");
+        Enemy[] enemies = Utilities.GenerateEnemies(10, level, "Apple guy");
         level.SetEnemies(enemies);
             
         return level;
@@ -1237,15 +1388,15 @@ class Program
     {
         TriggerBox entranceTrigger = new TriggerBox(15, 4);
         Sequence dani = new Sequence();
-        dani.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Future\\WowItWorkedImBack.wav");
-        dani.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Future\\HiImDaniKushmaro.wav");
-        dani.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Future\\WowImInAnEpisodeOfNews.wav");
-        dani.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Future\\NoTheyFiredMeSinceUnityTookAllOfMyMoneySoNowImBroke.wav");
-        dani.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Future\\justLikeAppleThatLostAllOfItsMoneyAfterTheVisionProDiedWhenItWasLaunchByTheWay.wav");
-        dani.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Future\\LolQuest3IsBetter.wav");
-        dani.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Future\\AnywayHaveYouSeenOfirKatz.wav");
-        dani.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Future\\IThinkHeIsInObanKoban.wav");
-        entranceTrigger.AddCutscene(dani);
+        dani.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Future\\WowItWorkedImBack.wav");
+        dani.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Future\\HiImDaniKushmaro.wav");
+        dani.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Future\\WowImInAnEpisodeOfNews.wav");
+        dani.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Future\\NoTheyFiredMeSinceUnityTookAllOfMyMoneySoNowImBroke.wav");
+        dani.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Future\\justLikeAppleThatLostAllOfItsMoneyAfterTheVisionProDiedWhenItWasLaunchByTheWay.wav");
+        dani.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Future\\LolQuest3IsBetter.wav");
+        dani.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Future\\AnywayHaveYouSeenOfirKatz.wav");
+        dani.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Future\\IThinkHeIsInObanKoban.wav");
+        entranceTrigger.AddSequance(dani);
         
         Actor carWheel = new Actor(17, 5, 1, 1, new Graphics('@', ConsoleColor.Black));
         Actor carWheel2 = new Actor(21, 5, 1, 1, new Graphics('@', ConsoleColor.Black));
@@ -1263,11 +1414,11 @@ class Program
     static Level FutureKoban()
     {
         TriggerBox entranceTrigger = new TriggerBox(34, 4);
-        Sequence entranceSequence = new Sequence();
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\FutureKoban\\Roads\\DORYOUGOTTACOMEBACKWITHME.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\FutureKoban\\Roads\\Where.wav");
-        entranceSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\FutureKoban\\Roads\\BackToTheFuture.wav");
-        entranceTrigger.AddCutscene(entranceSequence);
+        Sequence entranceSequence = new Sequence(true);
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\FutureKoban\\Roads\\DORYOUGOTTACOMEBACKWITHME.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\FutureKoban\\Roads\\Where.wav");
+        entranceSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\FutureKoban\\Roads\\BackToTheFuture.wav");
+        entranceTrigger.AddSequance(entranceSequence);
         
         Graphics tableGraphics = new Graphics('#', ConsoleColor.Blue);
         
@@ -1294,8 +1445,8 @@ class Program
         Actor ofirKatz = new Actor(6, 3, 1, 1, new Graphics('!', ConsoleColor.DarkRed));
         
         Sequence roadsSequence = new Sequence();
-        roadsSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\FutureKoban\\Roads\\HiOfirYouMightWantToGetBackWeDontHaveEnoughRoadToGetTo8.wav");
-        roadsSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\FutureKoban\\Roads\\RoadsWhereWeGoingWeDontNeedRoads.wav");
+        roadsSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\FutureKoban\\Roads\\HiOfirYouMightWantToGetBackWeDontHaveEnoughRoadToGetTo8.wav");
+        roadsSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\FutureKoban\\Roads\\RoadsWhereWeGoingWeDontNeedRoads.wav");
 
         Mesh mesh = new Mesh(".-==-***#%%%%+.        .:-+==-: ....  . ..::.*********************************************\n  .::+**#%%%%+.  . .=*****##***=:.:.....:--+=*********************************************\n    .+**##%%%+. -#**####%##%%%%%%**##########***************##*####***********************\n    .+**##%%%*..+***##**+***##%%#*-=---=-====*************#%%%%%%%%%#*********************\n    .+**###%%*.-=**=++====+++++*++==-=---====************#%%%%#**#%%%%#*******************\n     +**#*#%%*:-======-====++++++=----------=**************#+-===+#%%%%*******************\n     =**#*#%%#-====+=--=+++++++++=---------=-**************#+*%#**#%##%*******************\n. ...=**###%%#+=+-==-==+**##*+*##=-:::::::---*************+-+*=--=%%%#*###****************\n.....=*####%%#--+--=-==+++++==*#*::::::=+*##%**************#****##@@#+****###*************\n.  ..=*##%%%%#.:==---====+++==++=:---=*#%%%%%**************%++*%%@%#==+==+++*##***********\n     =*##%%%%#..::---==+*****#*+=-=*#%%%%%%%%**************#%%%%%%*++===+#==**##**********\n.   .=*#%%%%%#..:-=+==++*****##+:-#%%%%%%%%%%*************++##**+=====+*#%#+=++##*********\n     =*#%%%%%#..-==++****+*****-=#%%%%%%%%%##************+-=*##*+++****####*===+#*********\n     =*#%%%%%+.:-====+*+++*#*=-=#%%%%%%%%%%%%************+=+#**+=====++*##***=-+#*********\n     +*#%###=:::-=+=++**###+---*%%%%%*++##***************+=##***#*=++*#%%%****###*********\n     +*###%%%#+-==++++++***#%#*##%%%#+#+**=++************+=*#***#%#*#%%%%%#*+===#*********\n..-+#%%%%%%%%%%%#*+++++++*#@%@@%%%%%#***%####***************#***#%%###*###%**+**#*********\n*#%%%%%%%%%%%%%%%%%%#*++#%@@@%@@@@@@%%%%%%%%%******************##%******###***************\n#%#%%%%%%%%%%%%%%%%%@@%%@@%%%%%%@%%@%@%%%%%%%******************#%%*****####***************\n%%%%@%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%@@@%**+**************#%%#**#%%%%%%%***#%%************\n%%%%%@@%%%%%%%%%%%%%%%%@@%%%%%%%%%%@%@@@@#+##*********************************************\n%%%%%@@@%%%%%%%%%%%%%@@@%###%%%%%%%@%@@@@%=*%*********************************************\n");
         Teleporter roadsTrigger = new Teleporter(7, 2, 1, 3, new CutsceneLevel(mesh, roadsSequence, Credits(), _gameManager), new Graphics(' ', ConsoleColor.Black));
@@ -1310,8 +1461,11 @@ class Program
         return level;
     } // Level 20
 
+    #endregion
+
     static CutsceneLevel Credits()
     {
+        Mesh none = new Mesh(" ");
         Mesh title = new Mesh("$$\\   $$\\  $$$$$$\\  $$\\       $$$$$$$$\\       $$\\       $$$$$$\\ $$$$$$$$\\ $$$$$$$$\\        $$$$$$\\  \n$$ |  $$ |$$  __$$\\ $$ |      $$  _____|      $$ |      \\_$$  _|$$  _____|$$  _____|      $$ ___$$\\ \n$$ |  $$ |$$ /  $$ |$$ |      $$ |            $$ |        $$ |  $$ |      $$ |            \\_/   $$ |\n$$$$$$$$ |$$$$$$$$ |$$ |      $$$$$\\          $$ |        $$ |  $$$$$\\    $$$$$\\            $$$$$ / \n$$  __$$ |$$  __$$ |$$ |      $$  __|         $$ |        $$ |  $$  __|   $$  __|           \\___$$\\ \n$$ |  $$ |$$ |  $$ |$$ |      $$ |            $$ |        $$ |  $$ |      $$ |            $$\\   $$ |\n$$ |  $$ |$$ |  $$ |$$$$$$$$\\ $$ |            $$$$$$$$\\ $$$$$$\\ $$ |      $$$$$$$$\\       \\$$$$$$  |\n\\__|  \\__|\\__|  \\__|\\________|\\__|            \\________|\\______|\\__|      \\________|       \\______/ \n                                                                                                    \n                                                                                                    \n                                                                                                    ");
         Mesh author = new Mesh(" $$$$$$\\         $$$$$$\\   $$$$$$\\  $$\\      $$\\ $$$$$$$$\\       $$$$$$$\\ $$\\     $$\\                              \n$$  __$$\\       $$  __$$\\ $$  __$$\\ $$$\\    $$$ |$$  _____|      $$  __$$\\\\$$\\   $$  |                             \n$$ /  $$ |      $$ /  \\__|$$ /  $$ |$$$$\\  $$$$ |$$ |            $$ |  $$ |\\$$\\ $$  /$$\\                           \n$$$$$$$$ |      $$ |$$$$\\ $$$$$$$$ |$$\\$$\\$$ $$ |$$$$$\\          $$$$$$$\\ | \\$$$$  / \\__|                          \n$$  __$$ |      $$ |\\_$$ |$$  __$$ |$$ \\$$$  $$ |$$  __|         $$  __$$\\   \\$$  /                                \n$$ |  $$ |      $$ |  $$ |$$ |  $$ |$$ |\\$  /$$ |$$ |            $$ |  $$ |   $$ |   $$\\                           \n$$ |  $$ |      \\$$$$$$  |$$ |  $$ |$$ | \\_/ $$ |$$$$$$$$\\       $$$$$$$  |   $$ |   \\__|                          \n\\__|  \\__|       \\______/ \\__|  \\__|\\__|     \\__|\\________|      \\_______/    \\__|                                 \n                                                                                                                   \n                                                                                                                   \n                                                                                                                   \n$$\\   $$\\ $$$$$$\\ $$$$$$$\\  $$$$$$$$\\  $$$$$$\\        $$\\   $$\\  $$$$$$\\     $$$$$\\ $$$$$$\\ $$\\      $$\\  $$$$$$\\  \n$$ |  $$ |\\_$$  _|$$  __$$\\ $$  _____|$$  __$$\\       $$ | $$  |$$  __$$\\    \\__$$ |\\_$$  _|$$$\\    $$$ |$$  __$$\\ \n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ /  $$ |      $$ |$$  / $$ /  $$ |      $$ |  $$ |  $$$$\\  $$$$ |$$ /  $$ |\n$$$$$$$$ |  $$ |  $$ |  $$ |$$$$$\\    $$ |  $$ |      $$$$$  /  $$ |  $$ |      $$ |  $$ |  $$\\$$\\$$ $$ |$$$$$$$$ |\n$$  __$$ |  $$ |  $$ |  $$ |$$  __|   $$ |  $$ |      $$  $$<   $$ |  $$ |$$\\   $$ |  $$ |  $$ \\$$$  $$ |$$  __$$ |\n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ |  $$ |      $$ |\\$$\\  $$ |  $$ |$$ |  $$ |  $$ |  $$ |\\$  /$$ |$$ |  $$ |\n$$ |  $$ |$$$$$$\\ $$$$$$$  |$$$$$$$$\\  $$$$$$  |      $$ | \\$$\\  $$$$$$  |\\$$$$$$  |$$$$$$\\ $$ | \\_/ $$ |$$ |  $$ |\n\\__|  \\__|\\______|\\_______/ \\________| \\______/       \\__|  \\__| \\______/  \\______/ \\______|\\__|     \\__|\\__|  \\__|\n                                                                                                                   \n                                                                                                                   \n                                                                                                                   ");
         Mesh director = new Mesh("$$$$$$$\\  $$$$$$\\ $$$$$$$\\  $$$$$$$$\\  $$$$$$\\ $$$$$$$$\\ $$$$$$$$\\ $$$$$$$\\        $$$$$$$\\ $$\\     $$\\            \n$$  __$$\\ \\_$$  _|$$  __$$\\ $$  _____|$$  __$$\\\\__$$  __|$$  _____|$$  __$$\\       $$  __$$\\\\$$\\   $$  |           \n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ /  \\__|  $$ |   $$ |      $$ |  $$ |      $$ |  $$ |\\$$\\ $$  /$$\\         \n$$ |  $$ |  $$ |  $$$$$$$  |$$$$$\\    $$ |        $$ |   $$$$$\\    $$ |  $$ |      $$$$$$$\\ | \\$$$$  / \\__|        \n$$ |  $$ |  $$ |  $$  __$$< $$  __|   $$ |        $$ |   $$  __|   $$ |  $$ |      $$  __$$\\   \\$$  /              \n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ |  $$\\   $$ |   $$ |      $$ |  $$ |      $$ |  $$ |   $$ |   $$\\         \n$$$$$$$  |$$$$$$\\ $$ |  $$ |$$$$$$$$\\ \\$$$$$$  |  $$ |   $$$$$$$$\\ $$$$$$$  |      $$$$$$$  |   $$ |   \\__|        \n\\_______/ \\______|\\__|  \\__|\\________| \\______/   \\__|   \\________|\\_______/       \\_______/    \\__|               \n                                                                                                                   \n                                                                                                                   \n                                                                                                                   \n$$\\   $$\\ $$$$$$\\ $$$$$$$\\  $$$$$$$$\\  $$$$$$\\        $$\\   $$\\  $$$$$$\\     $$$$$\\ $$$$$$\\ $$\\      $$\\  $$$$$$\\  \n$$ |  $$ |\\_$$  _|$$  __$$\\ $$  _____|$$  __$$\\       $$ | $$  |$$  __$$\\    \\__$$ |\\_$$  _|$$$\\    $$$ |$$  __$$\\ \n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ /  $$ |      $$ |$$  / $$ /  $$ |      $$ |  $$ |  $$$$\\  $$$$ |$$ /  $$ |\n$$$$$$$$ |  $$ |  $$ |  $$ |$$$$$\\    $$ |  $$ |      $$$$$  /  $$ |  $$ |      $$ |  $$ |  $$\\$$\\$$ $$ |$$$$$$$$ |\n$$  __$$ |  $$ |  $$ |  $$ |$$  __|   $$ |  $$ |      $$  $$<   $$ |  $$ |$$\\   $$ |  $$ |  $$ \\$$$  $$ |$$  __$$ |\n$$ |  $$ |  $$ |  $$ |  $$ |$$ |      $$ |  $$ |      $$ |\\$$\\  $$ |  $$ |$$ |  $$ |  $$ |  $$ |\\$  /$$ |$$ |  $$ |\n$$ |  $$ |$$$$$$\\ $$$$$$$  |$$$$$$$$\\  $$$$$$  |      $$ | \\$$\\  $$$$$$  |\\$$$$$$  |$$$$$$\\ $$ | \\_/ $$ |$$ |  $$ |\n\\__|  \\__|\\______|\\_______/ \\________| \\______/       \\__|  \\__| \\______/  \\______/ \\______|\\__|     \\__|\\__|  \\__|\n                                                                                                                   \n                                                                                                                   \n                                                                                                                  ");
@@ -1337,7 +1491,7 @@ class Program
         Mesh even = new Mesh("$$$$$$$$\\ $$\\    $$\\ $$$$$$$$\\ $$\\   $$\\       $$$$$$\\ $$$$$$$$\\       \n$$  _____|$$ |   $$ |$$  _____|$$$\\  $$ |      \\_$$  _|$$  _____|      \n$$ |      $$ |   $$ |$$ |      $$$$\\ $$ |        $$ |  $$ |            \n$$$$$\\    \\$$\\  $$  |$$$$$\\    $$ $$\\$$ |        $$ |  $$$$$\\          \n$$  __|    \\$$\\$$  / $$  __|   $$ \\$$$$ |        $$ |  $$  __|         \n$$ |        \\$$$  /  $$ |      $$ |\\$$$ |        $$ |  $$ |            \n$$$$$$$$\\    \\$  /   $$$$$$$$\\ $$ | \\$$ |      $$$$$$\\ $$ |            \n\\________|    \\_/    \\________|\\__|  \\__|      \\______|\\__|            \n                                                                       \n                                                                       \n                                                                       \n$$$$$$\\       $$$$$$$\\   $$$$$$\\                                       \n\\_$$  _|      $$  __$$\\ $$  __$$\\                                      \n  $$ |        $$ |  $$ |$$ /  $$ |                                     \n  $$ |        $$ |  $$ |$$ |  $$ |                                     \n  $$ |        $$ |  $$ |$$ |  $$ |                                     \n  $$ |        $$ |  $$ |$$ |  $$ |                                     \n$$$$$$\\       $$$$$$$  | $$$$$$  |                                     \n\\______|      \\_______/  \\______/ ");
         Mesh computer = new Mesh("$$$$$$\\ $$\\      $$\\        $$$$$$\\         $$$$$$\\   $$$$$$\\  $$\\      $$\\ $$$$$$$\\  $$\\   $$\\ $$$$$$$$\\ $$$$$$$$\\ $$$$$$$\\  \n\\_$$  _|$$$\\    $$$ |      $$  __$$\\       $$  __$$\\ $$  __$$\\ $$$\\    $$$ |$$  __$$\\ $$ |  $$ |\\__$$  __|$$  _____|$$  __$$\\ \n  $$ |  $$$$\\  $$$$ |      $$ /  $$ |      $$ /  \\__|$$ /  $$ |$$$$\\  $$$$ |$$ |  $$ |$$ |  $$ |   $$ |   $$ |      $$ |  $$ |\n  $$ |  $$\\$$\\$$ $$ |      $$$$$$$$ |      $$ |      $$ |  $$ |$$\\$$\\$$ $$ |$$$$$$$  |$$ |  $$ |   $$ |   $$$$$\\    $$$$$$$  |\n  $$ |  $$ \\$$$  $$ |      $$  __$$ |      $$ |      $$ |  $$ |$$ \\$$$  $$ |$$  ____/ $$ |  $$ |   $$ |   $$  __|   $$  __$$< \n  $$ |  $$ |\\$  /$$ |      $$ |  $$ |      $$ |  $$\\ $$ |  $$ |$$ |\\$  /$$ |$$ |      $$ |  $$ |   $$ |   $$ |      $$ |  $$ |\n$$$$$$\\ $$ | \\_/ $$ |      $$ |  $$ |      \\$$$$$$  | $$$$$$  |$$ | \\_/ $$ |$$ |      \\$$$$$$  |   $$ |   $$$$$$$$\\ $$ |  $$ |\n\\______|\\__|     \\__|      \\__|  \\__|       \\______/  \\______/ \\__|     \\__|\\__|       \\______/    \\__|   \\________|\\__|  \\__|\n                                                                                                                              \n                                                                                                                              \n                                                                                                                              \n$$$$$$$\\  $$$$$$$\\   $$$$$$\\   $$$$$$\\  $$$$$$$\\   $$$$$$\\  $$\\      $$\\                                                      \n$$  __$$\\ $$  __$$\\ $$  __$$\\ $$  __$$\\ $$  __$$\\ $$  __$$\\ $$$\\    $$$ |                                                     \n$$ |  $$ |$$ |  $$ |$$ /  $$ |$$ /  \\__|$$ |  $$ |$$ /  $$ |$$$$\\  $$$$ |                                                     \n$$$$$$$  |$$$$$$$  |$$ |  $$ |$$ |$$$$\\ $$$$$$$  |$$$$$$$$ |$$\\$$\\$$ $$ |                                                     \n$$  ____/ $$  __$$< $$ |  $$ |$$ |\\_$$ |$$  __$$< $$  __$$ |$$ \\$$$  $$ |                                                     \n$$ |      $$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |\\$  /$$ |                                                     \n$$ |      $$ |  $$ | $$$$$$  |\\$$$$$$  |$$ |  $$ |$$ |  $$ |$$ | \\_/ $$ |                                                     \n\\__|      \\__|  \\__| \\______/  \\______/ \\__|  \\__|\\__|  \\__|\\__|     \\__|                                                     \n                                                                           ");
         Mesh anything = new Mesh(" $$$$$$\\   $$$$$$\\        $$$$$$\\       $$$$$$$\\   $$$$$$\\  $$\\   $$\\ $$$$$$$$\\       $$\\   $$\\  $$$$$$\\  $$\\    $$\\ $$$$$$$$\\      \n$$  __$$\\ $$  __$$\\       \\_$$  _|      $$  __$$\\ $$  __$$\\ $$$\\  $$ |\\__$$  __|      $$ |  $$ |$$  __$$\\ $$ |   $$ |$$  _____|     \n$$ /  \\__|$$ /  $$ |        $$ |        $$ |  $$ |$$ /  $$ |$$$$\\ $$ |   $$ |         $$ |  $$ |$$ /  $$ |$$ |   $$ |$$ |           \n\\$$$$$$\\  $$ |  $$ |        $$ |        $$ |  $$ |$$ |  $$ |$$ $$\\$$ |   $$ |         $$$$$$$$ |$$$$$$$$ |\\$$\\  $$  |$$$$$\\         \n \\____$$\\ $$ |  $$ |        $$ |        $$ |  $$ |$$ |  $$ |$$ \\$$$$ |   $$ |         $$  __$$ |$$  __$$ | \\$$\\$$  / $$  __|        \n$$\\   $$ |$$ |  $$ |        $$ |        $$ |  $$ |$$ |  $$ |$$ |\\$$$ |   $$ |         $$ |  $$ |$$ |  $$ |  \\$$$  /  $$ |           \n\\$$$$$$  | $$$$$$  |      $$$$$$\\       $$$$$$$  | $$$$$$  |$$ | \\$$ |   $$ |         $$ |  $$ |$$ |  $$ |   \\$  /   $$$$$$$$\\      \n \\______/  \\______/       \\______|      \\_______/  \\______/ \\__|  \\__|   \\__|         \\__|  \\__|\\__|  \\__|    \\_/    \\________|     \n                                                                                                                                    \n                                                                                                                                    \n                                                                                                                                    \n $$$$$$\\  $$\\   $$\\ $$\\     $$\\ $$$$$$$$\\ $$\\   $$\\ $$$$$$\\ $$\\   $$\\  $$$$$$\\        $$$$$$$$\\  $$$$$$\\        $$$$$$$\\   $$$$$$\\  \n$$  __$$\\ $$$\\  $$ |\\$$\\   $$  |\\__$$  __|$$ |  $$ |\\_$$  _|$$$\\  $$ |$$  __$$\\       \\__$$  __|$$  __$$\\       $$  __$$\\ $$  __$$\\ \n$$ /  $$ |$$$$\\ $$ | \\$$\\ $$  /    $$ |   $$ |  $$ |  $$ |  $$$$\\ $$ |$$ /  \\__|         $$ |   $$ /  $$ |      $$ |  $$ |$$ /  $$ |\n$$$$$$$$ |$$ $$\\$$ |  \\$$$$  /     $$ |   $$$$$$$$ |  $$ |  $$ $$\\$$ |$$ |$$$$\\          $$ |   $$ |  $$ |      $$ |  $$ |$$ |  $$ |\n$$  __$$ |$$ \\$$$$ |   \\$$  /      $$ |   $$  __$$ |  $$ |  $$ \\$$$$ |$$ |\\_$$ |         $$ |   $$ |  $$ |      $$ |  $$ |$$ |  $$ |\n$$ |  $$ |$$ |\\$$$ |    $$ |       $$ |   $$ |  $$ |  $$ |  $$ |\\$$$ |$$ |  $$ |         $$ |   $$ |  $$ |      $$ |  $$ |$$ |  $$ |\n$$ |  $$ |$$ | \\$$ |    $$ |       $$ |   $$ |  $$ |$$$$$$\\ $$ | \\$$ |\\$$$$$$  |         $$ |    $$$$$$  |      $$$$$$$  | $$$$$$  |\n\\__|  \\__|\\__|  \\__|    \\__|       \\__|   \\__|  \\__|\\______|\\__|  \\__| \\______/          \\__|    \\______/       \\_______/  \\______/ \n                                                                                                                                    \n                                                                                                                                    \n                                                                                                                                    \n$$\\      $$\\ $$$$$$\\ $$$$$$$$\\ $$\\   $$\\       $$$$$$$$\\ $$\\   $$\\ $$$$$$\\  $$$$$$\\        $$$$$$\\ $$\\   $$\\ $$$$$$$$\\  $$$$$$\\     \n$$ | $\\  $$ |\\_$$  _|\\__$$  __|$$ |  $$ |      \\__$$  __|$$ |  $$ |\\_$$  _|$$  __$$\\       \\_$$  _|$$$\\  $$ |$$  _____|$$  __$$\\    \n$$ |$$$\\ $$ |  $$ |     $$ |   $$ |  $$ |         $$ |   $$ |  $$ |  $$ |  $$ /  \\__|        $$ |  $$$$\\ $$ |$$ |      $$ /  $$ |   \n$$ $$ $$\\$$ |  $$ |     $$ |   $$$$$$$$ |         $$ |   $$$$$$$$ |  $$ |  \\$$$$$$\\          $$ |  $$ $$\\$$ |$$$$$\\    $$ |  $$ |   \n$$$$  _$$$$ |  $$ |     $$ |   $$  __$$ |         $$ |   $$  __$$ |  $$ |   \\____$$\\         $$ |  $$ \\$$$$ |$$  __|   $$ |  $$ |   \n$$$  / \\$$$ |  $$ |     $$ |   $$ |  $$ |         $$ |   $$ |  $$ |  $$ |  $$\\   $$ |        $$ |  $$ |\\$$$ |$$ |      $$ |  $$ |   \n$$  /   \\$$ |$$$$$$\\    $$ |   $$ |  $$ |         $$ |   $$ |  $$ |$$$$$$\\ \\$$$$$$  |      $$$$$$\\ $$ | \\$$ |$$ |       $$$$$$  |   \n\\__/     \\__|\\______|   \\__|   \\__|  \\__|         \\__|   \\__|  \\__|\\______| \\______/       \\______|\\__|  \\__|\\__|       \\______/ ");
-        Mesh board = new Mesh("$$$$$$\\ $$\\      $$\\        $$$$$$\\  $$$$$$$$\\ $$$$$$$$\\ $$$$$$$$\\ $$$$$$\\ $$\\   $$\\  $$$$$$\\  \n\\_$$  _|$$$\\    $$$ |      $$  __$$\\ $$  _____|\\__$$  __|\\__$$  __|\\_$$  _|$$$\\  $$ |$$  __$$\\ \n  $$ |  $$$$\\  $$$$ |      $$ /  \\__|$$ |         $$ |      $$ |     $$ |  $$$$\\ $$ |$$ /  \\__|\n  $$ |  $$\\$$\\$$ $$ |      $$ |$$$$\\ $$$$$\\       $$ |      $$ |     $$ |  $$ $$\\$$ |$$ |$$$$\\ \n  $$ |  $$ \\$$$  $$ |      $$ |\\_$$ |$$  __|      $$ |      $$ |     $$ |  $$ \\$$$$ |$$ |\\_$$ |\n  $$ |  $$ |\\$  /$$ |      $$ |  $$ |$$ |         $$ |      $$ |     $$ |  $$ |\\$$$ |$$ |  $$ |\n$$$$$$\\ $$ | \\_/ $$ |      \\$$$$$$  |$$$$$$$$\\    $$ |      $$ |   $$$$$$\\ $$ | \\$$ |\\$$$$$$  |\n\\______|\\__|     \\__|       \\______/ \\________|   \\__|      \\__|   \\______|\\__|  \\__| \\______/ \n                                                                                               \n                                                                                               \n                                                                                               \n$$$$$$$\\   $$$$$$\\   $$$$$$\\  $$$$$$$\\  $$$$$$$\\                                               \n$$  __$$\\ $$  __$$\\ $$  __$$\\ $$  __$$\\ $$  __$$\\                                              \n$$ |  $$ |$$ /  $$ |$$ /  $$ |$$ |  $$ |$$ |  $$ |                                             \n$$$$$$$\\ |$$ |  $$ |$$$$$$$$ |$$$$$$$  |$$ |  $$ |                                             \n$$  __$$\\ $$ |  $$ |$$  __$$ |$$  __$$< $$ |  $$ |                                             \n$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |                                             \n$$$$$$$  | $$$$$$  |$$ |  $$ |$$ |  $$ |$$$$$$$  |                                             \n\\_______/  \\______/ \\__|  \\__|\\__|  \\__|\\_______/ ");
+        Mesh tired = new Mesh("$$$$$$\\ $$\\      $$\\        $$$$$$\\  $$$$$$$$\\ $$$$$$$$\\ $$$$$$$$\\ $$$$$$\\ $$\\   $$\\  $$$$$$\\  \n\\_$$  _|$$$\\    $$$ |      $$  __$$\\ $$  _____|\\__$$  __|\\__$$  __|\\_$$  _|$$$\\  $$ |$$  __$$\\ \n  $$ |  $$$$\\  $$$$ |      $$ /  \\__|$$ |         $$ |      $$ |     $$ |  $$$$\\ $$ |$$ /  \\__|\n  $$ |  $$\\$$\\$$ $$ |      $$ |$$$$\\ $$$$$\\       $$ |      $$ |     $$ |  $$ $$\\$$ |$$ |$$$$\\ \n  $$ |  $$ \\$$$  $$ |      $$ |\\_$$ |$$  __|      $$ |      $$ |     $$ |  $$ \\$$$$ |$$ |\\_$$ |\n  $$ |  $$ |\\$  /$$ |      $$ |  $$ |$$ |         $$ |      $$ |     $$ |  $$ |\\$$$ |$$ |  $$ |\n$$$$$$\\ $$ | \\_/ $$ |      \\$$$$$$  |$$$$$$$$\\    $$ |      $$ |   $$$$$$\\ $$ | \\$$ |\\$$$$$$  |\n\\______|\\__|     \\__|       \\______/ \\________|   \\__|      \\__|   \\______|\\__|  \\__| \\______/ \n                                                                                               \n                                                                                               \n                                                                                               \n$$$$$$$$\\ $$$$$$\\ $$$$$$$\\  $$$$$$$$\\ $$$$$$$\\                                                 \n\\__$$  __|\\_$$  _|$$  __$$\\ $$  _____|$$  __$$\\                                                \n   $$ |     $$ |  $$ |  $$ |$$ |      $$ |  $$ |                                               \n   $$ |     $$ |  $$$$$$$  |$$$$$\\    $$ |  $$ |                                               \n   $$ |     $$ |  $$  __$$< $$  __|   $$ |  $$ |                                               \n   $$ |     $$ |  $$ |  $$ |$$ |      $$ |  $$ |                                               \n   $$ |   $$$$$$\\ $$ |  $$ |$$$$$$$$\\ $$$$$$$  |                                               \n   \\__|   \\______|\\__|  \\__|\\________|\\_______/   ");
         Mesh go = new Mesh(" $$$$$$\\   $$$$$$\\        $$$$$$\\       $$\\      $$\\ $$$$$$\\ $$\\       $$\\       \n$$  __$$\\ $$  __$$\\       \\_$$  _|      $$ | $\\  $$ |\\_$$  _|$$ |      $$ |      \n$$ /  \\__|$$ /  $$ |        $$ |        $$ |$$$\\ $$ |  $$ |  $$ |      $$ |      \n\\$$$$$$\\  $$ |  $$ |        $$ |        $$ $$ $$\\$$ |  $$ |  $$ |      $$ |      \n \\____$$\\ $$ |  $$ |        $$ |        $$$$  _$$$$ |  $$ |  $$ |      $$ |      \n$$\\   $$ |$$ |  $$ |        $$ |        $$$  / \\$$$ |  $$ |  $$ |      $$ |      \n\\$$$$$$  | $$$$$$  |      $$$$$$\\       $$  /   \\$$ |$$$$$$\\ $$$$$$$$\\ $$$$$$$$\\ \n \\______/  \\______/       \\______|      \\__/     \\__|\\______|\\________|\\________|\n                                                                                 \n                                                                                 \n                                                                                 \n $$$$$$\\   $$$$$$\\        $$\\   $$\\  $$$$$$\\  $$\\      $$\\                       \n$$  __$$\\ $$  __$$\\       $$$\\  $$ |$$  __$$\\ $$ | $\\  $$ |                      \n$$ /  \\__|$$ /  $$ |      $$$$\\ $$ |$$ /  $$ |$$ |$$$\\ $$ |                      \n$$ |$$$$\\ $$ |  $$ |      $$ $$\\$$ |$$ |  $$ |$$ $$ $$\\$$ |                      \n$$ |\\_$$ |$$ |  $$ |      $$ \\$$$$ |$$ |  $$ |$$$$  _$$$$ |                      \n$$ |  $$ |$$ |  $$ |      $$ |\\$$$ |$$ |  $$ |$$$  / \\$$$ |                      \n\\$$$$$$  | $$$$$$  |      $$ | \\$$ | $$$$$$  |$$  /   \\$$ |                      \n \\______/  \\______/       \\__|  \\__| \\______/ \\__/     \\__|");
         Mesh sub = new Mesh("$$$$$$$\\   $$$$$$\\  $$\\   $$\\ $$$$$$$$\\       $$$$$$$$\\  $$$$$$\\  $$$$$$$\\   $$$$$$\\  $$$$$$$$\\ $$$$$$$$\\       $$$$$$$$\\  $$$$$$\\  \n$$  __$$\\ $$  __$$\\ $$$\\  $$ |\\__$$  __|      $$  _____|$$  __$$\\ $$  __$$\\ $$  __$$\\ $$  _____|\\__$$  __|      \\__$$  __|$$  __$$\\ \n$$ |  $$ |$$ /  $$ |$$$$\\ $$ |   $$ |         $$ |      $$ /  $$ |$$ |  $$ |$$ /  \\__|$$ |         $$ |            $$ |   $$ /  $$ |\n$$ |  $$ |$$ |  $$ |$$ $$\\$$ |   $$ |         $$$$$\\    $$ |  $$ |$$$$$$$  |$$ |$$$$\\ $$$$$\\       $$ |            $$ |   $$ |  $$ |\n$$ |  $$ |$$ |  $$ |$$ \\$$$$ |   $$ |         $$  __|   $$ |  $$ |$$  __$$< $$ |\\_$$ |$$  __|      $$ |            $$ |   $$ |  $$ |\n$$ |  $$ |$$ |  $$ |$$ |\\$$$ |   $$ |         $$ |      $$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |         $$ |            $$ |   $$ |  $$ |\n$$$$$$$  | $$$$$$  |$$ | \\$$ |   $$ |         $$ |       $$$$$$  |$$ |  $$ |\\$$$$$$  |$$$$$$$$\\    $$ |            $$ |    $$$$$$  |\n\\_______/  \\______/ \\__|  \\__|   \\__|         \\__|       \\______/ \\__|  \\__| \\______/ \\________|   \\__|            \\__|    \\______/ \n                                                                                                                                    \n                                                                                                                                    \n                                                                                                                                    \n $$$$$$\\  $$\\   $$\\ $$$$$$$\\   $$$$$$\\   $$$$$$\\  $$$$$$$\\  $$$$$$\\ $$$$$$$\\  $$$$$$$$\\       $$$$$$$$\\  $$$$$$\\                    \n$$  __$$\\ $$ |  $$ |$$  __$$\\ $$  __$$\\ $$  __$$\\ $$  __$$\\ \\_$$  _|$$  __$$\\ $$  _____|      \\__$$  __|$$  __$$\\                   \n$$ /  \\__|$$ |  $$ |$$ |  $$ |$$ /  \\__|$$ /  \\__|$$ |  $$ |  $$ |  $$ |  $$ |$$ |               $$ |   $$ /  $$ |                  \n\\$$$$$$\\  $$ |  $$ |$$$$$$$\\ |\\$$$$$$\\  $$ |      $$$$$$$  |  $$ |  $$$$$$$\\ |$$$$$\\             $$ |   $$ |  $$ |                  \n \\____$$\\ $$ |  $$ |$$  __$$\\  \\____$$\\ $$ |      $$  __$$<   $$ |  $$  __$$\\ $$  __|            $$ |   $$ |  $$ |                  \n$$\\   $$ |$$ |  $$ |$$ |  $$ |$$\\   $$ |$$ |  $$\\ $$ |  $$ |  $$ |  $$ |  $$ |$$ |               $$ |   $$ |  $$ |                  \n\\$$$$$$  |\\$$$$$$  |$$$$$$$  |\\$$$$$$  |\\$$$$$$  |$$ |  $$ |$$$$$$\\ $$$$$$$  |$$$$$$$$\\          $$ |    $$$$$$  |                  \n \\______/  \\______/ \\_______/  \\______/  \\______/ \\__|  \\__|\\______|\\_______/ \\________|         \\__|    \\______/                   \n                                                                                                                                    \n                                                                                                                                    \n                                                                                                                                    \n $$$$$$\\   $$$$$$\\  $$$$$$$\\   $$$$$$\\        $$\\    $$\\ $$$$$$$\\                                                                   \n$$  __$$\\ $$  __$$\\ $$  __$$\\ $$  __$$\\       $$ |   $$ |$$  __$$\\                                                                  \n$$ /  \\__|$$ /  $$ |$$ |  $$ |$$ /  $$ |      $$ |   $$ |$$ |  $$ |                                                                 \n\\$$$$$$\\  $$ |  $$ |$$$$$$$  |$$$$$$$$ |      \\$$\\  $$  |$$$$$$$  |                                                                 \n \\____$$\\ $$ |  $$ |$$  __$$< $$  __$$ |       \\$$\\$$  / $$  __$$<                                                                  \n$$\\   $$ |$$ |  $$ |$$ |  $$ |$$ |  $$ |        \\$$$  /  $$ |  $$ |                                                                 \n\\$$$$$$  | $$$$$$  |$$ |  $$ |$$ |  $$ |         \\$  /   $$ |  $$ |                                                                 \n \\______/  \\______/ \\__|  \\__|\\__|  \\__|          \\_/    \\__|  \\__|  ");
         Mesh bye = new Mesh("$$$$$$$\\ $$\\     $$\\ $$$$$$$$\\       $$$$$$$\\ $$\\     $$\\ $$$$$$$$\\             \n$$  __$$\\\\$$\\   $$  |$$  _____|      $$  __$$\\\\$$\\   $$  |$$  _____|            \n$$ |  $$ |\\$$\\ $$  / $$ |            $$ |  $$ |\\$$\\ $$  / $$ |                  \n$$$$$$$\\ | \\$$$$  /  $$$$$\\          $$$$$$$\\ | \\$$$$  /  $$$$$\\                \n$$  __$$\\   \\$$  /   $$  __|         $$  __$$\\   \\$$  /   $$  __|               \n$$ |  $$ |   $$ |    $$ |            $$ |  $$ |   $$ |    $$ |                  \n$$$$$$$  |   $$ |    $$$$$$$$\\       $$$$$$$  |   $$ |    $$$$$$$$\\ $$\\ $$\\ $$\\ \n\\_______/    \\__|    \\________|      \\_______/    \\__|    \\________|\\__|\\__|\\__|");
@@ -1349,25 +1503,26 @@ class Program
         
         Mesh[] meshes =
         {
-            title, author, director, written, program, design, art, model, concept, tech, music, voice, koban, cucumber,
+            none, title, author, director, written, program, design, art, model, concept, tech, music, voice, koban, cucumber,
             dontKnow, cool, asCucumber, anyway, stalling, so, what,
-            care, even, computer, anything, board, go, sub, bye, bye2, last, thanks, lazy, wait
+            care, even, computer, anything, tired, go, sub, bye, bye2, last, thanks, lazy, wait
         };
 
         Sequence when = new Sequence();
-        when.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Credits\\UmOfirWhereAreWe.wav");
-        when.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Credits\\IThinkTheRealQuestionIs.wav");
-        when.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\Credits\\WhenAreWe.wav");
+        when.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Credits\\UmOfirWhereAreWe.wav");
+        when.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Credits\\IThinkTheRealQuestionIs.wav");
+        when.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Credits\\WhenAreWe.wav");
         
-        CutsceneLevel level = new CutsceneLevel(meshes, $"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\MIDI\\NeverGonnaGiveYouUp.mid", AnimeStore(), _gameManager);
+        CutsceneLevel level = new CutsceneLevel(meshes, $"{Environment.CurrentDirectory}\\MIDI\\NeverGonnaGiveYouUp.mid", AnimeStore(), _gameManager);
         level.AddEndDialogue(when);
         level.AddEndingURL("https://youtu.be/MMU-CPrUBlk?t=552");
+        level.AddEndingMesh(new Mesh("$$\\  $$$$$$$\\        $$$$$$$\\  $$$$$$$$\\ $$\\   $$\\       $$$$$$$\\   $$$$$$\\  $$$$$$$\\                               \n$$  __$$\\ $$  __$$\\ $$  __$$\\       $$  __$$\\ $$  _____|$$$\\  $$ |      $$  __$$\\ $$  __$$\\ $$  __$$\\                              \n$$ |  $$ |$$ /  $$ |$$ |  $$ |      $$ |  $$ |$$ |      $$$$\\ $$ |      $$ |  $$ |$$ /  $$ |$$ |  $$ |                             \n$$ |  $$ |$$ |  $$ |$$$$$$$  |      $$$$$$$\\ |$$$$$\\    $$ $$\\$$ |      $$ |  $$ |$$ |  $$ |$$$$$$$  |                             \n$$ |  $$ |$$ |  $$ |$$  __$$<       $$  __$$\\ $$  __|   $$ \\$$$$ |      $$ |  $$ |$$ |  $$ |$$  __$$<                              \n$$ |  $$ |$$ |  $$ |$$ |  $$ |      $$ |  $$ |$$ |      $$ |\\$$$ |      $$ |  $$ |$$ |  $$ |$$ |  $$ |                             \n$$$$$$$  | $$$$$$  |$$ |  $$ |      $$$$$$$  |$$$$$$$$\\ $$ | \\$$ |      $$$$$$$  | $$$$$$  |$$ |  $$ |                             \n\\_______/  \\______/ \\__|  \\__|      \\_______/ \\________|\\__|  \\__|      \\_______/  \\______/ \\__|  \\__|                             \n                                                                                                                                   \n                                                                                                                                   \n                                                                                                                                   \n$$\\      $$\\ $$$$$$\\ $$\\       $$\\             $$$$$$$\\  $$$$$$$$\\ $$$$$$$$\\ $$\\   $$\\ $$$$$$$\\  $$\\   $$\\       $$$$$$\\ $$\\   $$\\ \n$$ | $\\  $$ |\\_$$  _|$$ |      $$ |            $$  __$$\\ $$  _____|\\__$$  __|$$ |  $$ |$$  __$$\\ $$$\\  $$ |      \\_$$  _|$$$\\  $$ |\n$$ |$$$\\ $$ |  $$ |  $$ |      $$ |            $$ |  $$ |$$ |         $$ |   $$ |  $$ |$$ |  $$ |$$$$\\ $$ |        $$ |  $$$$\\ $$ |\n$$ $$ $$\\$$ |  $$ |  $$ |      $$ |            $$$$$$$  |$$$$$\\       $$ |   $$ |  $$ |$$$$$$$  |$$ $$\\$$ |        $$ |  $$ $$\\$$ |\n$$$$  _$$$$ |  $$ |  $$ |      $$ |            $$  __$$< $$  __|      $$ |   $$ |  $$ |$$  __$$< $$ \\$$$$ |        $$ |  $$ \\$$$$ |\n$$$  / \\$$$ |  $$ |  $$ |      $$ |            $$ |  $$ |$$ |         $$ |   $$ |  $$ |$$ |  $$ |$$ |\\$$$ |        $$ |  $$ |\\$$$ |\n$$  /   \\$$ |$$$$$$\\ $$$$$$$$\\ $$$$$$$$\\       $$ |  $$ |$$$$$$$$\\    $$ |   \\$$$$$$  |$$ |  $$ |$$ | \\$$ |      $$$$$$\\ $$ | \\$$ |\n\\__/     \\__|\\______|\\________|\\________|      \\__|  \\__|\\________|   \\__|    \\______/ \\__|  \\__|\\__|  \\__|      \\______|\\__|  \\__|\n                                                                                                                                   \n                                                                                                                                   \n                                                                                                                                   \n$$\\   $$\\  $$$$$$\\  $$\\       $$$$$$$$\\       $$\\       $$$$$$\\ $$$$$$$$\\ $$$$$$$$\\       $$$$$$$$\\                                \n$$ |  $$ |$$  __$$\\ $$ |      $$  _____|      $$ |      \\_$$  _|$$  _____|$$  _____|      \\____$$  |                               \n$$ |  $$ |$$ /  $$ |$$ |      $$ |            $$ |        $$ |  $$ |      $$ |                $$  /                                \n$$$$$$$$ |$$$$$$$$ |$$ |      $$$$$\\          $$ |        $$ |  $$$$$\\    $$$$$\\             $$  /                                 \n$$  __$$ |$$  __$$ |$$ |      $$  __|         $$ |        $$ |  $$  __|   $$  __|           $$  /                                  \n$$ |  $$ |$$ |  $$ |$$ |      $$ |            $$ |        $$ |  $$ |      $$ |             $$  /                                   \n$$ |  $$ |$$ |  $$ |$$$$$$$$\\ $$ |            $$$$$$$$\\ $$$$$$\\ $$ |      $$$$$$$$\\       $$  /                                    \n\\__|  \\__|\\__|  \\__|\\________|\\__|            \\________|\\______|\\__|      \\________|      \\__/                       "));
 
         return level;
     } //End credits
-    
-    
-    // Other levels
+
+    #region Other Levels
+
     static Level ObanKoban()
     {
         Graphics tableGraphics = new Graphics('#', ConsoleColor.Blue);
@@ -1387,6 +1542,12 @@ class Program
         Actor table7 = new Actor(30, 0, 2, 2, tableGraphics);
         Actor table8 = new Actor(35, 0, 4, 1, tableGraphics);
 
+        Actor me = new Actor(22, 5, 1, 1, new Graphics('!', ConsoleColor.DarkRed));        
+        TriggerBox meTrigger = new TriggerBox(22, 4, 2, 2);
+        Sequence withoutMe = new Sequence();
+        withoutMe.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\ObanKoban\\WithoutMe.wav");
+        meTrigger.AddSequance(withoutMe);
+        
         Actor wall = new Actor(35, 2, 5, 1, new Graphics('|', ConsoleColor.Black));
         Actor wall2 = new Actor(0, 0, 6, 2, new Graphics('|', ConsoleColor.Black));
         
@@ -1394,7 +1555,7 @@ class Program
         
         Actor[] actors =
         {
-            door, cashier, cashier2, table, table2, table3, table4, table5, table6, table7, table8, wall, doorCover, wall2, chest
+            door, cashier, cashier2, table, table2, table3, table4, table5, table6, table7, table8, wall, doorCover, wall2, chest, meTrigger, me
             
         };
         
@@ -1484,9 +1645,9 @@ class Program
         Door door = new Door(1, 0, DoorDirection.Down, true, true);
         TriggerBox clashTrigger = new TriggerBox(2, 2);
         Sequence clashSequence = new Sequence();
-        clashSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TheThirdEar\\ExcuseMeDoYouHaveAnythingByTheClashAtDemonhead.wav");
-        clashSequence.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\TheThirdEar\\HaveYouTriedTheSectionMarkedTheClashAtDemonhead.wav");
-        clashTrigger.AddCutscene(clashSequence);
+        clashSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TheThirdEar\\ExcuseMeDoYouHaveAnythingByTheClashAtDemonhead.wav");
+        clashSequence.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\TheThirdEar\\HaveYouTriedTheSectionMarkedTheClashAtDemonhead.wav");
+        clashTrigger.AddSequance(clashSequence);
         
         Actor cashier = new Actor(0, 7, 4, 1, new Graphics('.', ConsoleColor.Gray));
         Actor cashier2 = new Actor(4, 7, 1, 2, new Graphics('.', ConsoleColor.Gray));
@@ -1546,8 +1707,8 @@ class Program
 
         TriggerBox vTrigger = new TriggerBox(2, 8, 1, 2);
         Sequence bible = new Sequence();
-        bible.AddLine($"F:\\Tiltan\\DungeonCrawler\\DungeonCrawler\\VoiceLines\\DMC\\Bible.wav");
-        vTrigger.AddCutscene(bible);
+        bible.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\DMC\\Bible.wav");
+        vTrigger.AddSequance(bible);
         
         Actor[] actors =
         {
@@ -1559,4 +1720,6 @@ class Program
         
         return level;
     }
+
+    #endregion
 }

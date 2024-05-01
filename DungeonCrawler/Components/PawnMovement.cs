@@ -1,16 +1,18 @@
-﻿using System.Diagnostics;
-
-namespace DungeonCrawler;
+﻿namespace DungeonCrawler;
 
 public class PawnMovement
 {
     private Pawn _pawn;
     private Transform _transform;
-    
-    public PawnMovement(Pawn pawn)
+
+    private bool _canEnterTriggers;
+
+    public PawnMovement(Pawn pawn, bool canEnterTriggers)
     {
         _pawn = pawn;
         _transform = pawn.Transform;
+
+        _canEnterTriggers = canEnterTriggers;
     }
     
     // Movement
@@ -31,14 +33,8 @@ public class PawnMovement
         bool isCollidingFromTop = IsCollidingFromTop(world) && axis < 0;
         bool isCollidingFromBottom = IsCollidingFromBottom(world) && axis > 0;
 
-        if (isTryingToExitMap || isCollidingFromBottom || isCollidingFromTop)
-        {
-            //Console.Beep(7500, 50);
-            return;
-        }
-        
+        if (isTryingToExitMap || isCollidingFromBottom || isCollidingFromTop) return;
         _transform.SetPosition(xPos, yPos + axis * _pawn.Speed);
-        //Console.Beep(500, 100);
     }
 
     public void MoveRight(int axis, World world)
@@ -56,43 +52,37 @@ public class PawnMovement
         bool isCollidingFromRight = IsCollidingFromRight(world) && axis > 0;
         bool isCollidingFromLeft = IsCollidingFromLeft(world) && axis < 0;
 
-        if (isTryingToExitMap || isCollidingFromLeft || isCollidingFromRight)
-        {
-            //Console.Beep(7500, 50);
-            return;
-        }
-        
+        if (isTryingToExitMap || isCollidingFromLeft || isCollidingFromRight) return;
         _transform.SetPosition(xPos + axis * _pawn.Speed, yPos);
-        //Console.Beep(500, 100);
     }
     
     // Colliding
-    void OnActorBeginOverlap(Actor hitActor)
+    void OnActorBeginOverlap(Actor hitActor) // I forgot why i made this function but left it anyway because why not
     {
         
     }
     
     bool IsCollidingFromRight(World world)
     {
-        bool isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Right, out HitResult hitResult) && !hitResult.HitActor.Trigger;
+        bool isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Right, out HitResult hitResult) && !hitResult.HitActor.Trigger == _canEnterTriggers;
         return isColliding;
     }
 
     bool IsCollidingFromLeft(World world)
     {
-        bool isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Left, out HitResult hitResult) && !hitResult.HitActor.Trigger;
+        bool isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Left, out HitResult hitResult) && !hitResult.HitActor.Trigger == _canEnterTriggers;
         return isColliding;
     }
 
     bool IsCollidingFromTop(World world)
     {
-        bool isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Up, out HitResult hitResult) && !hitResult.HitActor.Trigger;
+        bool isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Up, out HitResult hitResult) && !hitResult.HitActor.Trigger == _canEnterTriggers;
         return isColliding;
     }
 
     bool IsCollidingFromBottom(World world)
     {
-        bool isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Down, out HitResult hitResult) && !hitResult.HitActor.Trigger;
+        bool isColliding = Physics.LineTrace(_transform.Position, world, 1, Direction.Down, out HitResult hitResult) && !hitResult.HitActor.Trigger == _canEnterTriggers;
         return isColliding;
     }
 

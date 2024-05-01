@@ -283,7 +283,7 @@ public static class Utilities
         _synthesizer.Speak(str);
     }
     
-    public static void SpeakSave(string str, string voice = "Microsoft David Desktop", int volume = 100)
+    public static void SpeakSave(string str, string folder, string voice = "Microsoft David Desktop", int volume = 100)
     { 
         SpeechSynthesizer _synthesizer = new SpeechSynthesizer();
     
@@ -307,15 +307,17 @@ public static class Utilities
             if (Char.IsLetter(c)) name += c;
         }
 
-        _synthesizer.SetOutputToWaveFile($@"F:\Gay\{name}.wav");
+        _synthesizer.SetOutputToWaveFile($@"F:\Tiltan\DungeonCrawler\DungeonCrawler\bin\Release\net7.0\win-x64\VoiceLines\{folder}\{name}.wav");
         _synthesizer.Speak(str);
     }
 
-    public static Playback PlayMidi(string path)
+    public static Playback CreatePlaybackMidi(string path)
     {
         var midiFile = MidiFile.Read(path);
 
         OutputDevice outputDevice = OutputDevice.GetByIndex(0);
+        outputDevice.TurnAllNotesOff();
+        
         Playback playback = midiFile.GetPlayback(outputDevice);
         
         return playback;

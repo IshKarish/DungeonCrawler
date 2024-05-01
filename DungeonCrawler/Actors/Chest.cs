@@ -4,6 +4,7 @@ public class Chest : Actor
 {
     public Item Item { get; private set; }
     public Sequence Sequence { get; private set; }
+    public string Midi { get; private set; }
     
     public Chest(Item item)
     {
@@ -60,5 +61,10 @@ public class Chest : Actor
     public void AddCutscene(Sequence sequence)
     {
         Sequence = sequence;
+    }
+
+    public void AddMidi(string path)
+    {
+        Midi = path;
     }
 }
