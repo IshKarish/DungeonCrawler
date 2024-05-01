@@ -130,7 +130,6 @@ public class CutsceneLevel : Level
     
     private void SwitchLevel()
     {
-        _outputDevice.Dispose();
         _gameManager.SwitchLevel(_nextLevel);
     }
 }
