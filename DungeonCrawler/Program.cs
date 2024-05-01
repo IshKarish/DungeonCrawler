@@ -10,7 +10,7 @@ class Program
     
     public static void Main(string[] args)
     {
-        //ConsoleHelperLibrary.Classes.WindowUtility.SetConsoleWindowPosition(ConsoleHelperLibrary.Classes.WindowUtility.AnchorWindow.Fill);
+        ConsoleHelperLibrary.Classes.WindowUtility.SetConsoleWindowPosition(ConsoleHelperLibrary.Classes.WindowUtility.AnchorWindow.Fill);
         Console.CursorVisible = false;
         
         Start();
