@@ -56,6 +56,13 @@ public class CutsceneLevel : Level
         _gameManager = gameManager;
         _meshes = meshes;
     }
+    
+    public CutsceneLevel(Mesh[] meshes, string path, GameManager gameManager)
+    {
+        _path = path;
+        _gameManager = gameManager;
+        _meshes = meshes;
+    }
 
     public void AddEndDialogue(Sequence sequence)
     {
@@ -114,6 +121,7 @@ public class CutsceneLevel : Level
         if (_endingMesh != null)
         {
             Console.Clear();
+            Thread.Sleep(2000);
             Console.WriteLine(_endingMesh.Ascii);
             Thread.Sleep(5000);
         }
@@ -125,11 +133,13 @@ public class CutsceneLevel : Level
             if (_url != null) Process.Start(new ProcessStartInfo(_url) {UseShellExecute = true});
         }
         
-        _gameManager.SwitchLevel(_nextLevel);
+        if (_nextLevel == null) Environment.Exit(0);
+        else _gameManager.SwitchLevel(_nextLevel);
     }
     
     private void SwitchLevel()
     {
-        _gameManager.SwitchLevel(_nextLevel);
+        if (_nextLevel == null) Environment.Exit(0);
+        else _gameManager.SwitchLevel(_nextLevel);
     }
 }

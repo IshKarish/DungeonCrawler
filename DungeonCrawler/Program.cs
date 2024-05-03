@@ -1,4 +1,6 @@
-﻿namespace DungeonCrawler;
+﻿using System.Diagnostics;
+
+namespace DungeonCrawler;
 
 class Program
 {
@@ -17,42 +19,96 @@ class Program
     }
 
     public static void Start()
-    { 
+    {
         Console.Clear();
-        
+
         Console.WriteLine();
         Console.WriteLine();
-        Console.WriteLine("$$\\   $$\\  $$$$$$\\  $$\\       $$$$$$$$\\       $$\\       $$$$$$\\ $$$$$$$$\\ $$$$$$$$\\        $$$$$$\\  \n$$ |  $$ |$$  __$$\\ $$ |      $$  _____|      $$ |      \\_$$  _|$$  _____|$$  _____|      $$ ___$$\\ \n$$ |  $$ |$$ /  $$ |$$ |      $$ |            $$ |        $$ |  $$ |      $$ |            \\_/   $$ |\n$$$$$$$$ |$$$$$$$$ |$$ |      $$$$$\\          $$ |        $$ |  $$$$$\\    $$$$$\\            $$$$$ / \n$$  __$$ |$$  __$$ |$$ |      $$  __|         $$ |        $$ |  $$  __|   $$  __|           \\___$$\\ \n$$ |  $$ |$$ |  $$ |$$ |      $$ |            $$ |        $$ |  $$ |      $$ |            $$\\   $$ |\n$$ |  $$ |$$ |  $$ |$$$$$$$$\\ $$ |            $$$$$$$$\\ $$$$$$\\ $$ |      $$$$$$$$\\       \\$$$$$$  |\n\\__|  \\__|\\__|  \\__|\\________|\\__|            \\________|\\______|\\__|      \\________|       \\______/ ");
+        Console.WriteLine(
+            "$$\\   $$\\  $$$$$$\\  $$\\       $$$$$$$$\\       $$\\       $$$$$$\\ $$$$$$$$\\ $$$$$$$$\\        $$$$$$\\  \n$$ |  $$ |$$  __$$\\ $$ |      $$  _____|      $$ |      \\_$$  _|$$  _____|$$  _____|      $$ ___$$\\ \n$$ |  $$ |$$ /  $$ |$$ |      $$ |            $$ |        $$ |  $$ |      $$ |            \\_/   $$ |\n$$$$$$$$ |$$$$$$$$ |$$ |      $$$$$\\          $$ |        $$ |  $$$$$\\    $$$$$\\            $$$$$ / \n$$  __$$ |$$  __$$ |$$ |      $$  __|         $$ |        $$ |  $$  __|   $$  __|           \\___$$\\ \n$$ |  $$ |$$ |  $$ |$$ |      $$ |            $$ |        $$ |  $$ |      $$ |            $$\\   $$ |\n$$ |  $$ |$$ |  $$ |$$$$$$$$\\ $$ |            $$$$$$$$\\ $$$$$$\\ $$ |      $$$$$$$$\\       \\$$$$$$  |\n\\__|  \\__|\\__|  \\__|\\________|\\__|            \\________|\\______|\\__|      \\________|       \\______/ ");
         Console.WriteLine();
         Console.WriteLine("A game by The Banana Project");
         Console.WriteLine();
         Console.WriteLine();
         Console.WriteLine();
         Console.WriteLine("Press T to play the tutorial");
-        Console.WriteLine("Press any other key to start the game.");
+        Console.WriteLine("Press Enter to start the game.");
+        Console.WriteLine();
+        Console.WriteLine("Chapter Select:");
+        Console.WriteLine("1 - Out of Tiltan");
+        Console.WriteLine("2 - Fear of the Center");
+        Console.WriteLine("3 - Out of time");
+        Console.WriteLine("4 - Of Oban and Koban");
+        Console.WriteLine("5 - Mac and learn");
+        Console.WriteLine("6 - This is heavy");
+        Console.WriteLine("7 - One last thing");
+        Console.WriteLine("8 - Return of the Dor");
+        Console.WriteLine("9 - Epilogue");
+        Console.WriteLine();
+        Console.WriteLine("Press B to watch \"Behind the scenes - The life of Dor Ben Dor\"");
 
         ConsoleKey c = Console.ReadKey(true).Key;
-        if (c == ConsoleKey.T) _gameManager.StartGame(Tutorial());
-        else
+        switch (c)
         {
-            Console.Clear();
-            Thread.Sleep(1000);
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.Write("     ");
-            Renderer.Write("There once was a Dor... \n     His name was Ben Dor.");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Thread.Sleep(2000);
-            Console.WriteLine("     Press Any Key to continue...");
-            
-            Console.ReadKey();
-                    
-            _gameManager.StartGame(Floor0());
+            case ConsoleKey.T:
+                _gameManager.StartGame(Tutorial());
+                break;
+            case ConsoleKey.D1:
+                _gameManager.StartGame(StudioClassroom());
+                break;
+            case ConsoleKey.D2:
+                _gameManager.StartGame(Dizingof());
+                break;
+            case ConsoleKey.D3:
+                _gameManager.StartGame(TelAviv());
+                break;
+            case ConsoleKey.D4:
+                _gameManager.StartGame(NotKoban());
+                break;
+            case ConsoleKey.D5:
+                _gameManager.StartGame(Tiltan2017());
+                break;
+            case ConsoleKey.D6:
+                _gameManager.StartGame(Floor0());
+                break;
+            case ConsoleKey.D7:
+                _gameManager.StartGame(AppleStoreEntrance());
+                break;
+            case ConsoleKey.D8:
+                _gameManager.StartGame(Future());
+                break;
+            case ConsoleKey.D9:
+                _gameManager.StartGame(FutureKoban());
+                break;
+            case ConsoleKey.Enter:
+                StartGame();
+                break;
+            case ConsoleKey.B:
+                string target = "https://www.youtube.com/watch?v=eZw_fbma2G0";
+                Process.Start(new ProcessStartInfo(target) { UseShellExecute = true });
+                break;
         }
+}
+
+    static void StartGame()
+    {
+        Console.Clear();
+        Thread.Sleep(1000);
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.Write("     ");
+        Renderer.Write("There once was a Dor... \n     His name was Ben Dor.");
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+        Thread.Sleep(2000);
+        Console.WriteLine("     Press Any Key to continue...");
+            
+        Console.ReadKey();
+                    
+        _gameManager.StartGame(StudioClassroom());
     }
 
     #region Tutorial Levels
@@ -1515,10 +1571,10 @@ class Program
         when.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Credits\\IThinkTheRealQuestionIs.wav");
         when.AddLine($"{Environment.CurrentDirectory}\\VoiceLines\\Credits\\WhenAreWe.wav");
         
-        CutsceneLevel level = new CutsceneLevel(meshes, $"{Environment.CurrentDirectory}\\MIDI\\NeverGonnaGiveYouUp.mid", AnimeStore(), _gameManager);
+        CutsceneLevel level = new CutsceneLevel(meshes, $"{Environment.CurrentDirectory}\\MIDI\\NeverGonnaGiveYouUp.mid", _gameManager);
         level.AddEndDialogue(when);
         level.AddEndingURL("https://youtu.be/MMU-CPrUBlk?t=552");
-        level.AddEndingMesh(new Mesh("$$\\  $$$$$$$\\        $$$$$$$\\  $$$$$$$$\\ $$\\   $$\\       $$$$$$$\\   $$$$$$\\  $$$$$$$\\                               \n$$  __$$\\ $$  __$$\\ $$  __$$\\       $$  __$$\\ $$  _____|$$$\\  $$ |      $$  __$$\\ $$  __$$\\ $$  __$$\\                              \n$$ |  $$ |$$ /  $$ |$$ |  $$ |      $$ |  $$ |$$ |      $$$$\\ $$ |      $$ |  $$ |$$ /  $$ |$$ |  $$ |                             \n$$ |  $$ |$$ |  $$ |$$$$$$$  |      $$$$$$$\\ |$$$$$\\    $$ $$\\$$ |      $$ |  $$ |$$ |  $$ |$$$$$$$  |                             \n$$ |  $$ |$$ |  $$ |$$  __$$<       $$  __$$\\ $$  __|   $$ \\$$$$ |      $$ |  $$ |$$ |  $$ |$$  __$$<                              \n$$ |  $$ |$$ |  $$ |$$ |  $$ |      $$ |  $$ |$$ |      $$ |\\$$$ |      $$ |  $$ |$$ |  $$ |$$ |  $$ |                             \n$$$$$$$  | $$$$$$  |$$ |  $$ |      $$$$$$$  |$$$$$$$$\\ $$ | \\$$ |      $$$$$$$  | $$$$$$  |$$ |  $$ |                             \n\\_______/  \\______/ \\__|  \\__|      \\_______/ \\________|\\__|  \\__|      \\_______/  \\______/ \\__|  \\__|                             \n                                                                                                                                   \n                                                                                                                                   \n                                                                                                                                   \n$$\\      $$\\ $$$$$$\\ $$\\       $$\\             $$$$$$$\\  $$$$$$$$\\ $$$$$$$$\\ $$\\   $$\\ $$$$$$$\\  $$\\   $$\\       $$$$$$\\ $$\\   $$\\ \n$$ | $\\  $$ |\\_$$  _|$$ |      $$ |            $$  __$$\\ $$  _____|\\__$$  __|$$ |  $$ |$$  __$$\\ $$$\\  $$ |      \\_$$  _|$$$\\  $$ |\n$$ |$$$\\ $$ |  $$ |  $$ |      $$ |            $$ |  $$ |$$ |         $$ |   $$ |  $$ |$$ |  $$ |$$$$\\ $$ |        $$ |  $$$$\\ $$ |\n$$ $$ $$\\$$ |  $$ |  $$ |      $$ |            $$$$$$$  |$$$$$\\       $$ |   $$ |  $$ |$$$$$$$  |$$ $$\\$$ |        $$ |  $$ $$\\$$ |\n$$$$  _$$$$ |  $$ |  $$ |      $$ |            $$  __$$< $$  __|      $$ |   $$ |  $$ |$$  __$$< $$ \\$$$$ |        $$ |  $$ \\$$$$ |\n$$$  / \\$$$ |  $$ |  $$ |      $$ |            $$ |  $$ |$$ |         $$ |   $$ |  $$ |$$ |  $$ |$$ |\\$$$ |        $$ |  $$ |\\$$$ |\n$$  /   \\$$ |$$$$$$\\ $$$$$$$$\\ $$$$$$$$\\       $$ |  $$ |$$$$$$$$\\    $$ |   \\$$$$$$  |$$ |  $$ |$$ | \\$$ |      $$$$$$\\ $$ | \\$$ |\n\\__/     \\__|\\______|\\________|\\________|      \\__|  \\__|\\________|   \\__|    \\______/ \\__|  \\__|\\__|  \\__|      \\______|\\__|  \\__|\n                                                                                                                                   \n                                                                                                                                   \n                                                                                                                                   \n$$\\   $$\\  $$$$$$\\  $$\\       $$$$$$$$\\       $$\\       $$$$$$\\ $$$$$$$$\\ $$$$$$$$\\       $$$$$$$$\\                                \n$$ |  $$ |$$  __$$\\ $$ |      $$  _____|      $$ |      \\_$$  _|$$  _____|$$  _____|      \\____$$  |                               \n$$ |  $$ |$$ /  $$ |$$ |      $$ |            $$ |        $$ |  $$ |      $$ |                $$  /                                \n$$$$$$$$ |$$$$$$$$ |$$ |      $$$$$\\          $$ |        $$ |  $$$$$\\    $$$$$\\             $$  /                                 \n$$  __$$ |$$  __$$ |$$ |      $$  __|         $$ |        $$ |  $$  __|   $$  __|           $$  /                                  \n$$ |  $$ |$$ |  $$ |$$ |      $$ |            $$ |        $$ |  $$ |      $$ |             $$  /                                   \n$$ |  $$ |$$ |  $$ |$$$$$$$$\\ $$ |            $$$$$$$$\\ $$$$$$\\ $$ |      $$$$$$$$\\       $$  /                                    \n\\__|  \\__|\\__|  \\__|\\________|\\__|            \\________|\\______|\\__|      \\________|      \\__/                       "));
+        level.AddEndingMesh(new Mesh("$$$$$$$\\   $$$$$$\\  $$$$$$$\\        $$$$$$$\\  $$$$$$$$\\ $$\\   $$\\       $$$$$$$\\   $$$$$$\\  $$$$$$$\\                        \n$$  __$$\\ $$  __$$\\ $$  __$$\\       $$  __$$\\ $$  _____|$$$\\  $$ |      $$  __$$\\ $$  __$$\\ $$  __$$\\                       \n$$ |  $$ |$$ /  $$ |$$ |  $$ |      $$ |  $$ |$$ |      $$$$\\ $$ |      $$ |  $$ |$$ /  $$ |$$ |  $$ |                      \n$$ |  $$ |$$ |  $$ |$$$$$$$  |      $$$$$$$\\ |$$$$$\\    $$ $$\\$$ |      $$ |  $$ |$$ |  $$ |$$$$$$$  |                      \n$$ |  $$ |$$ |  $$ |$$  __$$<       $$  __$$\\ $$  __|   $$ \\$$$$ |      $$ |  $$ |$$ |  $$ |$$  __$$<                       \n$$ |  $$ |$$ |  $$ |$$ |  $$ |      $$ |  $$ |$$ |      $$ |\\$$$ |      $$ |  $$ |$$ |  $$ |$$ |  $$ |                      \n$$$$$$$  | $$$$$$  |$$ |  $$ |      $$$$$$$  |$$$$$$$$\\ $$ | \\$$ |      $$$$$$$  | $$$$$$  |$$ |  $$ |                      \n\\_______/  \\______/ \\__|  \\__|      \\_______/ \\________|\\__|  \\__|      \\_______/  \\______/ \\__|  \\__|                      \n                                                                                                                            \n                                                                                                                            \n                                                                                                                            \n$$\\      $$\\ $$$$$$\\ $$\\       $$\\             $$$$$$$\\  $$$$$$$$\\ $$$$$$$$\\ $$\\   $$\\ $$$$$$$\\  $$\\   $$\\                  \n$$ | $\\  $$ |\\_$$  _|$$ |      $$ |            $$  __$$\\ $$  _____|\\__$$  __|$$ |  $$ |$$  __$$\\ $$$\\  $$ |                 \n$$ |$$$\\ $$ |  $$ |  $$ |      $$ |            $$ |  $$ |$$ |         $$ |   $$ |  $$ |$$ |  $$ |$$$$\\ $$ |                 \n$$ $$ $$\\$$ |  $$ |  $$ |      $$ |            $$$$$$$  |$$$$$\\       $$ |   $$ |  $$ |$$$$$$$  |$$ $$\\$$ |                 \n$$$$  _$$$$ |  $$ |  $$ |      $$ |            $$  __$$< $$  __|      $$ |   $$ |  $$ |$$  __$$< $$ \\$$$$ |                 \n$$$  / \\$$$ |  $$ |  $$ |      $$ |            $$ |  $$ |$$ |         $$ |   $$ |  $$ |$$ |  $$ |$$ |\\$$$ |                 \n$$  /   \\$$ |$$$$$$\\ $$$$$$$$\\ $$$$$$$$\\       $$ |  $$ |$$$$$$$$\\    $$ |   \\$$$$$$  |$$ |  $$ |$$ | \\$$ |                 \n\\__/     \\__|\\______|\\________|\\________|      \\__|  \\__|\\________|   \\__|    \\______/ \\__|  \\__|\\__|  \\__|                 \n                                                                                                                            \n                                                                                                                            \n                                                                                                                            \n$$$$$$\\ $$\\   $$\\       $$\\   $$\\  $$$$$$\\  $$\\       $$$$$$$$\\       $$\\       $$$$$$\\ $$$$$$$$\\ $$$$$$$$\\       $$$$$$$$\\ \n\\_$$  _|$$$\\  $$ |      $$ |  $$ |$$  __$$\\ $$ |      $$  _____|      $$ |      \\_$$  _|$$  _____|$$  _____|      \\____$$  |\n  $$ |  $$$$\\ $$ |      $$ |  $$ |$$ /  $$ |$$ |      $$ |            $$ |        $$ |  $$ |      $$ |                $$  / \n  $$ |  $$ $$\\$$ |      $$$$$$$$ |$$$$$$$$ |$$ |      $$$$$\\          $$ |        $$ |  $$$$$\\    $$$$$\\             $$  /  \n  $$ |  $$ \\$$$$ |      $$  __$$ |$$  __$$ |$$ |      $$  __|         $$ |        $$ |  $$  __|   $$  __|           $$  /   \n  $$ |  $$ |\\$$$ |      $$ |  $$ |$$ |  $$ |$$ |      $$ |            $$ |        $$ |  $$ |      $$ |             $$  /    \n$$$$$$\\ $$ | \\$$ |      $$ |  $$ |$$ |  $$ |$$$$$$$$\\ $$ |            $$$$$$$$\\ $$$$$$\\ $$ |      $$$$$$$$\\       $$  /     \n\\______|\\__|  \\__|      \\__|  \\__|\\__|  \\__|\\________|\\__|            \\________|\\______|\\__|      \\________|      \\__/      \n                                                                                                                            "));
 
         return level;
     } //End credits
