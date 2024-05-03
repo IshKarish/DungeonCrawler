@@ -121,7 +121,6 @@ public class CutsceneLevel : Level
         if (_endingMesh != null)
         {
             Console.Clear();
-            Thread.Sleep(2000);
             Console.WriteLine(_endingMesh.Ascii);
             Thread.Sleep(5000);
         }

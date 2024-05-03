@@ -159,7 +159,7 @@ class Program
         
         Actor[] actors =
         {
-            tutorialTrigger, entrance, chest, chest2, chest3, chest4, door, chest5
+            entrance, tutorialTrigger, chest, chest2, chest3, chest4, door, chest5
         };
         
         Level level = Utilities.CreateLevel("Tutorial", 10, _player, actors);
@@ -184,10 +184,10 @@ class Program
         
         Actor[] actors =
         {
-            door, tutorialTrigger, entrance
+            entrance, door, tutorialTrigger, 
         };
         
-        Level level = Utilities.CreateLevel("Tutorial", 10, _player, actors, new Vector2(1, 0));
+        Level level = Utilities.CreateLevel("Tutorial", 10, _player, actors);
         
         Enemy enemy = Utilities.GenerateEnemy(level);
         Enemy[] enemies = { enemy };
@@ -218,7 +218,7 @@ class Program
         
         Actor[] actors =
         {
-            tutorialTrigger, entrance, trap3, trap4, trap5, actor, actor2, actor3
+            entrance, tutorialTrigger, trap3, trap4, trap5, actor, actor2, actor3
         };
         
         Level level = Utilities.CreateLevel("Tutorial", 10, _player, actors, new Vector2(1, 0));
@@ -1742,7 +1742,7 @@ class Program
             door, cashier, cashier2, chest, chest2
         };
         
-        Level level = Utilities.CreateLevel("Nintendo Store", 10, _player, actors);
+        Level level = Utilities.CreateLevel("Books Crossroad", 10, _player, actors);
         
         Enemy enemy = Utilities.GenerateEnemy(level, "Store's manager");
         Enemy[] enemies = { enemy };
